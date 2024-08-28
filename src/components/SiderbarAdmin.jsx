@@ -5,6 +5,7 @@ import { FaShoppingBag } from "react-icons/fa";
 import { HiUsers } from "react-icons/hi2";
 import { RxExit } from "react-icons/rx";
 
+
 function SidebarAdmin(){
     return(
         <div className="w-1/5 bg-white flex flex-col gap-4 pt-[24px] h-full">
@@ -32,4 +33,4 @@ function SidebarAdmin(){
     )
 }
 
-export default SidebarAdmin
+export default SidebarAdmin;
