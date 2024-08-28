@@ -7,11 +7,11 @@ import { FaRegEnvelope, FaRegUser, FaKey, FaRegEye } from "react-icons/fa6";
 
 function Register() {
   return (
-        <div className="flex w-full items-center gap-16 md:pr-12 md:p-0 p-5">
+        <div className="flex w-full items-center gap-16 md:pr-32 md:p-0 p-5">
             <div className="md:flex md:w-1/4 h-screen hidden">
                 <img src={ImgRegister} alt="" />
             </div>
-            <div className="flex flex-col justify-center gap-6 md:w-3/4 w-full">
+            <form className="flex flex-col justify-center gap-6 md:w-3/4 w-full">
                 <div className="font-semibold text-[#8E6447] text-2xl">Register</div>
                 <div className="text-[#4F5665] text-base">Fill out the form correctly</div>
                 <label htmlFor="name" className="flex flex-col gap-1 w-full justify-center">
@@ -60,7 +60,7 @@ function Register() {
                         <div className="text-[#4F5665] font-medium text-lg">Google</div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
