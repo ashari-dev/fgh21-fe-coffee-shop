@@ -1,5 +1,5 @@
 import React from "react";
-import ImagesProduct from "../assets/grid-product.png";
+import ImagesProduct from "../img/grid-product.png";
 import { FaShoppingCart } from "react-icons/fa";
 
 function GridProduct() {
