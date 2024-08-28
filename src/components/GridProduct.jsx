@@ -5,10 +5,14 @@ import { FaShoppingCart } from "react-icons/fa";
 function GridProduct() {
   return (
     <div className="flex gap-4 p-8">
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen relative">
         {/* <div className="bg-red-400">Images</div> */}
-        <img src={ImagesProduct} alt="" />
-        <div className="max-w-[262px] absolute bg-white p-2 flex flex-col gap-2 top-60 left-10">
+        <img
+          className="min-w-[300px] bg-black"
+          src="https://picsum.photos/id/63/500/500"
+          alt=""
+        />
+        <div className="max-w-[262px] absolute bg-white p-2 flex flex-col gap-2 top-60 left-2">
           <div className="text-2xl font-semibold">Hazelnut Latte</div>
           <p className="text-gray-600">
             You can explore the menu that we provide with fun and have their own
