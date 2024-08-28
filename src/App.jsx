@@ -3,6 +3,7 @@ import Forgetpassword from "./pages/Forgetpassword";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import EditProduct from "./pages/EditProduct";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   path: "/register",
   element: <Register />,
   },
+    {
+    path: "/login",
+    element: <Login />,
+    },
 ]);
 
 function App() {
