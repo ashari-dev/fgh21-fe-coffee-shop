@@ -3,6 +3,8 @@ import ImgRegister from "../assets/img/Register.svg"
 import google from "../assets/img/google.svg"
 import facebook from "../assets/img/facebook.svg"
 import { FaRegEnvelope, FaRegUser, FaKey, FaRegEye } from "react-icons/fa6";
+import Logo from "../assets/components/Logo";
+import { Link } from "react-router-dom";
 
 
 function Register() {
@@ -12,6 +14,7 @@ function Register() {
                 <img src={ImgRegister} alt="" />
             </div>
             <form className="flex flex-col justify-center gap-6 md:w-3/4 w-full">
+                <Logo/>
                 <div className="font-semibold text-[#8E6447] text-2xl">Register</div>
                 <div className="text-[#4F5665] text-base">Fill out the form correctly</div>
                 <label htmlFor="name" className="flex flex-col gap-1 w-full justify-center">
@@ -47,7 +50,7 @@ function Register() {
                 <button type="submit" className="bg-[#FF8906] text-[#0B132A] p-3 rounded-lg font-medium text-base">Register</button>
                 <div className="flex justify-center gap-1 text-base">
                     <div className="text-[#4F5665]">Have An Account?</div>
-                    <div className="text-[#FF8906]">Login</div>
+                    <Link to={"/login"} className="text-[#FF8906]">Login</Link>
                 </div>
                 <div className="flex text-[#4F5665] text-xs justify-center">Or</div>
                 <div className="flex gap-4 items-center w-full mb-11">
