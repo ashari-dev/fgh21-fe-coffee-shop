@@ -21,14 +21,14 @@ function Login() {
             <p className="text-[#4F5665] text-[16px]">
               Fill out the form correctly
             </p>
-            <div className="flex flex-col gap-[25px]">
+            <form className="flex flex-col gap-[25px]">
               <label htmlFor="" className="text-[16px] font-bold">
                 Email
               </label>
               <div className="flex w-full items-center border p-3 rounded-lg gap-[10px]">
                 <FaEnvelope />
                 <input
-                  className="w-full"
+                  className="w-full outline-none"
                   type="email"
                   placeholder="Enter Your Email"
                 />
@@ -39,7 +39,7 @@ function Login() {
               <div className="flex w-full items-center border p-3 rounded-lg gap-[10px]">
                 <FaKey />
                 <input
-                  className="w-full"
+                  className="w-full outline-none"
                   type="password"
                   placeholder="Enter Your Password"
                 />
@@ -48,30 +48,29 @@ function Login() {
               <div className="flex justify-end text-[#FF8906]">
                 Lupa Password?
               </div>
-              <button className="w-full p-3 rounded-lg bg-[#FF8906] text-[16px] font-semibold">
+              <button
+                type="submit"
+                className="w-full p-3 rounded-lg bg-[#FF8906] text-[16px] font-semibold"
+              >
                 Login
               </button>
-              <div className="flex gap-[10px] justify-center">
-                <div className=" text-[16px]">Not Have An Account?</div>
-                <div className="text-[#FF8906] text-[16px]">Register</div>
-              </div>
-              <div className="flex justify-center text-[#AAAAAA] text-[12px]">
-                Or
-              </div>
-              <div className="flex justify-center gap-6">
-                <button className=" flex w-[383px] p-3 rounded-lg gap-[10px] items-center justify-center shadow-lg">
-                  <img
-                    className="flex justify-center"
-                    src={ImgFacebook}
-                    alt=""
-                  />
-                  <div className="text-[18px] text-[#4F5665]">Facebook</div>
-                </button>
-                <button className="flex w-[383px] p-3 rounded-lg  justify-center items-center gap-[10px] shadow-lg">
-                  <img className="flex justify-center" src={ImgGoogle} alt="" />
-                  <div className="text-[18px] text-[#4F5665]">Google</div>
-                </button>
-              </div>
+            </form>
+            <div className="flex gap-[10px] justify-center">
+              <div className=" text-[16px]">Not Have An Account?</div>
+              <div className="text-[#FF8906] text-[16px]">Register</div>
+            </div>
+            <div className="flex justify-center text-[#AAAAAA] text-[12px]">
+              Or
+            </div>
+            <div className="flex justify-center gap-6">
+              <button className=" flex w-[383px] p-3 rounded-lg gap-[10px] items-center justify-center shadow-lg">
+                <img className="flex justify-center" src={ImgFacebook} alt="" />
+                <div className="text-[18px] text-[#4F5665]">Facebook</div>
+              </button>
+              <button className="flex w-[383px] p-3 rounded-lg  justify-center items-center gap-[10px] shadow-lg">
+                <img className="flex justify-center" src={ImgGoogle} alt="" />
+                <div className="text-[18px] text-[#4F5665]">Google</div>
+              </button>
             </div>
           </div>
         </div>
