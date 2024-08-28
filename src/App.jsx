@@ -1,18 +1,23 @@
 import React from "react";
-// import Forgetpassword from "./pages/Forgetpassword";
+import Forgetpassword from "./pages/Forgetpassword";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import EditProduct from "./pages/EditProduct";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/forget-password",
-  //   element: <Forgetpassword />,
-  // },
-  // {
-  //   path: "/EditProduct",
-  //   element: <EditProduct />,
-  // },
+  {
+    path: "/Forgetpassword",
+    element: <Forgetpassword />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
   {
     path: "/",
     element: <HomePage />,
