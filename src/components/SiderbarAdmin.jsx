@@ -7,7 +7,7 @@ import { RxExit } from "react-icons/rx";
 
 function SidebarAdmin(){
     return(
-        <div className="w-[262px] fixed bg-white flex flex-col gap-4 pt-[24px] h-full">
+        <div className="w-1/5 bg-white flex flex-col gap-4 pt-[24px] h-full">
             <button className="flex items-center gap-2 ml-[42px] mr-[12px] hover:bg-[#FF8906] rounded-lg px-[11px]">
                 <CgMenuGridR />
                 <span>Dashboard</span>
