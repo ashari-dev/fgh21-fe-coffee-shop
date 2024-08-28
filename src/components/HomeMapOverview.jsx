@@ -6,7 +6,7 @@ import mapoverview from "../assets/img/mapoverview.svg"
 function HomeMapOverview() {
     return(
         <div className="bg-[#E8E8E8]">
-            <div className="flex flex-col gap-20 mr-5 ml-5 mt-20">
+            <div className="flex flex-col gap-20 mr-5 ml-5">
                 <div className="text-center flex flex-col gap-6">
                     <div className="md:text-5xl text-3xl font-medium">
                         <span className="text-[#8E6447]">Visit Our Store </span><span className="text-[#0B132A]">in the Spot on the Map Below</span>

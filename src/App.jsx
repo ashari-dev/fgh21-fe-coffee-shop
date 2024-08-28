@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import UserList from "./pages/UserList";
 import HomePage from "./pages/HomePage";
+import DashboardAdmin from "./pages/DashboardAdmin";
 import UserList from "./pages/UserList";
 import Profile from "./pages/Profile";
 
@@ -34,6 +35,9 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
+    path: "/DashboardAdmin",
+    element: <DashboardAdmin />,
+  },{
     path: "/list-user",
     element: <UserList />,
   },
