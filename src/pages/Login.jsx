@@ -6,6 +6,7 @@ import { FaKey } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa6";
 import ImgFacebook from "../assets/img/facebook.png";
 import ImgGoogle from "../assets/img/google.png";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -45,9 +46,12 @@ function Login() {
                 />
                 <FaEye />
               </div>
-              <div className="flex justify-end text-[#FF8906]">
+              <Link
+                to={"/forget-password"}
+                className="flex justify-end text-[#FF8906]"
+              >
                 Lupa Password?
-              </div>
+              </Link>
               <button
                 type="submit"
                 className="w-full p-3 rounded-lg bg-[#FF8906] text-[16px] font-semibold"
@@ -57,7 +61,9 @@ function Login() {
             </form>
             <div className="flex gap-[10px] justify-center">
               <div className=" text-[16px]">Not Have An Account?</div>
-              <div className="text-[#FF8906] text-[16px]">Register</div>
+              <Link to={"/register"} className="text-[#FF8906] text-[16px]">
+                Register
+              </Link>
             </div>
             <div className="flex justify-center text-[#AAAAAA] text-[12px]">
               Or
