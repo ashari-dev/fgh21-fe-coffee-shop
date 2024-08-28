@@ -4,7 +4,8 @@ import HomeComponent from "../components/HomeDescription";
 
 function HomePage() {
   return (<HomeComponent />
-         <HomeGridFavourite />);
+        //  <HomeGridFavourite />
+        );
 }
 
 export default HomePage;
