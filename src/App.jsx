@@ -10,6 +10,7 @@ import OrderList from "./pages/OrderList";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import Profile from "./pages/Profile";
 import ProductList from "./pages/ProductList";
+import Product from "./pages/Product";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
   {
     path: "/list-product",
     element: <ProductList />,
+  },
+  {
+    path: "/product",
+    element: <Product />,
   },
 ]);
 

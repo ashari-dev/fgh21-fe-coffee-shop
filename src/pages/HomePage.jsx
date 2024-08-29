@@ -10,13 +10,15 @@ import Footer from "../component/Footer";
 function HomePage() {
   return (
     <>
-     <Navbar />
-    <HomeCover />
-    <HomeComponent />
-    <HomeGridFavourite />
-    <HomeMapOverview/>
-    <HomeTestimonial />
-     <Footer />
+      <Navbar />
+      <HomeCover />
+      <HomeComponent />
+      <div className="flex flex-col gap-12">
+      <HomeGridFavourite />
+      <HomeMapOverview />
+      </div>
+      <HomeTestimonial />
+      <Footer />
     </>
   );
 }
