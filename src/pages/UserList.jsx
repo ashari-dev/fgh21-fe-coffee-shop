@@ -15,6 +15,8 @@ function UserList() {
   return (
     <>
       <Navbar />
+      <div className="bg-white w-screen h-24"></div>
+      <hr />
       <div className="flex ">
         <SidebarAdmin />
         <div className="relative w-full">

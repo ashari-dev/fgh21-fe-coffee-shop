@@ -14,7 +14,10 @@ function ProductList() {
   const [showAdd, SetShowAdd] = useState(false);
   return (
     <>
-      <div className="flex">
+        <Navbar />
+        <div className="bg-white w-screen h-24"></div>
+        <hr />
+        <div className="flex">
         <SidebarAdmin />
         <div className="relative w-full">
           {showAdd ? <InsertProduct closeMenu={SetShowAdd} /> : ""}
