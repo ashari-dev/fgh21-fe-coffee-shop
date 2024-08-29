@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../component/Navbar"
 import SidebarAdmin from "../components/SiderbarAdmin";
 import { CiSearch } from "react-icons/ci";
@@ -6,14 +6,18 @@ import { FaRegListAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteForever } from "react-icons/md";
 import { CiFilter } from "react-icons/ci";
+import DetailOrder from "../components/DetailOrderSheet";
 
 function OrderList(){
+    const [showAdd, SetShowAdd] = useState(false);
     return(
-        <div className="flex flex-col">
-            <Navbar/>
+        <div>
+            <div className="flex flex-col">
             <div className="flex flex-row">
                 <SidebarAdmin/>
-                <div className="flex flex-col w-4/5 bg-white pl-[40px] pt-[23px] pr-[80px] gap-4">
+                <div className="relative w-full">
+                {showAdd ? <DetailOrder closeMenu={SetShowAdd} /> : ""}
+                <div className="flex flex-col w-4/5 bg-white ml-[40px] mt-[23px] mr-[80px] gap-4 ">
                     <div className="flex w-full">
                         <div className="flex flex-col items-start gap-2 w-1/2">
                             <span className="text-black">Order List</span>
@@ -31,9 +35,9 @@ function OrderList(){
                             </div>
                             <div className="flex flex-col justify-end">
                                 <label htmlFor="search">Search Order</label>
-                                <div className="relative flex justify-center items-center">
+                                <div className="flex justify-center items-center">
                                     <input type="text" placeholder="Enter Order Number" id="search"className="text-sm border rounded-lg py-[10px] px-[12px]"/>
-                                    <CiSearch className="absolute right-2"/>
+                                    <CiSearch className="right-2"/>
                                 </div>
                             </div>
                             <div className="flex flex-col justify-end">
@@ -73,7 +77,7 @@ function OrderList(){
                                     </td>
                                     <td>IDR 40.000</td>
                                     <td className="flex gap-2 justify-center items-center">
-                                        <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
+                                        <button onClick={() => SetShowAdd(true)} className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
                                             <FaRegListAlt className="text-[#8E6447] bg-[#8E64471A]"/>
                                         </button>
                                         <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
@@ -99,7 +103,7 @@ function OrderList(){
                                     </td>
                                     <td>IDR 40.000</td>
                                     <td className="flex gap-2 justify-center items-center">
-                                        <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
+                                        <button onClick={() => SetShowAdd(true)} className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
                                             <FaRegListAlt className="text-[#8E6447] bg-[#8E64471A]"/>
                                         </button>
                                         <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
@@ -125,7 +129,7 @@ function OrderList(){
                                     </td>
                                     <td>IDR 40.000</td>
                                     <td className="flex gap-2 justify-center items-center">
-                                        <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
+                                        <button onClick={() => SetShowAdd(true)} className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
                                             <FaRegListAlt className="text-[#8E6447] bg-[#8E64471A]"/>
                                         </button>
                                         <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
@@ -151,7 +155,7 @@ function OrderList(){
                                     </td>
                                     <td>IDR 40.000</td>
                                     <td className="flex gap-2 justify-center items-center">
-                                        <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
+                                        <button onClick={() => SetShowAdd(true)} className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
                                             <FaRegListAlt className="text-[#8E6447] bg-[#8E64471A]"/>
                                         </button>
                                         <button className="w-[24px] h-[24px] flex justify-center items-center rounded-full bg-[#8E64471A]">
@@ -183,7 +187,9 @@ function OrderList(){
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
+        </div>
         </div>
     )
 }
