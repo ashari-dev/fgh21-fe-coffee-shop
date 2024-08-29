@@ -3,8 +3,11 @@ import HomeGridFavourite from "../components/HomeGridFavourite";
 import HomeComponent from "../components/HomeDescription";
 
 function HomePage() {
-  return (<HomeComponent />
-         <HomeGridFavourite />);
+  return (
+  <>
+  <HomeComponent />
+  <HomeGridFavourite />
+  </>);
 }
 
 export default HomePage;
