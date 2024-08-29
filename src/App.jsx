@@ -11,6 +11,7 @@ import DashboardAdmin from "./pages/DashboardAdmin";
 import Profile from "./pages/Profile";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/Product";
+import HistoryOrder from "./pages/HistoryOrder";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/detail-order",
     element: <DetailOrder />,
+  },
+  {
+    path: "/history-order",
+    element: <HistoryOrder />,
   },
   {
     path: "/register",
@@ -46,7 +51,7 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: "/DashboardAdmin",
+    path: "/dashboard-admin",
     element: <DashboardAdmin />,
   },
   {

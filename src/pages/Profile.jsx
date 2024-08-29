@@ -13,7 +13,7 @@ function Profile() {
   return (
     <div>
       <Navbar />
-      <div className="p-32">
+      <div className="md:p-32 px-5">
         <div className="flex flex-col justify-center gap-[44px]">
           <h1 className="font-bold text-[48px]">Profile</h1>
           <div className="md:flex md:flex-row flex flex-col justify-center gap-[30px] md:gap-[10px]">
@@ -36,7 +36,7 @@ function Profile() {
               </div>
             </div>
             <div className="w-full gap-[15px] border rounded-lg border-[#E8E8E8]">
-              <form className="flex flex-col gap-[25px] pr-[50px] pl-[50px] pt-[25px] pb-[25px]">
+              <form className="flex flex-col gap-[25px] md:px-[50px] px-5 py-[25px]">
                 <div className="flex flex-col gap-[14px]">
                   <label className="text-[16px] font-bold">Full Name</label>
                   <div className="border border-[#DEDEDE] flex gap-[10px] items-center  p-[14px] rounded-lg">

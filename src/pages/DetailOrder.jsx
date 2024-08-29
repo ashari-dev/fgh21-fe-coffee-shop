@@ -1,10 +1,13 @@
 import React from "react";
-import { FaRegUser, FaLocationDot, FaPhone, FaRegCreditCard, FaTruck, FaRepeat } from "react-icons/fa6";
+import { FaRegUser, FaLocationDot, FaPhone, FaRegCreditCard, FaTruck, FaRepeat, FaX } from "react-icons/fa6";
 import Kopie from "../img/Kopie.svg"
+import Layout from "../components/Layout";
 
 function DetailOrder(){
     return(
-        <div className="flex flex-col gap-6 px-32 py-16">
+        <Layout>
+        <div className="bg-black w-screen h-24"></div>
+        <div className="flex flex-col gap-6 md:px-32 px-5 py-16">
             <div className="flex flex-col text-[#4F5665] gap-1">
                 <div className="flex gap-1 text-[#0B0909]">
                     <div className="font-medium text-5xl">
@@ -16,8 +19,8 @@ function DetailOrder(){
                 </div>
                 <div className="">21 March 2023 at 10:30 AM</div>
             </div>
-            <div className="flex">
-                <div className="flex flex-col w-1/2 pr-2">
+            <div className="flex flex-col md:flex-row">
+                <div className="flex flex-col md:w-1/2 pr-2">
                     <div className="text-[#0B132A] font-medium text-xl mb-4">Order Information</div>
                     <div className="flex items-center p-4 gap-2 border-b-2">
                         <FaRegUser className="text-[#4F5665]"/>
@@ -62,11 +65,11 @@ function DetailOrder(){
                         </div>
                     </div>
                     <div className="flex items-center justify-between p-4 gap-2">
-                    <div className="font-medium text-[#4F5665]">Shipping</div>
+                    <div className="font-medium text-[#4F5665]">Total Transaksi</div>
                     <div className="text-[#FF8906] font-bold">IDR 40.000</div>
                     </div>
                 </div>
-                <div className="w-1/2 flex flex-col gap-4 pl-2">
+                <div className="md:w-1/2 flex flex-col gap-4 pl-2">
                     <div className="text-[#0B132A] font-medium text-xl">Your Order</div>
                     <div className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
                         <div className="">
@@ -99,9 +102,9 @@ function DetailOrder(){
                             <img src={Kopie} alt="" className="w-44 h-44"/>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <div className="flex justify-center bg-[#D00000] p-2 text-white rounded-full">
-                                FLASH SALE!
-                            </div>
+                                <div className="flex justify-center bg-[#D00000] p-2 text-white rounded-full">
+                                    FLASH SALE!
+                                </div>
                             <div className="text-[#0B0909] font-bold text-lg">
                                 Hazelnut Latte
                             </div>
@@ -123,6 +126,7 @@ function DetailOrder(){
                 </div>
             </div>
         </div>
+        </Layout>
     )
 }
 

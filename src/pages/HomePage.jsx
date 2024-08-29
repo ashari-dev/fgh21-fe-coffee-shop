@@ -13,10 +13,8 @@ function HomePage() {
       <Navbar />
       <HomeCover />
       <HomeComponent />
-      <div className="flex flex-col gap-12">
       <HomeGridFavourite />
       <HomeMapOverview />
-      </div>
       <HomeTestimonial />
       <Footer />
     </>

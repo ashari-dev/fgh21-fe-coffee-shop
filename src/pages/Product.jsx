@@ -14,14 +14,14 @@ function Product() {
       <div className="flex flex-col">
         <ProductCover />
         <PromoList />
-        <div className="flex flex-col gap-10 px-32 mt-20">
-          <h2 className="text-5xl">
+        <div className="flex flex-col gap-10 md:px-32 mt-20">
+          <h2 className="text-5xl mx-5">
             Our <span className="text-[#8e6447]">Product</span>
           </h2>
           <div className="flex gap-10">
             <SideBarProduct />
-            <div className="flex flex-col gap-48">
-              <div className="flex flex-wrap">
+            <div className="flex flex-col gap-10">
+              <div className="grid md:grid-cols-3 grid-cols-2">
                 <GridProduct />
                 <GridProduct />
                 <GridProduct />
@@ -29,7 +29,7 @@ function Product() {
                 <GridProduct />
                 <GridProduct />
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center py-24">
                 <Pagination />
               </div>
             </div>
