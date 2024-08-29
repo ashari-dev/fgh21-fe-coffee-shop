@@ -1,7 +1,7 @@
 import React from "react";
 import { FaSearch, FaShoppingCart, FaBars } from "react-icons/fa";
 import Logo from "../assets/components/Logo";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ function Navbar() {
             </div>
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
-            <div>Home</div>
-            <div>Product</div>
+            <Link to={"/"}>Home</Link>
+            <Link to={"/product"}>Product</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">

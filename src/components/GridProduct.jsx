@@ -1,14 +1,12 @@
 import React from "react";
-import ImagesProduct from "../img/grid-product.png";
 import { FaShoppingCart } from "react-icons/fa";
 
 function GridProduct() {
   return (
-    <div className="flex gap-4 p-8">
-      <div className="flex flex-col h-screen relative">
-        {/* <div className="bg-red-400">Images</div> */}
+    <div className="gap-4 p-8">
+      <div className="flex flex-col pb-32 relative">
         <img
-          className="min-w-[300px] bg-black"
+          className="max-w-[300px] bg-black"
           src="https://picsum.photos/id/63/500/500"
           alt=""
         />
@@ -23,7 +21,7 @@ function GridProduct() {
             <button className="w-3/4 bg-orange-400 rounded-[6px] p-2">
               Buy
             </button>
-            <button className="w-1/4 border border-orange-400 flex justify-center items-center text-orange-400 rounded-xl rounded-[6px]">
+            <button className="w-1/4 border border-orange-400 flex justify-center items-center text-orange-400 rounded-xl">
               <FaShoppingCart />
             </button>
           </div>
