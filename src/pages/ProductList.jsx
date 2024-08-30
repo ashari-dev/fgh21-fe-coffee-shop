@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../component/Navbar";
 import SidebarAdmin from "../components/SiderbarAdmin";
 import { FaPlus, FaRegListAlt, FaUserCircle } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
@@ -8,15 +7,14 @@ import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import InsertProduct from "../components/InsertProduct";
 import EditProduct from "../components/EditProduct";
+import NavbarAdmin from "../component/NavbarAdmin";
 
 function ProductList() {
   const [showUpdate, setShowUpdate] = useState(false);
   const [showAdd, SetShowAdd] = useState(false);
   return (
     <>
-        <Navbar />
-        <div className="bg-white w-screen h-24"></div>
-        <hr />
+        <NavbarAdmin/>
         <div className="flex">
         <SidebarAdmin />
         <div className="relative w-full">
