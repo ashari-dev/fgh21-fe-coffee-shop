@@ -3,19 +3,27 @@ import ImgLogin from "../assets/img/Login.png";
 import Logo from "../assets/components/Logo";
 import { FaEnvelope } from "react-icons/fa6";
 import { FaKey } from "react-icons/fa6";
-import { FaEye } from "react-icons/fa6";
+import { FaEye, FaRegEnvelope, FaRegEye } from "react-icons/fa6";
 import ImgFacebook from "../assets/img/facebook.png";
 import ImgGoogle from "../assets/img/google.png";
 import { Link } from "react-router-dom";
 
 function Login() {
+  let [pass, setPassword] = React.useState("password");
+  function changePassword() {
+    if (pass === "password") {
+      setPassword("text");
+    } else {
+      setPassword("password");
+    }
+  }
   return (
-    <div className="flex justify-center gap-16 h-screen">
-      <div className="w-1/4 h-screen md:flex hidden">
-        <img src={ImgLogin} alt="" />
+    <div className="flex justify-center flex-col md:flex-row gap-16 h-screen">
+      <div className="md:w-1/4 h-screen md:flex hidden">
+        <img src={ImgLogin} alt="" className="object-cover"/>
       </div>
-      <div className="w-3/4">
-        <div className="flex flex-col justify-center w-full p-[50px] gap-[25px] h-screen">
+      <div className="md:w-3/4">
+        <div className="flex flex-col justify-center md:pr-32 gap-6 p-5 h-screen">
           <Logo />
           <div className="flex flex-col gap-[25px] w-full justify-center">
             <h1 className="text-[#8E6447] text-[30px] font-bold">Login</h1>
@@ -23,29 +31,23 @@ function Login() {
               Fill out the form correctly
             </p>
             <form className="flex flex-col gap-[25px]">
-              <label htmlFor="" className="text-[16px] font-bold">
-                Email
+              <label htmlFor="email" className="flex flex-col gap-1 w-full justify-center">
+                  <div className="text-[#0B132A] font-semibold text-base">Email</div>
+                  <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
+                      <FaRegEnvelope />
+                      <input type="email" name="email" id="email" placeholder="Enter Your Email" className="w-full outline-none"/>
+                  </div>
               </label>
-              <div className="flex w-full items-center border p-3 rounded-lg gap-[10px]">
-                <FaEnvelope />
-                <input
-                  className="w-full outline-none"
-                  type="email"
-                  placeholder="Enter Your Email"
-                />
-              </div>
-              <label htmlFor="" className="text-[16px] font-bold">
-                Password
+              <label htmlFor="password" className="flex flex-col gap-1 w-full justify-center">
+                <div className="text-[#0B132A] font-semibold text-base">Password</div>
+                <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
+                    <FaKey />
+                    <input type={pass} name="password" id="password" placeholder="Enter Your Password" className="w-full outline-none"/>
+                    <button type="button" onClick={changePassword}>
+                      <FaRegEye />
+                    </button>
+                </div>
               </label>
-              <div className="flex w-full items-center border p-3 rounded-lg gap-[10px]">
-                <FaKey />
-                <input
-                  className="w-full outline-none"
-                  type="password"
-                  placeholder="Enter Your Password"
-                />
-                <FaEye />
-              </div>
               <Link
                 to={"/forget-password"}
                 className="flex justify-end text-[#FF8906]"

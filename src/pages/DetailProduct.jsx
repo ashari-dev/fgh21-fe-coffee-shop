@@ -7,25 +7,39 @@ import coffe_2 from "../assets/img/coffe_2.svg"
 import coffe_3 from "../assets/img/coffe_3.svg"
 import coffe_4 from "../assets/img/coffe_4.svg"
 import Pagination from "../components/Pagination.jsx";
+import GridProduct from "../components/GridProduct.jsx";
+import Footer from "../component/Footer.jsx";
 
 function DetailProduct(){
+    const [num, setNum] = React.useState(0);
+    function mins() {
+        if (num > 0) {
+        setNum(num - 1);
+        }
+    }
+    function plus() {
+        if (num < 100) {
+        setNum(num + 1);
+        }
+    }
+
     return (
         <div className="">
             <Navbar />
-            <div className="flex flex-col md:flex-row md:px-32 px-5 py-16 gap-5 mb-16">
+            <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
                 <div className="md:w-1/2 flex flex-col gap-4">
                     <img src={coffe_1} className="bg-black w-full object-cover"/>
                     <div className="grid grid-cols-3 gap-4 w-full">
                         <img src={coffe_2} className="flex w-full bg-black" />
-                        <img src={coffe_2} className="flex w-full bg-black" />
-                        <img src={coffe_2} className="flex w-full bg-black" />
+                        <img src={coffe_3} className="flex w-full bg-black" />
+                        <img src={coffe_4} className="flex w-full bg-black" />
                     </div>
                 </div>
                 <div className="flex flex-col gap-4 md:w-1/2">
                     <div className="flex font-bold text-lg text-white max-w-36 justify-center bg-[#D00000] rounded-full p-2">FLASH SALE!</div>
                     <div className="text-[#0B0909] font-medium text-5xl">Hazelnut Latte</div>
                     <div className="flex gap-4 items-center">
-                        <div className="font-medium text-[#D00000] text-xs">IDR 20.000</div>
+                        <div className="font-medium text-[#D00000] line-through text-xs">IDR 20.000</div>
                         <div className="text-[#FF8906] font-medium text-2xl">IDR 10.000</div>
                     </div>
                     <div className="flex gap-3 items-center  text-sm">
@@ -44,11 +58,11 @@ function DetailProduct(){
                     </div>
                     <div className="text-[#4F5665]">Cold brewing is a method of brewing that combines ground coffee and cool water and uses time instead of heat to extract the flavor. It is brewed in small batches and steeped for as long as 48 hours.</div>
                     <div className="flex gap-4 items-center">
-                        <button type="button" className="flex items-center justify-center rounded-md border-[#FF8906] border-2 w-9 h-9">
+                        <button type="button" onClick={mins} className="flex items-center justify-center rounded-md border-[#FF8906] border-2 w-9 h-9">
                             <FaMinus className=""/>
                         </button>
-                        <div className="font-bold text-lg">1</div>
-                        <button type="button" className="flex items-center justify-center rounded-md bg-[#FF8906] w-9 h-9">
+                        <div className="font-bold text-lg">{num}</div>
+                        <button type="button" onClick={plus} className="flex items-center justify-center rounded-md bg-[#FF8906] w-9 h-9">
                             <FaPlus className=""/>
                         </button>
                     </div>
@@ -78,6 +92,13 @@ function DetailProduct(){
                 <div className="text-[#0B0909]">Recommendation</div>
                 <div className="text-[#8E6447]">For You</div>
             </div>
+            <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
+                <GridProduct />
+                <GridProduct />
+                <GridProduct />
+                <GridProduct />
+            </div>
+            <Footer />
         </div>
     )
 }

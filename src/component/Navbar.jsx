@@ -7,7 +7,7 @@ function Navbar() {
   const navigate = useNavigate();
   return (
     <>
-      <div className="absolute w-full flex justify-between px-5 md:px-32 py-5 items-center bg-transparent">
+      <div className="fixed w-full flex justify-between px-5 md:px-32 items-center bg-[#0B090921]">
         <div className="flex gap-16">
           <div className="flex items-center w-screen md:w-40 justify-between">
             <Logo></Logo>

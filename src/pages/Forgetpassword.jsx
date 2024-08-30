@@ -2,6 +2,7 @@ import React from "react";
 import forgetpass from "../assets/img/picforgetpassword.jpeg";
 import { MdOutlineEmail } from "react-icons/md";
 import Logo from "../assets/components/Logo";
+import { FaRegEnvelope } from "react-icons/fa6";
 
 function Forgetpassword() {
   return (
@@ -24,17 +25,14 @@ function Forgetpassword() {
                 Fill out the form correctly
               </div>
               <div>We will send new password to your email</div>
-              <form className="flex-col gap">
-                <div className="mb-3 font-semibold">Email</div>
-                <div className="mb-8 border-2 rounded-lg overflow-hidden">
-                  <MdOutlineEmail className="h-7 w-7 absolute mt-2 ml-6" />
-                  <input
-                    className="w-full h-[44px] pl-16 outline-none"
-                    type="text"
-                    name="password"
-                    placeholder="Enter Your Email"
-                  />
-                </div>
+              <form className="flex flex-col gap-6">
+                <label htmlFor="email" className="flex flex-col gap-1 w-full justify-center mb-6-">
+                  <div className="text-[#0B132A] font-semibold text-base">Email</div>
+                  <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
+                      <FaRegEnvelope />
+                      <input type="email" name="email" id="email" placeholder="Enter Your Email" className="w-full outline-none"/>
+                  </div>
+                </label>
                 <div>
                   <button className="w-full bg-[#FF8906] h-[50px] rounded-md font-medium">
                     Submit

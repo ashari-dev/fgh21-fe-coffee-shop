@@ -54,7 +54,9 @@ function SideBarProduct(){
                 <div className="flex flex-col gap-2">
                     <div className="text-white font-bold text-lg">Range Price</div>
                     <div className="">
-                        <img src={range} alt="" />
+                    <div className="flex">
+                        <input type="range" id="range" name="range" min="0" max="1000000" className="w-1/2"/>
+                        <input type="range" id="range" name="range" min="0" max="1000000" className="w-1/2"/>                    </div>
                     </div>
                     <button type="submit" className="w-full bg-[#FF8906] py-3 rounded-lg font-medium text-sm mb-4">Apply Filter</button>
                 </div>
