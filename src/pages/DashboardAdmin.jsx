@@ -2,20 +2,19 @@ import React from "react";
 import CardInformation from "../components/CardInformation";
 import OrderStatic from "../components/OrderStatic";
 import ListPopularOrder from "../components/ListPopularOrder";
-import Navbar from "../component/Navbar";
 import SidebarAdmin from "../components/SiderbarAdmin";
+import NavbarAdmin from "../component/NavbarAdmin";
 
 function DashboarAdmin() {
   return (
     <div>
-      <Navbar />
-      <div className="bg-white w-screen h-24"></div>
-      <hr />
+      <NavbarAdmin />
+
       <div className="flex">
-      <SidebarAdmin />
+        <SidebarAdmin />
         <div>
           <CardInformation />
-          <OrderStatic/>
+          <OrderStatic />
           <ListPopularOrder />
         </div>
       </div>
@@ -23,4 +22,3 @@ function DashboarAdmin() {
   );
 }
 export default DashboarAdmin;
-  
