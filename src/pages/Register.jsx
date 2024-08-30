@@ -25,9 +25,9 @@ function Register() {
         }
     }
   return (
-        <div className="flex w-full items-center gap-16 md:pr-32 md:p-0 p-5">
+        <div className="flex w-full h-screen items-center gap-16 md:pr-32 md:p-0 p-5">
             <div className="md:flex md:w-1/4 hidden">
-                <img src={ImgRegister} alt="" className="object-cover"/>
+                <img src={ImgRegister} alt="" className="object-cover h-screen"/>
             </div>
             <form className="flex flex-col justify-center gap-6 md:w-3/4 w-full">
                 <Logo/>
