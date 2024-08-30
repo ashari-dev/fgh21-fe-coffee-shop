@@ -11,6 +11,10 @@ import DashboardAdmin from "./pages/DashboardAdmin";
 import Profile from "./pages/Profile";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/Product";
+import DetailProduct from "./pages/DetailProduct";
+import Payment from "./pages/Payment";
+import HistoryOrder from "./pages/HistoryOrder"
+import Try from "./pages/Try"
 
 const router = createBrowserRouter([
   {
@@ -60,6 +64,22 @@ const router = createBrowserRouter([
   {
     path: "/product",
     element: <Product />,
+  },
+  {
+    path: "/detail-product",
+    element: <DetailProduct />,
+  },
+  {
+    path: "/payment-detail",
+    element: <Payment />,
+  },
+  {
+    path: "/history-order",
+    element: <HistoryOrder />,
+  },
+  {
+    path: "/try",
+    element: <Try />,
   },
 ]);
 
