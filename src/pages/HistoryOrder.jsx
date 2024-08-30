@@ -4,6 +4,7 @@ import Footer from "../component/Footer";
 import Kopie from "../img/Kopie.svg"
 import Pagination from "../components/Pagination";
 import { FaRegTrashCan, FaRegComments, FaRegCalendarDays, FaRotate,FaArrowsSpin } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 function HistoryOrder() {
     return (
@@ -63,7 +64,7 @@ function HistoryOrder() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</div>
+                                <Link to={"/detail-order"} className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</Link>
                             </div>
                         </div>
                         <div className="flex gap-5 bg-[#E8E8E8]/30 p-4 rounded-lg">
@@ -111,7 +112,7 @@ function HistoryOrder() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</div>
+                                <Link to={"/detail-order"} className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</Link>
                             </div>
                         </div>
                         <div className="flex gap-5 bg-[#E8E8E8]/30 p-4 rounded-lg">
@@ -159,7 +160,7 @@ function HistoryOrder() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</div>
+                                <Link to={"/detail-order"} className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</Link>
                             </div>
                         </div>
                         <div className="flex gap-5 bg-[#E8E8E8]/30 p-4 rounded-lg">
@@ -207,11 +208,8 @@ function HistoryOrder() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</div>
+                                <Link to={"/detail-order"} className="text-sm underline text-[#FF8906] font-medium">Views Order Detail</Link>
                             </div>
-                        </div>
-                        <div className="flex justify-center mb-10">
-                            <Pagination />
                         </div>
                     </div>
                     <div className="md:w-1/3 md:pl-5">
