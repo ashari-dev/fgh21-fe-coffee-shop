@@ -5,7 +5,7 @@ import Coupon from "../assets/img/coupon.png"
 function PromoList() {
     return(
         <>
-            <div className="pt-12 mt-48 flex flex-col gap-6">
+            <div className="pt-12 md:mt-48 flex flex-col gap-6">
                 <div className="flex items-center justify-between md:mx-32 mx-5">
                     <div className="text-5xl">
                         <span>Today</span>

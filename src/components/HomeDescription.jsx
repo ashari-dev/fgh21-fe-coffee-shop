@@ -3,10 +3,11 @@ import { FaCheckCircle } from "react-icons/fa";
 
 function HomeComponent() {
   return (
-    <div className="flex h-[60vh] w-full">
-      <div className="flex flex-col max-w-[50%] h-full gap-6 mt-14 ml-36 mr-16">
-        <div className="pl-8 border-l-4">
-          <h1 className="text-5xl">We Provide <span className="text-[#8E6447]"> Good Coffee </span>and <span className="text-[#8E6447]">Healthy Meals</span> </h1>
+    <div className="flex w-full h-1/2">
+      <div className="flex flex-col md:max-w-[50%] h-full gap-6 md:pt-14 px-5 md:pl-36 md:pr-16">
+      <div className="bg-[#FF8906] w-full h-full md:hidden"></div>
+        <div className="pl-8 border-l-4 border-[#FF8906]">
+          <h1 className="md:text-5xl text-2xl">We Provide <span className="text-[#8E6447]"> Good Coffee </span>and <span className="text-[#8E6447]">Healthy Meals</span> </h1>
         </div>
         <div className="flex flex-col gap-6 text-[#4F5665]">
           <p>
@@ -32,7 +33,7 @@ function HomeComponent() {
           </ul>
         </div>
       </div>
-      <div className="bg-[#FF8906] flex max-w-[50%] w-full h-full"></div>
+      <div className="bg-[#FF8906] md:flex md:max-w-[100vh] w-full md:h-[50vh] hidden"></div>
     </div>
   );
 }

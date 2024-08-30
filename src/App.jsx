@@ -16,6 +16,8 @@ import Payment from "./pages/Payment";
 import HistoryOrder from "./pages/HistoryOrder"
 import Try from "./pages/Try"
 
+
+
 const router = createBrowserRouter([
   {
     path: "/forget-password",
@@ -24,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/detail-order",
     element: <DetailOrder />,
+  },
+  {
+    path: "/history-order",
+    element: <HistoryOrder />,
   },
   {
     path: "/register",
@@ -50,7 +56,7 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: "/DashboardAdmin",
+    path: "/dashboard-admin",
     element: <DashboardAdmin />,
   },
   {
