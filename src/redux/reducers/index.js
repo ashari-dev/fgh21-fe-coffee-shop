@@ -1,6 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import auth from "./auth";
+import profile from "./profile";
 
 const reducer = combineReducers({
-
-})
-export default reducer
+  auth,
+  profile,
+});
+export default reducer;

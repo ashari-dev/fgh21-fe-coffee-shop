@@ -14,6 +14,8 @@ import Product from "./pages/Product";
 import DetailProduct from "./pages/DetailProduct";
 import Payment from "./pages/Payment";
 import HistoryOrder from "./pages/HistoryOrder";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 // import Try from "./pages/Try"
 
 const router = createBrowserRouter([
@@ -88,7 +90,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />;
+    </Provider>
+  );
 }
 
 export default App;

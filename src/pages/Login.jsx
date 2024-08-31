@@ -1,14 +1,24 @@
 import React from "react";
 import ImgLogin from "../assets/img/Login.png";
 import Logo from "../assets/components/Logo";
-import { FaEnvelope } from "react-icons/fa6";
 import { FaKey } from "react-icons/fa6";
-import { FaEye, FaRegEnvelope, FaRegEye } from "react-icons/fa6";
+import { FaRegEnvelope, FaRegEye } from "react-icons/fa6";
 import ImgFacebook from "../assets/img/facebook.png";
 import ImgGoogle from "../assets/img/google.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/reducers/auth";
+import { addProfile } from "../redux/reducers/profile";
 
 function Login() {
+  // const dataToken = useSelector((state) => state.auth.token);
+  // console.log(dataToken);
+  // const profile = useSelector((state) => state.auth.)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   let [pass, setPassword] = React.useState("password");
   function changePassword() {
     if (pass === "password") {
@@ -17,10 +27,77 @@ function Login() {
       setPassword("password");
     }
   }
+  const formik = useFormik({
+    onSubmit: dataNew(),
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: dataNew(),
+    validationSchema: Yup.object().shape({
+      email: Yup.string().email("Invalid email address").required("Required!"),
+      password: Yup.string()
+        .min(6, "Minimum 6 characters")
+        .required("Required!"),
+    }),
+  });
+
+  async function dataNew(e) {
+    e.preventDefault();
+    const email = formik.values.email;
+    const password = formik.values.password;
+    console.log(formik.values.email);
+    console.log(formik.values.password);
+
+    const formData = new URLSearchParams();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    const dataNew = await fetch("http://localhost:8000/auth/login", {
+      method: "POST",
+      body: formData,
+    }).then((response) => {
+      response.json().then((data) => {
+        if (data.success) {
+          console.log(data.result.token);
+          dispatch(login(data.result.token));
+          async function dataUpdate() {
+            const response = await fetch("http://localhost:8000/profile/", {
+              headers: {
+                Authorization: "Bearer " + data.result.token,
+              },
+            });
+            const json = await response.json();
+            console.log(json.result);
+            dispatch(addProfile(json.result));
+          }
+
+          dataUpdate();
+          navigate("/");
+        } else {
+          setLoading(false);
+          setMessage(data.message);
+          setAlert(true);
+          // window.alert;
+          // window.alert(data.message);
+        }
+      });
+    });
+    // console.log(formData);
+    // const response = await dataNew.json();
+    // if (response.success) {
+    //   window.alert("Sukses");
+    //   dispatch(dataNew(data.result.token));
+    //   navigate("/");
+    // } else {
+    //   console.log("gagal");
+    // }
+  }
+
   return (
     <div className="flex justify-center flex-col md:flex-row gap-16 h-screen">
       <div className="md:w-1/4 h-screen md:flex hidden">
-        <img src={ImgLogin} alt="" className="object-cover"/>
+        <img src={ImgLogin} alt="" className="object-cover" />
       </div>
       <div className="md:w-3/4">
         <div className="flex flex-col justify-center md:pr-32 gap-6 p-5 h-screen">
@@ -30,23 +107,57 @@ function Login() {
             <p className="text-[#4F5665] text-[16px]">
               Fill out the form correctly
             </p>
-            <form className="flex flex-col gap-[25px]">
-              <label htmlFor="email" className="flex flex-col gap-1 w-full justify-center">
-                  <div className="text-[#0B132A] font-semibold text-base">Email</div>
-                  <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
-                      <FaRegEnvelope />
-                      <input type="email" name="email" id="email" placeholder="Enter Your Email" className="w-full outline-none"/>
-                  </div>
-              </label>
-              <label htmlFor="password" className="flex flex-col gap-1 w-full justify-center">
-                <div className="text-[#0B132A] font-semibold text-base">Password</div>
-                <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
-                    <FaKey />
-                    <input type={pass} name="password" id="password" placeholder="Enter Your Password" className="w-full outline-none"/>
-                    <button type="button" onClick={changePassword}>
-                      <FaRegEye />
-                    </button>
+            <form onSubmit={dataNew} className="flex flex-col gap-[25px]">
+              <label
+                htmlFor="email"
+                className="flex flex-col gap-1 w-full justify-center"
+              >
+                <div className="text-[#0B132A] font-semibold text-base">
+                  Email
                 </div>
+                <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
+                  <FaRegEnvelope />
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Enter Your Email"
+                    onChange={formik.handleChange}
+                    className={
+                      formik.errors.email && formik.touched.email
+                        ? "outline-none w-full"
+                        : "outline-none w-full"
+                    }
+                  />
+                </div>
+                {formik.errors.email && formik.touched.email && (
+                  <p className="text-red-500">{formik.errors.email}</p>
+                )}
+              </label>
+              <label
+                htmlFor="password"
+                className="flex flex-col gap-1 w-full justify-center"
+              >
+                <div className="text-[#0B132A] font-semibold text-base">
+                  Password
+                </div>
+                <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
+                  <FaKey />
+                  <input
+                    type={pass}
+                    name="password"
+                    id="password"
+                    placeholder="Enter Your Password"
+                    className="w-full outline-none"
+                    onChange={formik.handleChange}
+                  />
+                  <button type="button" onClick={changePassword}>
+                    <FaRegEye />
+                  </button>
+                </div>
+                {formik.errors.password && formik.touched.password && (
+                  <p className="text-red-500">{formik.errors.password}</p>
+                )}
               </label>
               <Link
                 to={"/forget-password"}
