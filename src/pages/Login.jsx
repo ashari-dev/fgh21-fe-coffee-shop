@@ -75,23 +75,10 @@ function Login() {
           dataUpdate();
           navigate("/");
         } else {
-          setLoading(false);
           setMessage(data.message);
-          setAlert(true);
-          // window.alert;
-          // window.alert(data.message);
         }
       });
     });
-    // console.log(formData);
-    // const response = await dataNew.json();
-    // if (response.success) {
-    //   window.alert("Sukses");
-    //   dispatch(dataNew(data.result.token));
-    //   navigate("/");
-    // } else {
-    //   console.log("gagal");
-    // }
   }
 
   return (
