@@ -10,13 +10,13 @@ import Footer from "../component/Footer";
 function HomePage() {
   return (
     <>
-     <Navbar />
-    <HomeCover />
-    <HomeComponent />
-    <HomeGridFavourite />
-    <HomeMapOverview/>
-    <HomeTestimonial />
-     <Footer />
+      <Navbar />
+      <HomeCover />
+      <HomeComponent />
+      <HomeGridFavourite />
+      <HomeMapOverview />
+      <HomeTestimonial />
+      <Footer />
     </>
   );
 }

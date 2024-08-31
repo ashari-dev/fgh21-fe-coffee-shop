@@ -10,6 +10,13 @@ import OrderList from "./pages/OrderList";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import Profile from "./pages/Profile";
 import ProductList from "./pages/ProductList";
+import Product from "./pages/Product";
+import DetailProduct from "./pages/DetailProduct";
+import Payment from "./pages/Payment";
+import HistoryOrder from "./pages/HistoryOrder";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+// import Try from "./pages/Try"
 
 const router = createBrowserRouter([
   {
@@ -21,11 +28,15 @@ const router = createBrowserRouter([
     element: <DetailOrder />,
   },
   {
+    path: "/history-order",
+    element: <HistoryOrder />,
+  },
+  {
     path: "/register",
     element: <Register />,
   },
   {
-    path: "/orderList",
+    path: "/order-list",
     element: <OrderList />,
   },
   {
@@ -33,7 +44,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/userList",
+    path: "/user-list",
     element: <UserList />,
   },
   {
@@ -45,7 +56,7 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: "/DashboardAdmin",
+    path: "/dashboard-admin",
     element: <DashboardAdmin />,
   },
   {
@@ -56,10 +67,34 @@ const router = createBrowserRouter([
     path: "/list-product",
     element: <ProductList />,
   },
+  {
+    path: "/product",
+    element: <Product />,
+  },
+  {
+    path: "/detail-product/:id",
+    element: <DetailProduct />,
+  },
+  {
+    path: "/payment-detail",
+    element: <Payment />,
+  },
+  {
+    path: "/history-order",
+    element: <HistoryOrder />,
+  },
+  // {
+  //   path: "/try",
+  //   element: <Try />,
+  // },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />;
+    </Provider>
+  );
 }
 
 export default App;

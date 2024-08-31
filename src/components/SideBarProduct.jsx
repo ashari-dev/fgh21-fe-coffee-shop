@@ -3,7 +3,7 @@ import range from "../img/range.svg"
 
 function SideBarProduct(){
     return(
-        <div className="bg-black w-full max-w-96 rounded-xl">
+        <div className="bg-black h-full w-full max-w-96 rounded-xl md:block hidden">
             <form className="p-5 flex flex-col gap-8">
                 <div className="flex justify-between">
                     <div className="text-white font-semibold text-xl">Filter</div>
@@ -54,7 +54,9 @@ function SideBarProduct(){
                 <div className="flex flex-col gap-2">
                     <div className="text-white font-bold text-lg">Range Price</div>
                     <div className="">
-                        <img src={range} alt="" />
+                    <div className="flex">
+                        <input type="range" id="range" name="range" min="0" max="1000000" className="w-1/2"/>
+                        <input type="range" id="range" name="range" min="0" max="1000000" className="w-1/2"/>                    </div>
                     </div>
                     <button type="submit" className="w-full bg-[#FF8906] py-3 rounded-lg font-medium text-sm mb-4">Apply Filter</button>
                 </div>

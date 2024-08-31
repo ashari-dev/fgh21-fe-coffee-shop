@@ -4,7 +4,7 @@ import { FaRegMessage } from "react-icons/fa6";
 function ChatAdmin() {
     return(
         <>
-            <div className="border w-1/3">
+            <div className="border">
                 <div className="p-5 flex flex-col gap-2">
                     <div className="bg-black max-w-11 h-11 flex items-center justify-center rounded-3xl">
                         <FaRegMessage className="text-white"></FaRegMessage>

@@ -1,13 +1,14 @@
 import React from "react";
 import { FaSearch, FaShoppingCart, FaBars } from "react-icons/fa";
 import Logo from "../assets/components/Logo";
-import { useNavigate } from "react-router-dom";
+import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
   return (
     <>
-      <div className="absolute w-full flex justify-between px-5 md:px-32 items-center bg-[#0B090921]">
+      <div className="fixed w-full flex justify-between py-2 px-5 md:px-32 items-center bg-[#0B090921]">
+        <ScrollRestoration />
         <div className="flex gap-16">
           <div className="flex items-center w-screen md:w-40 justify-between">
             <Logo></Logo>
@@ -21,8 +22,8 @@ function Navbar() {
             </div>
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
-            <div>Home</div>
-            <div>Product</div>
+            <Link to={"/"}>Home</Link>
+            <Link to={"/product"}>Product</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">

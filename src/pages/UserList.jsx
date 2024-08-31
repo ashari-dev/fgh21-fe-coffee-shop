@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../component/Navbar";
 import SidebarAdmin from "../components/SiderbarAdmin";
 import { FaPlus, FaRegListAlt, FaUserCircle } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
@@ -8,24 +7,31 @@ import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import EditUser from "../components/EditUser";
 import InsertUser from "../components/InsertUser";
+import NavbarAdmin from "../component/NavbarAdmin";
 
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(false);
   const [showAdd, SetShowAdd] = useState(false);
   return (
     <>
-      <Navbar />
+      <NavbarAdmin />
+
       <div className="flex ">
         <SidebarAdmin />
         <div className="relative w-full">
-          {showAdd ? <InsertUser closeMenu={SetShowAdd}/> : ""}
+          {showAdd ? <InsertUser closeMenu={SetShowAdd} /> : ""}
           {showUpdate ? <EditUser closeMenu={setShowUpdate} /> : ""}
 
           <div className="border-l w-full min-h-screen pt-6 pl-7 pr-20 flex flex-col gap-5">
             <div className="text-2xl">User List</div>
             <div className="flex justify-between items-center">
               <div>
-                <button onClick={()=>{SetShowAdd(true)}} className="flex items-center gap-3 bg-[#FF8906] p-2 rounded-md">
+                <button
+                  onClick={() => {
+                    SetShowAdd(true);
+                  }}
+                  className="flex items-center gap-3 bg-[#FF8906] p-2 rounded-md"
+                >
                   <FaPlus /> Add User
                 </button>
               </div>

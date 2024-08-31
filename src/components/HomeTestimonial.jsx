@@ -10,10 +10,10 @@ import {
 function HomeTestimonial() {
   return (
     <>
-      <div className="flex bg-[rgba(0,0,0,0.9)] min-h-[583px] gap-4 py-16 pl-24">
-        <div className="bg-white max-h-[432px] flex-1"></div>
-        <div className="flex-1 pr-36 text-white flex-col flex gap-6">
-          <div className="text-xl">TESTIMONIAL</div>
+      <div className="flex flex-col md:flex-row bg-[rgba(0,0,0,0.9)] min-h-[583px] gap-4 py-16 md:px-32 p-5">
+        <div className="bg-white h-[500px] md:max-h-[432px] flex-1"></div>
+        <div className="flex-1 text-white flex-col flex gap-6">
+          <div className="text-xl md:flex hidden">TESTIMONIAL</div>
           <div className="text-3xl">Viezh Robert</div>
           <div className="text-[#FF8906]">Manager Coffe Shop</div>
           <div>
@@ -29,7 +29,7 @@ function HomeTestimonial() {
               <FaStar />
               <FaStar />
             </span>
-            <span>5,0</span>
+            <span>5.0</span>
           </div>
           <div className="flex gap-8">
             <button className="bg-white text-black p-4 rounded-full">
