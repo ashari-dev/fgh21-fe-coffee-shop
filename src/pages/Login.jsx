@@ -53,7 +53,7 @@ function Login() {
     formData.append("email", email);
     formData.append("password", password);
 
-    const dataNew = await fetch("http://localhost:8000/auth/login", {
+    const datalogin = await fetch("http://localhost:8000/auth/login", {
       method: "POST",
       body: formData,
     }).then((response) => {
@@ -71,7 +71,6 @@ function Login() {
             console.log(json.result);
             dispatch(addProfile(json.result));
           }
-
           dataUpdate();
           navigate("/");
         } else {
