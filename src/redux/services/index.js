@@ -1,9 +1,8 @@
-import { product } from "./products";
+import { products } from "./products";
 import { profile } from "./profile";
 
 export const services = {
-  [product.reducerPath]: product.reducer,
-  [profile.reducerPath]: profile.reducer,
+  [products.reducerPath]: products.reducer,
 };
 
-export const rtkMiddlewares = [product.middleware];
+export const rtkMiddlewares = [products.middleware];
