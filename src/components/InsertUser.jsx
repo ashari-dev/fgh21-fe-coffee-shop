@@ -11,24 +11,17 @@ import * as yup from "yup"
 
 function InsertUser(props) {
   const [role, setRole] = useState(0)
-  console.log(role)
-  async function inputForm(e) {
-    console.log(e)
+
+  async function inputForm() {
+    const file = formik.values.file
     const fullName = formik.values.fullName
     const email = formik.values.email
     const phone = formik.values.phone
     const password = formik.values.password
     const address = formik.values.address
-    // const roleValue = role
-    // if (role == "Admin") {
-    //   role = 2
-    // } else if(role == "Normal User"){
-    //   role = 1
-    // }
-
-    // pull ulang.
     
     const data = new URLSearchParams()
+    data.append('image', file)
     data.append('fullName', fullName)
     data.append('email', email)
     data.append('phoneNumber', phone)
@@ -53,6 +46,7 @@ function InsertUser(props) {
 
     const formik = useFormik({
         initialValues: {
+            file: "",
             fullName: "",
             email: "",
             phone: "",
@@ -89,6 +83,7 @@ function InsertUser(props) {
               <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
                 <CiImageOn />
               </div>
+              <input type="file" name="file" onChange={handleForm}/>
               <button className="bg-[#FF8906] w-[80px] rounded-md px-[16px]">
                 <span className="text-xs">Upload</span>
               </button>
