@@ -6,8 +6,47 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FiPhoneOutgoing } from "react-icons/fi";
 import { MdLocationPin } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function EditProduct(props) {
+  const dataToken = useSelector((state) => state.auth.token);
+  const [message, setMessage] = React.useState(true);
+  const [product, setProduct] = React.useState([]);
+  console.log(product)
+  async function products() {
+    const dataProducts = await fetch("http://localhost:8000/products/" + props.id, {});
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+
+  useEffect(() => {
+    products()
+  }, []);
+  async function updateProduct(e) {
+    e.preventDefault();
+    const title = e.target.productName.value;
+    const description = e.target.description.value;
+    const price = e.target.price.value;
+    const stock = e.target.stock.value;
+    const form = new URLSearchParams();
+    form.append("title", title);
+    form.append("description", description);
+    form.append("price", price);
+    form.append("stock", stock);
+    const dataProduct = await fetch("http://localhost:8000/products/" + props.id, {
+      method: "PATCH",
+      headers: {
+        Authorization: "Bearer " + dataToken,
+      },
+      body: form,
+    });
+    const listData = await dataProduct.json();
+    console.log(listData)
+    setMessage(listData.message);
+    setProfile(listData.result);
+  }
   return (
     <div>
       <div className="absolute bg-[#00000099] w-full flex h-screen justify-end">
@@ -23,7 +62,8 @@ function EditProduct(props) {
               <IoMdCloseCircleOutline />
             </button>
           </div>
-          <form action="" className="flex flex-col gap-2">
+          <div className="text-red-600 mb-5">{message}</div>
+          <form onSubmit={updateProduct} className="flex flex-col gap-2">
             <div className="flex flex-col gap-2">
               <span className="text-sm">Photos Product</span>
               <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
@@ -42,6 +82,7 @@ function EditProduct(props) {
                   type="text"
                   id="productName"
                   placeholder="Enter Product Name"
+                  defaultValue={product.title}
                   name="productName"
                   className="h-[40px] px-5 outline-none w-full bg-[#DEDEDE] rounded-lg"
                 />
@@ -55,6 +96,7 @@ function EditProduct(props) {
                 <input
                   type="text"
                   id="price"
+                  defaultValue={product.price}
                   placeholder="Enter Product Price"
                   name="price"
                   className="h-[40px] px-5 outline-none w-full bg-[#DEDEDE] rounded-lg"
@@ -70,6 +112,7 @@ function EditProduct(props) {
                 <textarea
                   className=" px-5 py-3 outline-none w-full bg-[#DEDEDE] rounded-lg"
                   name="description"
+                  defaultValue={product.description}
                   id="description"
                 ></textarea>
               </div>
@@ -117,11 +160,11 @@ function EditProduct(props) {
                   id="stock"
                 >
                   <option value="">Enter Product Stock</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
                   <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="250">250</option>
                 </select>
               </div>
             </div>
