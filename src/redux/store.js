@@ -3,10 +3,9 @@ import reducer from "./reducers";
 import { rtkMiddlewares, services } from "./services";
 
 export const store = configureStore({
-  reducer: {
-    ...reducer,
-    ...services,
-  },
+  reducer,
+  services,
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(rtkMiddlewares),
 });
