@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { CiImageOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa6";
@@ -6,8 +6,73 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FiPhoneOutgoing } from "react-icons/fi";
 import { MdLocationPin } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { useFormik } from "formik";
+import * as yup from "yup"
 
 function InsertUser(props) {
+  const [role, setRole] = useState(0)
+  console.log(role)
+  async function inputForm(e) {
+    console.log(e)
+    const fullName = formik.values.fullName
+    const email = formik.values.email
+    const phone = formik.values.phone
+    const password = formik.values.password
+    const address = formik.values.address
+    // const roleValue = role
+    // if (role == "Admin") {
+    //   role = 2
+    // } else if(role == "Normal User"){
+    //   role = 1
+    // }
+
+    // pull ulang.
+    
+    const data = new URLSearchParams()
+    data.append('fullName', fullName)
+    data.append('email', email)
+    data.append('phoneNumber', phone)
+    data.append('password', password)
+    data.append('address', address)
+    data.append('roleId', role)
+    const response = await fetch('http://localhost:8000/profile', {
+        method: 'POST',
+        body: data
+    })
+    // const dataResponse = await response.json()
+    // if (dataResponse.success) {
+    //     setAuthResponse(dataResponse)
+    //     setShowPopUp(true)
+    // } else {
+    //     setAuthResponse(dataResponse)
+    //     setShowPopUp(true)
+    // }
+    // e.target.reset({})
+    props.closeMenu(false)
+  }
+
+    const formik = useFormik({
+        initialValues: {
+            fullName: "",
+            email: "",
+            phone: "",
+            password: "",
+            address: "",
+            role: ""
+        },
+        onSubmit: inputForm,
+        validationSchema: yup.object().shape({
+            fullName: yup.string().required('Please Enter your name').min(3).max(10),
+            email: yup.string().required('Please Enter your email').email(),
+            password: yup.string().required('Please Enter your password').min(8)
+        })
+    })
+
+    const handleForm = (event) => {
+        const {target} = event
+        formik.setFieldValue(target.name, target.value)
+    }
+
   return (
     <div>
       <div className="absolute bg-[#00000099] w-full flex h-screen justify-end">
@@ -18,7 +83,7 @@ function InsertUser(props) {
                 <IoMdCloseCircleOutline />
               </button>
             </div>
-          <form action="" className="flex flex-col gap-2">
+          <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
             <div className="flex flex-col gap-2">
               <span className="text-sm">Image User</span>
               <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
@@ -38,6 +103,7 @@ function InsertUser(props) {
                   type="text"
                   id="fullName"
                   placeholder="Enter Full Name"
+                  onChange={handleForm}
                   name="fullName"
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
@@ -53,6 +119,7 @@ function InsertUser(props) {
                   type="text"
                   id="email"
                   placeholder="Enter Your Email"
+                  onChange={handleForm}
                   name="email"
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
@@ -68,6 +135,7 @@ function InsertUser(props) {
                   type="text"
                   id="phone"
                   placeholder="Enter Your Number"
+                  onChange={handleForm}
                   name="phone"
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
@@ -91,6 +159,7 @@ function InsertUser(props) {
                   type="text"
                   id="password"
                   placeholder="Enter Your Password"
+                  onChange={handleForm}
                   name="password"
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
@@ -106,6 +175,7 @@ function InsertUser(props) {
                   type="text"
                   id="address"
                   placeholder="Enter Your Address"
+                  onChange={handleForm}
                   name="address"
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
@@ -118,18 +188,24 @@ function InsertUser(props) {
               <div className="flex justify-between">
                 <input
                   type="button"
+                  onChange={handleForm}
                   value="Normal User"
+                  name="role"
+                  onClick={()=>setRole(1)}
                   className="border hover:border-[#FF8906] flex justify-center rounded-md px-[60px]"
                 />
                 <input
                   type="button"
+                  onChange={handleForm}
                   value="Admin"
+                  name="role"
+                  onClick={()=>setRole(2)}
                   className="border hover:border-[#FF8906] flex justify-center rounded-md px-[60px]"
                 />
               </div>
             </div>
             <div className="flex">
-              <button className="bg-[#FF8906] w-full rounded-md py-[10px]">
+              <button type="submit" className="bg-[#FF8906] w-full rounded-md py-[10px]">
                 Add User
               </button>
             </div>
