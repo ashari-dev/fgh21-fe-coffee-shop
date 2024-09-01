@@ -6,13 +6,13 @@ export const products = createApi({
     baseUrl: "http://localhost:8000",
   }),
   endpoints: (builder) => ({
-    listUsers: builder.query({
-      query: () => `/products`,
+    listProducts: builder.query({
+      query: ([page, limit]) => `/products?page=${page}&limit=${limit}`,
     }),
-    getUser: builder.query({
+    getProducts: builder.query({
       query: (id) => `/products/${id}`,
     }),
   }),
 });
 
-export const { useListUsersQuery, useGetUserQuery } = products;
+export const { useListProductsQuery, useGetProductsQuery } = products;

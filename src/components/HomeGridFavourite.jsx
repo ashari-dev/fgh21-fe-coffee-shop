@@ -1,8 +1,10 @@
 import React from "react";
 import GridProduct from "../components/GridProduct";
 import { FaRegWindowMinimize } from "react-icons/fa";
+import { useListProductsQuery } from "../redux/services/products";
 
 function HomeGridFavourite() {
+  const { data, err, isLoading } = useListProductsQuery([1, 4]);
   return (
     <div className="flex flex-col mt-8">
       <div className="flex flex-col justify-center items-center">
@@ -15,17 +17,18 @@ function HomeGridFavourite() {
             <FaRegWindowMinimize />
           </div>
           <div className="text-[#4F5665]">
-            Let's choose and have a bit taste of poeple's favorite. It might be
+            Let's choose and have a bit taste of people's favorite. It might be
             yours too!
           </div>
         </div>
       </div>
       <div className="flex justify-center">
         <div className="grid md:grid-cols-4 grid-cols-2">
-          {/* <GridProduct />
-          <GridProduct />
-          <GridProduct />
-          <GridProduct /> */}
+            {isLoading || err
+              ? ""
+              : data.result.map((item) => {
+                  return <GridProduct key={item.id} data={item}/>;
+                })}
         </div>
       </div>
     </div>
