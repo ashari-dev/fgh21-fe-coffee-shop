@@ -10,13 +10,23 @@ import Pagination from "../components/Pagination.jsx";
 import GridProduct from "../components/GridProduct.jsx";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addQuantity, addVariant, addSize, addProductId } from "../redux/reducers/payment.js";
 import { useGetProductsQuery } from "../redux/services/products.js";
+import AuthPopUp from "../components/AuthPopUp.jsx";
 
 function DetailProduct() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const response = {message: "purchases cannot be empty"}
   const id = useParams().id;
+  console.log(typeof id)
+  const [showPopUp, setShowPopUp] = React.useState(false)
   const [num, setNum] = React.useState(0);
-  const nav = useNavigate();
+  const [selectedSize, setSelectedSize] = React.useState("Reguler");
+  const [selectedTemperature, setSelectedTemperature] = React.useState("Ice");
   const { data, err, isLoading } = useGetProductsQuery(id);
+  console.log(data)
   function mins() {
     if (num > 0) {
       setNum(num - 1);
@@ -27,10 +37,22 @@ function DetailProduct() {
       setNum(num + 1);
     }
   }
+  function pay () {
+    if (num == 0) {
+      setShowPopUp(true)
+      return
+    }
+    dispatch(addQuantity(num))
+    dispatch(addVariant(selectedSize))
+    dispatch(addSize(selectedTemperature))
+    dispatch(addProductId(id))
+    navigate("/payment-detail")
+  }
   return (
     <div className="">
       <Navbar />
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
+        {showPopUp? <AuthPopUp data={response}/>:""}
         <div className="md:w-1/2 flex flex-col gap-4">
           <img src={coffe_1} className="bg-black w-full object-cover" />
           <div className="grid grid-cols-3 gap-4 w-full">
@@ -94,19 +116,34 @@ function DetailProduct() {
             <div className="flex gap-5">
               <button
                 type="button"
-                className="flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md border-[#FF8906]"
+                onClick={() => setSelectedSize("Reguler")}
+                className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                  selectedSize === "Reguler"
+                    ? "border-[#FF8906]"
+                    : "border-[#E8E8E8]"
+                }`}
               >
                 Reguler
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center h-11 w-1/3 border-2 text-base border-[#E8E8E8] rounded-md text-[#0B0909]"
+                onClick={() => setSelectedSize("Medium")}
+                className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                  selectedSize === "Medium"
+                    ? "border-[#FF8906]"
+                    : "border-[#E8E8E8]"
+                }`}
               >
                 Medium
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center h-11 w-1/3 border-2 text-base border-[#E8E8E8] rounded-md text-[#0B0909]"
+                onClick={() => setSelectedSize("Large")}
+                className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                  selectedSize === "Large"
+                    ? "border-[#FF8906]"
+                    : "border-[#E8E8E8]"
+                }`}
               >
                 Large
               </button>
@@ -115,24 +152,32 @@ function DetailProduct() {
             <div className="flex gap-5 w-full mb-4">
               <button
                 type="button"
-                className="flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md border-[#FF8906]"
+                onClick={() => setSelectedTemperature("Ice")}
+                className={`flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md ${
+                  selectedTemperature === "Ice"
+                    ? "border-[#FF8906]"
+                    : "border-[#E8E8E8]"
+                }`}
               >
                 Ice
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center h-11 w-1/2 border-2 text-base border-[#E8E8E8] rounded-md text-[#0B0909]"
+                onClick={() => setSelectedTemperature("Hot")}
+                className={`flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md ${
+                  selectedTemperature === "Hot"
+                    ? "border-[#FF8906]"
+                    : "border-[#E8E8E8]"
+                }`}
               >
                 Hot
               </button>
             </div>
             <div className="flex gap-5 w-full mb-4">
               <button
-                onClick={() => {
-                  nav("/payment-detail");
-                }}
+                onClick={pay}
                 type="button"
-                className="flex items-center justify-center h-11 w-1/2 text-base text-[#0B0909] rounded-md bg-[#FF8906]"
+                className="flex items-center justify-center h-11 w-1/2 text-base text-[#0B0909] rounded-md bg-[#FF8906] hover:bg-orange-600"
               >
                 Buy
               </button>
