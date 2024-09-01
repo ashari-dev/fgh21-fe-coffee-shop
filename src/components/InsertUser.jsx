@@ -25,6 +25,8 @@ function InsertUser(props) {
     // } else if(role == "Normal User"){
     //   role = 1
     // }
+
+    // pull ulang
     
     const data = new URLSearchParams()
     data.append('fullName', fullName)
