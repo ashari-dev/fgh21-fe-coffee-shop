@@ -33,7 +33,7 @@ function HomeComponent() {
           </ul>
         </div>
       </div>
-      <div className="bg-[#FF8906] md:flex md:max-w-[100vh] w-full md:h-[50vh] hidden"></div>
+      <div className="bg-[#FF8906] md:flex md:w-[100vh] w-full md:h-[50vh] hidden"></div>
     </div>
   );
 }
