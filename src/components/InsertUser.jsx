@@ -26,7 +26,7 @@ function InsertUser(props) {
     //   role = 1
     // }
 
-    // pull ulang
+    // pull ulang.
     
     const data = new URLSearchParams()
     data.append('fullName', fullName)
