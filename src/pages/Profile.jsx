@@ -9,6 +9,8 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import ImgProfileUser from "../assets/img/profileUser.png";
 import { useSelector } from "react-redux";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function Profile() {
   const token = useSelector((state) => state.auth.token);
@@ -16,24 +18,46 @@ function Profile() {
   const profile = useSelector((state) => state.profile.data);
   console.log(profile);
 
-  async function Update(event) {
-    event.preventDefault();
-
-    const fullName = event.target.name.value;
-    const email = event.target.email.value;
-    const phoneNumber = event.target.phoneNumber.value;
-    const password = event.target.password.value;
-    const address = event.target.address.value;
+  const formik = useFormik({
+    onSubmit: Update,
+    initialValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      address: "",
+    },
+    validationSchema: Yup.object().shape({
+      fullName: Yup.string()
+        .min(3, "Minimum 3 characters")
+        .required("Required!"),
+      email: Yup.string().email("Invalid email address").required("Required!"),
+      phoneNumber: Yup.string()
+        .min(8, "Minimum 8 characters")
+        .required("Required!"),
+      password: Yup.string()
+        .min(6, "Minimum 6 characters")
+        .required("Required!"),
+      address: Yup.string().required("Required!"),
+    }),
+  });
+  async function Update() {
+    const fullName = formik.values.fullName;
+    const email = formik.values.email;
+    const phoneNumber = formik.values.phoneNumber;
+    const password = formik.values.password;
+    const address = formik.values.address;
 
     console.log(fullName);
     console.log(email);
     console.log(phoneNumber);
     console.log(password);
     console.log(address);
+
     const formData = new URLSearchParams();
-    formData.append("full_name", fullName);
+    formData.append("fullName", fullName);
     formData.append("email", email);
-    formData.append("phone_number", phoneNumber);
+    formData.append("phoneNumber", phoneNumber);
     formData.append("password", password);
     formData.append("address", address);
 
@@ -79,7 +103,7 @@ function Profile() {
             </div>
             <div className="w-full gap-[15px] border rounded-lg border-[#E8E8E8]">
               <form
-                onSubmit={Update}
+                onSubmit={formik.handleSubmit}
                 className="flex flex-col gap-[25px] md:px-[50px] px-5 py-[25px]"
               >
                 <div className="flex flex-col gap-[14px]">
@@ -88,12 +112,17 @@ function Profile() {
                     <FaUser />
                     <input
                       type="name"
-                      name="name"
+                      name="fullName"
                       placeholder="Ghaluh Wizard"
                       className="outline-none w-full"
+                      onChange={formik.handleChange}
+                      defaultValue={profile.fullName}
                     />
                   </div>
                 </div>
+                {formik.errors.fullName && formik.touched.fullName && (
+                  <p className="text-red-500">{formik.errors.fullName}</p>
+                )}
                 <div className="flex flex-col gap-[14px]">
                   <label className="text-[16px] font-bold">Email</label>
                   <div className="border border-[#DEDEDE] flex gap-[10px] items-center  p-[14px] rounded-lg">
@@ -103,8 +132,13 @@ function Profile() {
                       name="email"
                       placeholder="ghaluhwizz@gmail.com"
                       className="outline-none w-full"
+                      onChange={formik.handleChange}
+                      defaultValue={profile.email}
                     />
                   </div>
+                  {formik.errors.email && formik.touched.email && (
+                    <p className="text-red-500">{formik.errors.email}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-[14px]">
                   <label className="text-[16px] font-bold">Phone</label>
@@ -115,8 +149,13 @@ function Profile() {
                       name="phoneNumber"
                       placeholder="082116304338"
                       className="outline-none w-full"
+                      onChange={formik.handleChange}
+                      defaultValue={profile.phoneNumber}
                     />
                   </div>
+                  {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+                    <p className="text-red-500">{formik.errors.phoneNumber}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-[14px]">
                   <div className="flex justify-between">
@@ -130,10 +169,15 @@ function Profile() {
                     <input
                       type="password"
                       name="password"
+                      placeholder="*************"
+                      onChange={formik.handleChange}
                       className="outline-none w-full"
                     />
                     <FaEye />
                   </div>
+                  {formik.errors.password && formik.touched.password && (
+                    <p className="text-red-500">{formik.errors.password}</p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-[14px]">
                   <label className="text-[16px] font-bold">Addres</label>
@@ -144,8 +188,13 @@ function Profile() {
                       name="address"
                       placeholder="Griya Bandung Indah"
                       className="outline-none w-full"
+                      onChange={formik.handleChange}
+                      defaultValue={profile.address}
                     />
                   </div>
+                  {formik.errors.address && formik.touched.address && (
+                    <p className="text-red-500">{formik.errors.address}</p>
+                  )}
                 </div>
                 <button
                   type="submit"
