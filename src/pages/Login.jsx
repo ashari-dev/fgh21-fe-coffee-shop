@@ -70,7 +70,7 @@ function Login() {
             dispatch(addData(json.result));
           }
           dataUpdate();
-          navigate("/");
+          navigate("/profile");
         } else {
           console.log("error");
         }
