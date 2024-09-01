@@ -23,7 +23,7 @@ function UserList() {
 }
 useEffect(() => {
     dataUser()
-},[])
+},[showAdd, showUpdate])
   return (
     <>
       <NavbarAdmin />
