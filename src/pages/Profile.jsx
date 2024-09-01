@@ -8,8 +8,50 @@ import { FaKey } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import ImgProfileUser from "../assets/img/profileUser.png";
+import { useSelector } from "react-redux";
 
 function Profile() {
+  const token = useSelector((state) => state.auth.token);
+  console.log(token);
+  const profile = useSelector((state) => state.profile.data);
+  console.log(profile);
+
+  async function Update(event) {
+    event.preventDefault();
+
+    const fullName = event.target.name.value;
+    const email = event.target.email.value;
+    const phoneNumber = event.target.phoneNumber.value;
+    const password = event.target.password.value;
+    const address = event.target.address.value;
+
+    console.log(fullName);
+    console.log(email);
+    console.log(phoneNumber);
+    console.log(password);
+    console.log(address);
+    const formData = new URLSearchParams();
+    formData.append("full_name", fullName);
+    formData.append("email", email);
+    formData.append("phone_number", phoneNumber);
+    formData.append("password", password);
+    formData.append("address", address);
+
+    const dataProfile = await fetch("http://localhost:8000/profile/", {
+      method: "PATCH",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    });
+    console.log(dataProfile);
+    const response = await dataProfile.json();
+    if (response.success) {
+      window.alert("Success Updated");
+    } else {
+      window.alert("tidak berhasil");
+    }
+  }
   return (
     <div>
       <Navbar />
@@ -36,13 +78,17 @@ function Profile() {
               </div>
             </div>
             <div className="w-full gap-[15px] border rounded-lg border-[#E8E8E8]">
-              <form className="flex flex-col gap-[25px] md:px-[50px] px-5 py-[25px]">
+              <form
+                onSubmit={Update}
+                className="flex flex-col gap-[25px] md:px-[50px] px-5 py-[25px]"
+              >
                 <div className="flex flex-col gap-[14px]">
                   <label className="text-[16px] font-bold">Full Name</label>
                   <div className="border border-[#DEDEDE] flex gap-[10px] items-center  p-[14px] rounded-lg">
                     <FaUser />
                     <input
                       type="name"
+                      name="name"
                       placeholder="Ghaluh Wizard"
                       className="outline-none w-full"
                     />
@@ -54,6 +100,7 @@ function Profile() {
                     <FaEnvelope />
                     <input
                       type="email"
+                      name="email"
                       placeholder="ghaluhwizz@gmail.com"
                       className="outline-none w-full"
                     />
@@ -65,6 +112,7 @@ function Profile() {
                     <FaPhone />
                     <input
                       type="text"
+                      name="phoneNumber"
                       placeholder="082116304338"
                       className="outline-none w-full"
                     />
@@ -81,7 +129,7 @@ function Profile() {
                     <FaKey />
                     <input
                       type="password"
-                      placeholder="**********"
+                      name="password"
                       className="outline-none w-full"
                     />
                     <FaEye />
@@ -93,6 +141,7 @@ function Profile() {
                     <FaLocationDot />
                     <input
                       type="text"
+                      name="address"
                       placeholder="Griya Bandung Indah"
                       className="outline-none w-full"
                     />

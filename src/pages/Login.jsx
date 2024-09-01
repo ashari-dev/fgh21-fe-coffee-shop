@@ -5,18 +5,18 @@ import { FaKey } from "react-icons/fa6";
 import { FaRegEnvelope, FaRegEye } from "react-icons/fa6";
 import ImgFacebook from "../assets/img/facebook.png";
 import ImgGoogle from "../assets/img/google.png";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/reducers/auth";
-import { addProfile } from "../redux/reducers/profile";
+import { addData } from "../redux/reducers/profile";
 
 function Login() {
-  // const dataToken = useSelector((state) => state.auth.token);
-  // console.log(dataToken);
-  // const profile = useSelector((state) => state.auth.)
+  const datatoken = useSelector((state) => state.auth.token);
+  console.log(datatoken);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let [pass, setPassword] = React.useState("password");
@@ -28,12 +28,11 @@ function Login() {
     }
   }
   const formik = useFormik({
-    onSubmit: dataNew(),
+    onSubmit: dataNew,
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: dataNew(),
     validationSchema: Yup.object().shape({
       email: Yup.string().email("Invalid email address").required("Required!"),
       password: Yup.string()
@@ -42,8 +41,7 @@ function Login() {
     }),
   });
 
-  async function dataNew(e) {
-    e.preventDefault();
+  async function dataNew() {
     const email = formik.values.email;
     const password = formik.values.password;
     console.log(formik.values.email);
@@ -69,12 +67,12 @@ function Login() {
             });
             const json = await response.json();
             console.log(json.result);
-            dispatch(addProfile(json.result));
+            dispatch(addData(json.result));
           }
           dataUpdate();
           navigate("/");
         } else {
-          setMessage(data.message);
+          console.log("error");
         }
       });
     });
@@ -93,7 +91,10 @@ function Login() {
             <p className="text-[#4F5665] text-[16px]">
               Fill out the form correctly
             </p>
-            <form onSubmit={dataNew} className="flex flex-col gap-[25px]">
+            <form
+              onSubmit={formik.handleSubmit}
+              className="flex flex-col gap-[25px]"
+            >
               <label
                 htmlFor="email"
                 className="flex flex-col gap-1 w-full justify-center"

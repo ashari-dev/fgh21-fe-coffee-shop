@@ -11,11 +11,10 @@ const auth = createSlice({
     login: (state, action) => {
       state.token = action.payload;
     },
-  },
-  logout: (state, action) => {
-    state.token = null;
+    logout: (state) => {
+      state.token = null;
+    },
   },
 });
-
 export const { login, logout } = auth.actions;
 export default auth.reducer;
