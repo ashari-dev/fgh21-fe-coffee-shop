@@ -1,4 +1,5 @@
 import React from "react";
+import ImagesProduct from "../img/grid-product.png";
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +9,7 @@ function GridProduct(props) {
     <div className="gap-4 p-8 min-h-[490px]">
       <div className="flex flex-col md:pb-32 relative">
         <img
-          className="max-w-[300px] bg-black"
+          className="min-w-[300px] bg-black"
           src="https://picsum.photos/id/63/500/500"
           alt=""
         />
@@ -25,7 +26,7 @@ function GridProduct(props) {
             >
               Buy
             </button>
-            <button className="md:w-1/4 p-3 w-full border border-orange-400 flex justify-center items-center text-orange-400 rounded-xl">
+            <button className="w-1/4 border border-orange-400 flex justify-center items-center text-orange-400 rounded-xl rounded-[6px]">
               <FaShoppingCart />
             </button>
           </div>
