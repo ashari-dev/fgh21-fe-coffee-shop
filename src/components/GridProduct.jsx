@@ -1,7 +1,7 @@
 import React from "react";
 import ImagesProduct from "../img/grid-product.png";
 import { FaShoppingCart } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
 
 function GridProduct(props) {
   const nav = useNavigate();

@@ -10,13 +10,13 @@ import Pagination from "../components/Pagination.jsx";
 import GridProduct from "../components/GridProduct.jsx";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetUserQuery } from "../redux/services/products.js";
+import { useGetProductsQuery } from "../redux/services/products.js";
 
 function DetailProduct() {
   const id = useParams().id;
   const [num, setNum] = React.useState(0);
   const nav = useNavigate();
-  const { data, err, isLoading } = useGetUserQuery(id);
+  const { data, err, isLoading } = useGetProductsQuery(id);
   function mins() {
     if (num > 0) {
       setNum(num - 1);

@@ -6,11 +6,11 @@ import SideBarProduct from "../components/SideBarProduct";
 import GridProduct from "../components/GridProduct";
 import Pagination from "../components/Pagination";
 import Footer from "../component/Footer";
-import { useListUsersQuery } from "../redux/services/products";
+import { useListProductsQuery } from "../redux/services/products";
 
 function Product() {
   const [dataProduct, setDataProduct] = useState([]);
-  const { data, err, isLoading } = useListUsersQuery();
+  const { data, err, isLoading } = useListProductsQuery();
   return (
     <>
       <Navbar />
