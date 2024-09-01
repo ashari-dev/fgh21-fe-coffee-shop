@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../components/SiderbarAdmin";
 import { FaPlus, FaRegListAlt, FaUserCircle } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
@@ -12,6 +12,18 @@ import NavbarAdmin from "../component/NavbarAdmin";
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(false);
   const [showAdd, SetShowAdd] = useState(false);
+  const [listUser, setListUser] = useState([])
+
+  async function dataUser() {
+    const endPoint = 'http://localhost:8000/profile'
+    const response = await fetch(endPoint);
+    const data = await response.json()
+    const listData = data.result
+    setListUser(listData)
+}
+useEffect(() => {
+    dataUser()
+},[])
   return (
     <>
       <NavbarAdmin />
@@ -73,102 +85,40 @@ function UserList() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-t text-[#4F5665]">
-                      <td className="text-center ">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="py-3 flex items-center justify-center">
-                        <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                          <FaUserCircle />
-                        </div>
-                      </td>
-                      <td className="text-center">Eleanor Pena</td>
-                      <td className="text-center">(205) 555-0100</td>
-                      <td className="text-center">
-                        3517 W. Gray St. Utica, Pennsylvania 57867
-                      </td>
-                      <td className="text-center">cikaracak@gmail.com</td>
-                      <td className="justify-center flex">
-                        <div className="flex gap-3">
-                          <div className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <FaRegListAlt className="text-[#8E6447]" />
-                          </div>
-                          <button
-                            onClick={() => setShowUpdate(true)}
-                            className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
-                          >
-                            <FiEdit3 className="text-[#FF8906]" />
-                          </button>
-                          <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <AiOutlineDelete className="text-[#d00000]" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="border-t text-[#4F5665]">
-                      <td className="text-center ">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="py-3 flex items-center justify-center">
-                        <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                          <FaUserCircle />
-                        </div>
-                      </td>
-                      <td className="text-center">Eleanor Pena</td>
-                      <td className="text-center">(205) 555-0100</td>
-                      <td className="text-center">
-                        3517 W. Gray St. Utica, Pennsylvania 57867
-                      </td>
-                      <td className="text-center">cikaracak@gmail.com</td>
-                      <td className="justify-center flex">
-                        <div className="flex gap-3">
-                          <div className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <FaRegListAlt className="text-[#8E6447]" />
-                          </div>
-                          <button
-                            onClick={() => setShowUpdate(true)}
-                            className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
-                          >
-                            <FiEdit3 className="text-[#FF8906]" />
-                          </button>
-                          <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <AiOutlineDelete className="text-[#d00000]" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="border-t text-[#4F5665]">
-                      <td className="text-center ">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="py-3 flex items-center justify-center">
-                        <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                          <FaUserCircle />
-                        </div>
-                      </td>
-                      <td className="text-center">Eleanor Pena</td>
-                      <td className="text-center">(205) 555-0100</td>
-                      <td className="text-center">
-                        3517 W. Gray St. Utica, Pennsylvania 57867
-                      </td>
-                      <td className="text-center">cikaracak@gmail.com</td>
-                      <td className="justify-center flex">
-                        <div className="flex gap-3">
-                          <div className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <FaRegListAlt className="text-[#8E6447]" />
-                          </div>
-                          <button
-                            onClick={() => setShowUpdate(true)}
-                            className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
-                          >
-                            <FiEdit3 className="text-[#FF8906]" />
-                          </button>
-                          <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <AiOutlineDelete className="text-[#d00000]" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                    {listUser.map((item)=>{
+                      return(
+                        <tr className="border-t text-[#4F5665]">
+                          <td className="text-center ">
+                            <input type="checkbox" />
+                          </td>
+                          <td className="py-3 flex items-center justify-center">
+                            <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
+                              {item.image?item.image:<FaUserCircle />}
+                            </div>
+                          </td>
+                          <td className="text-center">{item.fullName}</td>
+                          <td className="text-center">{item.phoneNumber}</td>
+                          <td className="text-center">{item.address}</td>
+                          <td className="text-center">{item.email}</td>
+                          <td className="justify-center flex">
+                            <div className="flex gap-3">
+                              <div className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center">
+                                <FaRegListAlt className="text-[#8E6447]" />
+                              </div>
+                              <button
+                                onClick={() => setShowUpdate(true)}
+                                className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
+                              >
+                                <FiEdit3 className="text-[#FF8906]" />
+                              </button>
+                              <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                                <AiOutlineDelete className="text-[#d00000]" />
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
