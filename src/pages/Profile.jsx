@@ -11,13 +11,24 @@ import ImgProfileUser from "../assets/img/profileUser.png";
 import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AuthPopUp from "../components/AuthPopUp";
 
 function Profile() {
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   console.log(token);
   const profile = useSelector((state) => state.profile.data);
   console.log(profile);
-
+  let [pass, setPassword] = React.useState("password");
+  function changePassword() {
+    if (pass === "password") {
+      setPassword("text");
+    } else {
+      setPassword("password");
+    }
+  }
   const formik = useFormik({
     onSubmit: Update,
     initialValues: {
@@ -41,6 +52,8 @@ function Profile() {
       address: Yup.string().required("Required!"),
     }),
   });
+  const [authResponse, setAuthResponse] = useState({});
+  const [showPopUp, setShowPopUp] = useState(false);
   async function Update() {
     const fullName = formik.values.fullName;
     const email = formik.values.email;
@@ -71,15 +84,18 @@ function Profile() {
     console.log(dataProfile);
     const response = await dataProfile.json();
     if (response.success) {
-      window.alert("Success Updated");
+      setAuthResponse(response);
+      setShowPopUp(true);
     } else {
-      window.alert("tidak berhasil");
+      setAuthResponse(response);
+      setShowPopUp(true);
     }
   }
   return (
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
+        {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
         <div className="flex flex-col justify-center gap-[44px]">
           <h1 className="font-bold text-[48px]">Profile</h1>
           <div className="md:flex md:flex-row flex flex-col justify-center gap-[30px] md:gap-[10px]">
@@ -167,13 +183,15 @@ function Profile() {
                   <div className="border border-[#DEDEDE] flex gap-[10px] items-center  p-[14px] rounded-lg">
                     <FaKey />
                     <input
-                      type="password"
+                      type={pass}
                       name="password"
                       placeholder="*************"
                       onChange={formik.handleChange}
                       className="outline-none w-full"
                     />
-                    <FaEye />
+                    <button type="button" onClick={changePassword}>
+                      <FaEye />
+                    </button>
                   </div>
                   {formik.errors.password && formik.touched.password && (
                     <p className="text-red-500">{formik.errors.password}</p>
