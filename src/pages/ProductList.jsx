@@ -14,8 +14,17 @@ function ProductList(props) {
   const [showAdd, SetShowAdd] = useState(false);
   const [product, setProduct] = React.useState([]);
 
-  async function products(props) {
+  async function products() {
     const dataProducts = await fetch("http://localhost:8000/products/", {});
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+
+  async function filterProducts(e) {
+    e.preventDefault();
+    const datas = e.target.search.value;
+    console.log(datas)
+    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${datas}`, {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
@@ -60,7 +69,7 @@ function ProductList(props) {
                 </button>
               </div>
               <div>
-                <form className="flex flex-col gap-2">
+                <form onSubmit={filterProducts} className="flex flex-col gap-2">
                   <label htmlFor="search" className="text-xs text-[#4F5665]">
                     Search Product
                   </label>
@@ -69,6 +78,7 @@ function ProductList(props) {
                       <input
                         type="text"
                         id="search"
+                        name="search"
                         placeholder="Enter Product Name"
                         className="outline-none"
                       />
