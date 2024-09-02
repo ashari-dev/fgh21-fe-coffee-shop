@@ -66,10 +66,16 @@ function Login() {
             });
             const json = await response.json();
             dispatch(addData(json.result));
-            navigate("/")
+
+            if (json.result.roleId == 2) {
+              navigate("/dashboard-admin");
+              return;
+            } else {
+              navigate("/");
+              return;
+            }
           }
           dataUpdate();
-          navigate("/");
         } else {
           setErr(true);
           setTimeout(() => {
