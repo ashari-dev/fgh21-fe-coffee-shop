@@ -65,7 +65,6 @@ function Login() {
             });
             const json = await response.json();
             dispatch(addData(json.result));
-            console.log(json);
           }
           dataUpdate();
           navigate("/");
