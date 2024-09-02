@@ -56,7 +56,6 @@ function Login() {
     }).then((response) => {
       response.json().then((data) => {
         if (data.success) {
-          console.log(data.result.token);
           dispatch(login(data.result.token));
           async function dataUpdate() {
             const response = await fetch("http://localhost:8000/profile/", {
@@ -66,6 +65,7 @@ function Login() {
             });
             const json = await response.json();
             dispatch(addData(json.result));
+            console.log(json);
           }
           dataUpdate();
           navigate("/");
