@@ -72,7 +72,7 @@ function Login() {
             dispatch(addData(json.result));
           }
           dataUpdate();
-          navigate("/profile");
+          navigate("/");
         } else {
           setErr(true);
           setTimeout(() => {
