@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { CiImageOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa6";
@@ -6,8 +6,73 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FiPhoneOutgoing } from "react-icons/fi";
 import { MdLocationPin } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { useParams } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup"
 
 function EditUser(props) {
+  const [dataUser, setDataUser] = useState([])
+
+  const formik = useFormik({
+    initialValues: {
+        fullName: "",
+        email: "",
+        phone: "",
+        password: "",
+        address: "",
+        role: ""
+    },
+    onSubmit: updateProfile,
+    validationSchema: yup.object().shape({
+        fullName: yup.string().required('Please Enter your name').min(3).max(10),
+        email: yup.string().required('Please Enter your email').email()
+        // password: yup.string().required('Please Enter your password').min(8)
+    })
+  })
+  
+  // const file = formik.values.file
+  // data.append('roleId', role)
+  async function updateProfile(){
+      const fullName = formik.values.fullName
+      const email = formik.values.email
+      const phone = formik.values.phone
+      const password = formik.values.password
+      const address = formik.values.address
+        
+        const data = new URLSearchParams()
+        // data.append('image', file)
+        data.append('fullName', fullName)
+        data.append('email', email)
+        data.append('phoneNumber', phone)
+        data.append('password', password)
+        data.append('address', address)
+      const response = await fetch(`http://localhost:8000/profile/`+ props.id,{
+        method: 'PATCH',
+        body: data,
+      })
+      // const userData = await response.json()
+      // const listData = userData.result
+      // console.log(listData)
+      // props.closeMenu(false)
+    }
+    async function getData() {
+        const endPoint = 'http://localhost:8000/profile/' + props.id
+        const response = await fetch(endPoint);
+        const data = await response.json()
+        const listData = data.result
+        console.log(listData)
+        setDataUser(listData)
+    }
+    
+    useEffect(() => {
+        getData()
+    }, [])
+
+
+  const handleForm = (event) => {
+      const {target} = event
+      formik.setFieldValue(target.name, target.value)
+  }
   return (
     <div>
       <div className="absolute bg-[#00000099] w-full flex h-screen justify-end">
@@ -18,7 +83,7 @@ function EditUser(props) {
               <IoMdCloseCircleOutline />
             </button>
           </div>
-          <form action="" className="flex flex-col gap-2 w-full">
+          <form action="" onSubmit={formik.handleSubmit} className="flex flex-col gap-2 w-full">
             <div className="flex flex-col gap-2">
               <span className="text-sm">Image User</span>
               <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
@@ -40,8 +105,10 @@ function EditUser(props) {
                 <input
                   type="text"
                   id="fullName"
+                  defaultValue={dataUser.fullName}
                   placeholder="Enter Full Name"
                   name="fullName"
+                  onChange={handleForm}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
               </div>
@@ -57,6 +124,8 @@ function EditUser(props) {
                   id="email"
                   placeholder="Enter Your Email"
                   name="email"
+                  defaultValue={dataUser.email}
+                  onChange={handleForm}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
               </div>
@@ -72,6 +141,8 @@ function EditUser(props) {
                   id="phone"
                   placeholder="Enter Your Number"
                   name="phone"
+                  defaultValue={dataUser.phoneNumber}
+                  onChange={handleForm}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
               </div>
@@ -110,12 +181,14 @@ function EditUser(props) {
                   id="address"
                   placeholder="Enter Your Address"
                   name="address"
+                  defaultValue={dataUser.address}
+                  onChange={handleForm}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
               </div>
             </div>
             <div className="flex">
-              <button className="bg-[#FF8906] w-full rounded-md py-[10px]">
+              <button type="submit" className="bg-[#FF8906] w-full rounded-md py-[10px]">
                 Update
               </button>
             </div>
