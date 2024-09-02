@@ -15,7 +15,7 @@ function ProductList(props) {
   const [product, setProduct] = React.useState([]);
 
   async function products(props) {
-    const dataProducts = await fetch("http://localhost:8000/products", {});
+    const dataProducts = await fetch("http://localhost:8000/products/", {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
