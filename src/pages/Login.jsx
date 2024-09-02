@@ -16,7 +16,6 @@ import HandlerError from "../component/handlerError";
 
 function Login() {
   const datatoken = useSelector((state) => state.auth.token);
-  console.log(datatoken);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,8 +45,6 @@ function Login() {
   async function dataNew() {
     const email = formik.values.email;
     const password = formik.values.password;
-    console.log(formik.values.email);
-    console.log(formik.values.password);
 
     const formData = new URLSearchParams();
     formData.append("email", email);
@@ -68,11 +65,10 @@ function Login() {
               },
             });
             const json = await response.json();
-            console.log(json.result);
             dispatch(addData(json.result));
           }
           dataUpdate();
-          navigate("/profile");
+          navigate("/");
         } else {
           setErr(true);
           setTimeout(() => {

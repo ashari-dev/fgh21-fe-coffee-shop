@@ -18,13 +18,13 @@ function PaymentListOrder() {
   const size = useSelector((state) => state.payment.size);
   const variant = useSelector((state) => state.payment.variant);
   const id = useSelector((state) => state.payment.productId);
-  console.log(id)
-  console.log(typeof id)
-  const { data, err, isLoading } = useGetProductsQuery(id);
-  const price = data.result.price
-  console.log(data)
-  // console.log(payment);
 
+  const { data, err, isLoading } = useGetProductsQuery(id);
+  const price = data.result.price;
+  
+  const order = price * quantity;
+  const tax = (price * quantity * 10) / 100;
+  const subTotal = price * quantity + (price * quantity * 10) / 100;
   return (
     <>
       <div className="flex flex-col md:p-32 py-32 px-5">
@@ -57,7 +57,7 @@ function PaymentListOrder() {
                   FLASH SALE!
                 </div>
                 <div className="text-[#0B0909] font-bold text-lg">
-                    {isLoading || err ? "" : data.result.title}
+                  {isLoading || err ? "" : data.result.title}
                 </div>
                 <div className="flex gap-2 ">
                   <div className="">{quantity}pcs</div>
@@ -72,7 +72,12 @@ function PaymentListOrder() {
                   {/* <div className="text-[#D00000] font-medium text-xs line-through">
                     IDR 40.000
                   </div> */}
-                  <div className="font-medium text-[#FF8906]">IDR {isLoading || err ? "" : data.result.price}</div>
+                  <div className="font-medium text-[#FF8906]">
+                    IDR{" "}
+                    {isLoading || err
+                      ? ""
+                      : data.result.price.toLocaleString("id")}
+                  </div>
                 </div>
               </div>
             </div>
@@ -212,20 +217,26 @@ function PaymentListOrder() {
               <div className="flex flex-col gap-3">
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Order</div>
-                  <div className="font-bold text-[#0B132A]">Idr. {price * quantity}</div>
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {order.toLocaleString("id")}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Delivery</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 0</div>
+                  <div className="font-bold text-[#0B132A]">IDR. 0</div>
                 </div>
                 <div className="flex justify-between ">
                   <div className="text-[#4F5665] font-bold">Tax</div>
-                  <div className="font-bold text-[#0B132A]">Idr. {(price * quantity) * 10/100}</div>
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {tax.toLocaleString("id")}
+                  </div>
                 </div>
                 <div className="border-b-2"></div>
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Subtotal</div>
-                  <div className="font-bold text-[#0B132A]">Idr. {(price * quantity) + ((price * quantity) * 10/100)}</div>
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {subTotal.toLocaleString("id")}
+                  </div>
                 </div>
               </div>
               <button

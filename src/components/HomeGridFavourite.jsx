@@ -24,11 +24,11 @@ function HomeGridFavourite() {
       </div>
       <div className="flex justify-center">
         <div className="grid md:grid-cols-4 grid-cols-2">
-            {isLoading || err
-              ? ""
-              : data.result.map((item) => {
-                  return <GridProduct key={item.id} data={item}/>;
-                })}
+          {isLoading || err
+            ? ""
+            : data.result.map((item) => {
+                return <GridProduct key={item.id} data={item} />;
+              })}
         </div>
       </div>
     </div>
