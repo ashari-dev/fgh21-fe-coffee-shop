@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarAdmin from "../components/SiderbarAdmin";
 import { FaPlus, FaRegListAlt, FaUserCircle } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
@@ -9,9 +9,34 @@ import InsertProduct from "../components/InsertProduct";
 import EditProduct from "../components/EditProduct";
 import NavbarAdmin from "../component/NavbarAdmin";
 
-function ProductList() {
-  const [showUpdate, setShowUpdate] = useState(false);
+function ProductList(props) {
+  const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
+  const [product, setProduct] = React.useState([]);
+
+  async function products(props) {
+    const dataProducts = await fetch("http://localhost:8000/products", {});
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+
+  useEffect(() => {
+    products()
+  }, []);
+  function removeData(id) {
+    fetch("http://localhost:8000/products/" + id, {
+      method: "DELETE",
+    })
+      .then(() => {
+        console.log("removed");
+        products()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      effect = product()
+
+  }
   return (
     <>
         <NavbarAdmin/>
@@ -19,7 +44,7 @@ function ProductList() {
         <SidebarAdmin />
         <div className="relative w-full">
           {showAdd ? <InsertProduct closeMenu={SetShowAdd} /> : ""}
-          {showUpdate ? <EditProduct closeMenu={setShowUpdate} /> : ""}
+          {showUpdate ? <EditProduct closeMenu={setShowUpdate} id={showUpdate}/> : ""}
 
           <div className="border-l w-full min-h-screen pt-6 pl-7 pr-20 flex flex-col gap-5">
             <div className="text-2xl">Product List</div>
@@ -74,111 +99,48 @@ function ProductList() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-t text-[#4F5665]">
-                      <td className="text-center ">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="items-center px-6">
-                        <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                          <FaUserCircle />
-                        </div>
-                      </td>
-                      <td className="text-center px-3 py-3">
-                        Caramel Machiato
-                      </td>
-                      <td className="text-center px-3 py-3">IDR 40.000</td>
-                      <td className="text-center px-3 py-3">
-                        Cold brewing is a method of brewing that ...
-                      </td>
-                      <td className="text-center px-3 py-3">R,L,XL,250gr</td>
-                      <td className="text-center px-3 py-3">
-                        Deliver, Dine In
-                      </td>
-                      <td className="text-center px-3 py-3">200</td>
-                      <td className="justify-center text-center">
-                        <div className="flex gap-3 w-full justify-center">
-                          <button
-                            onClick={() => setShowUpdate(true)}
-                            className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
-                          >
-                            <FiEdit3 className="text-[#FF8906]" />
-                          </button>
-                          <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <AiOutlineDelete className="text-[#d00000]" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="border-t text-[#4F5665]">
-                      <td className="text-center ">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="items-center px-6">
-                        <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                          <FaUserCircle />
-                        </div>
-                      </td>
-                      <td className="text-center px-3 py-3">
-                        Caramel Machiato
-                      </td>
-                      <td className="text-center px-3 py-3">IDR 40.000</td>
-                      <td className="text-center px-3 py-3">
-                        Cold brewing is a method of brewing that ...
-                      </td>
-                      <td className="text-center px-3 py-3">R,L,XL,250gr</td>
-                      <td className="text-center px-3 py-3">
-                        Deliver, Dine In
-                      </td>
-                      <td className="text-center px-3 py-3">200</td>
-                      <td className="justify-center text-center">
-                        <div className="flex gap-3 w-full justify-center">
-                          <button
-                            onClick={() => setShowUpdate(true)}
-                            className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
-                          >
-                            <FiEdit3 className="text-[#FF8906]" />
-                          </button>
-                          <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <AiOutlineDelete className="text-[#d00000]" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="border-t text-[#4F5665]">
-                      <td className="text-center ">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="items-center px-6">
-                        <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                          <FaUserCircle />
-                        </div>
-                      </td>
-                      <td className="text-center px-3 py-3">
-                        Caramel Machiato
-                      </td>
-                      <td className="text-center px-3 py-3">IDR 40.000</td>
-                      <td className="text-center px-3 py-3">
-                        Cold brewing is a method of brewing that ...
-                      </td>
-                      <td className="text-center px-3 py-3">R,L,XL,250gr</td>
-                      <td className="text-center px-3 py-3">
-                        Deliver, Dine In
-                      </td>
-                      <td className="text-center px-3 py-3">200</td>
-                      <td className="justify-center text-center">
-                        <div className="flex gap-3 w-full justify-center">
-                          <button
-                            onClick={() => setShowUpdate(true)}
-                            className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
-                          >
-                            <FiEdit3 className="text-[#FF8906]" />
-                          </button>
-                          <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
-                            <AiOutlineDelete className="text-[#d00000]" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                    {product.map((item) => {
+                      console.log(item.id)
+                      return (
+                        <tr className="border-t text-[#4F5665]">
+                          <td className="text-center ">
+                            <input type="checkbox" />
+                          </td>
+                          <td className="items-center px-6">
+                            <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
+                              <FaUserCircle />
+                            </div>
+                          </td>
+                          <td className="text-center px-3 py-3">
+                            {item.title}
+                          </td>
+                          <td className="text-center px-3 py-3">{item.price}</td>
+                          <td className="text-center px-3 py-3">
+                            {item.description}
+                          </td>
+                          <td className="text-center px-3 py-3">R,L,XL,250gr</td>
+                          <td className="text-center px-3 py-3">
+                            Deliver, Dine In
+                          </td>
+                          <td className="text-center px-3 py-3">{item.stock}</td>
+                          <td className="justify-center text-center">
+                            <div className="flex gap-3 w-full justify-center">
+                              <button
+                                onClick={() => setShowUpdate(item.id)}
+                                className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center"
+                              >
+                                <FiEdit3 className="text-[#FF8906]" />
+                              </button>
+                              <button
+                                onClick={() => removeData(item.id)}
+                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                                <AiOutlineDelete className="text-[#d00000]" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

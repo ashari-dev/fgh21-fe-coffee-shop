@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ImgLogin from "../assets/img/Login.png";
 import Logo from "../assets/components/Logo";
 import { FaKey } from "react-icons/fa6";
@@ -12,13 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/reducers/auth";
 import { addData } from "../redux/reducers/profile";
+import HandlerError from "../component/handlerError";
 
 function Login() {
   const datatoken = useSelector((state) => state.auth.token);
-  console.log(datatoken);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [err, setErr] = useState(false);
   let [pass, setPassword] = React.useState("password");
   function changePassword() {
     if (pass === "password") {
@@ -44,8 +45,6 @@ function Login() {
   async function dataNew() {
     const email = formik.values.email;
     const password = formik.values.password;
-    console.log(formik.values.email);
-    console.log(formik.values.password);
 
     const formData = new URLSearchParams();
     formData.append("email", email);
@@ -60,18 +59,21 @@ function Login() {
           console.log(data.result.token);
           dispatch(login(data.result.token));
           async function dataUpdate() {
-            const response = await fetch("http://localhost:8000/profile/", {
+            const response = await fetch("http://localhost:8000/profile", {
               headers: {
                 Authorization: "Bearer " + data.result.token,
               },
             });
             const json = await response.json();
-            console.log(json.result);
             dispatch(addData(json.result));
           }
           dataUpdate();
-          navigate("/profile");
+          navigate("/");
         } else {
+          setErr(true);
+          setTimeout(() => {
+            setErr(false);
+          }, 3000);
           console.log("error");
         }
       });
@@ -95,6 +97,7 @@ function Login() {
               onSubmit={formik.handleSubmit}
               className="flex flex-col gap-[25px]"
             >
+              {err ? <HandlerError msg={"Wrong email or password "} /> : ""}
               <label
                 htmlFor="email"
                 className="flex flex-col gap-1 w-full justify-center"

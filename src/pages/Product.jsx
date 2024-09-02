@@ -9,8 +9,8 @@ import Footer from "../component/Footer";
 import { useListProductsQuery } from "../redux/services/products";
 
 function Product() {
-  const [dataProduct, setDataProduct] = useState([]);
-  const { data, err, isLoading } = useListProductsQuery();
+  // const [dataProduct, setDataProduct] = useState([]);
+  const { data, err, isLoading } = useListProductsQuery([1,9]);
   return (
     <>
       <Navbar />

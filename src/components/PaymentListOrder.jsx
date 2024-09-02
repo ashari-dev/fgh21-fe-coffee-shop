@@ -8,9 +8,23 @@ import {
 } from "react-icons/fa6";
 import Kopie from "../img/Kopie.svg";
 import { useNavigate } from "react-router-dom";
-function PaymentListOrder() {
-  const nav = useNavigate();
+import { useSelector } from "react-redux";
+import { useGetProductsQuery } from "../redux/services/products.js";
 
+function PaymentListOrder() {
+  const [selectedDelivery, setSelectedDelivery] = React.useState("Dine In");
+  const nav = useNavigate();
+  const quantity = useSelector((state) => state.payment.quantity);
+  const size = useSelector((state) => state.payment.size);
+  const variant = useSelector((state) => state.payment.variant);
+  const id = useSelector((state) => state.payment.productId);
+
+  const { data, err, isLoading } = useGetProductsQuery(id);
+  const price = data.result.price;
+  
+  const order = price * quantity;
+  const tax = (price * quantity * 10) / 100;
+  const subTotal = price * quantity + (price * quantity * 10) / 100;
   return (
     <>
       <div className="flex flex-col md:p-32 py-32 px-5">
@@ -43,26 +57,31 @@ function PaymentListOrder() {
                   FLASH SALE!
                 </div>
                 <div className="text-[#0B0909] font-bold text-lg">
-                  Hazelnut Latte
+                  {isLoading || err ? "" : data.result.title}
                 </div>
                 <div className="flex gap-2 ">
-                  <div className="">2pcs</div>
+                  <div className="">{quantity}pcs</div>
                   <div className="">|</div>
-                  <div className="">Regular</div>
+                  <div className="">{size}</div>
                   <div className="">|</div>
-                  <div className="">Ice</div>
+                  <div className="">{variant}</div>
                   <div className="">|</div>
-                  <div className="">Dine In</div>
+                  <div className="">{selectedDelivery}</div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="text-[#D00000] font-medium text-xs line-through">
+                  {/* <div className="text-[#D00000] font-medium text-xs line-through">
                     IDR 40.000
+                  </div> */}
+                  <div className="font-medium text-[#FF8906]">
+                    IDR{" "}
+                    {isLoading || err
+                      ? ""
+                      : data.result.price.toLocaleString("id")}
                   </div>
-                  <div className="font-medium text-[#FF8906]">IDR 20.000</div>
                 </div>
               </div>
             </div>
-            <div className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
+            {/* <div className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
               <div className="">
                 <img src={Kopie} alt="" className="object-cover" />
               </div>
@@ -91,7 +110,7 @@ function PaymentListOrder() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-2">
               <div className="font-bold">Payment Info & Delivery</div>
               <form className="flex flex-col gap-2">
@@ -136,7 +155,7 @@ function PaymentListOrder() {
                   className="flex flex-col gap-1 w-full justify-center"
                 >
                   <div className="text-[#0B132A] font-semibold text-base">
-                    Full Name
+                    Address
                   </div>
                   <div className="flex items-center border-2 p-3 rounded-lg gap-2 text-[#4F5665]">
                     <FaLocationDot />
@@ -144,7 +163,7 @@ function PaymentListOrder() {
                       type="text"
                       name="name"
                       id="name"
-                      placeholder="Enter Your Full Name"
+                      placeholder="Enter Your Address"
                       className="w-full outline-none"
                     />
                   </div>
@@ -155,19 +174,34 @@ function PaymentListOrder() {
                     <div className="flex gap-5 w-full">
                       <button
                         type="button"
-                        className="flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md border-[#FF8906]"
+                        onClick={() => setSelectedDelivery("Dine in")}
+                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                          selectedDelivery === "Dine in"
+                            ? "border-[#FF8906]"
+                            : "border-[#E8E8E8]"
+                        }`}
                       >
                         Dine in
                       </button>
                       <button
                         type="button"
-                        className="flex items-center justify-center h-11 w-1/3 border-2 text-base border-[#E8E8E8] rounded-md text-[#0B0909]"
+                        onClick={() => setSelectedDelivery("Door Delivery")}
+                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                          selectedDelivery === "Door Delivery"
+                            ? "border-[#FF8906]"
+                            : "border-[#E8E8E8]"
+                        }`}
                       >
                         Door Delivery
                       </button>
                       <button
                         type="button"
-                        className="flex items-center justify-center h-11 w-1/3 border-2 text-base border-[#E8E8E8] rounded-md text-[#0B0909]"
+                        onClick={() => setSelectedDelivery("Pick Up")}
+                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                          selectedDelivery === "Pick Up"
+                            ? "border-[#FF8906]"
+                            : "border-[#E8E8E8]"
+                        }`}
                       >
                         Pick Up
                       </button>
@@ -183,20 +217,26 @@ function PaymentListOrder() {
               <div className="flex flex-col gap-3">
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Order</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 40.000</div>
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {order.toLocaleString("id")}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Delivery</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 0</div>
+                  <div className="font-bold text-[#0B132A]">IDR. 0</div>
                 </div>
                 <div className="flex justify-between ">
                   <div className="text-[#4F5665] font-bold">Tax</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 4.000</div>
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {tax.toLocaleString("id")}
+                  </div>
                 </div>
                 <div className="border-b-2"></div>
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Subtotal</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 44.000</div>
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {subTotal.toLocaleString("id")}
+                  </div>
                 </div>
               </div>
               <button
