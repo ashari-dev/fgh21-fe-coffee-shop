@@ -112,7 +112,7 @@ useEffect(() => {
                             </div>
                           </td>
                           <td className="text-center">{item.fullName}</td>
-                          <td className="text-center">{item.phoneNumber}</td>
+                          <td className="text-center">{item.phoneNUmber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
                           <td className="justify-center flex">

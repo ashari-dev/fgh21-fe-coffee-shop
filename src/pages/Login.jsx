@@ -37,7 +37,7 @@ function Login() {
     validationSchema: Yup.object().shape({
       email: Yup.string().email("Invalid email address").required("Required!"),
       password: Yup.string()
-        .min(6, "Minimum 6 characters")
+        .min(8, "Minimum 8 characters")
         .required("Required!"),
     }),
   });
@@ -76,7 +76,6 @@ function Login() {
             }
           }
           dataUpdate();
-          // navigate("/");
         } else {
           setErr(true);
           setTimeout(() => {
