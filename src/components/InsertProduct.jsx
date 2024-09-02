@@ -35,6 +35,7 @@ function InsertProduct(props) {
       body: form,
     });
     const listData = await dataProduct.json();
+    setMessage(listData.message)
     console.log(listData)
     props.effect()
     
