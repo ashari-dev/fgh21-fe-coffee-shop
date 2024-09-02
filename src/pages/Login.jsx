@@ -59,7 +59,7 @@ function Login() {
           console.log(data.result.token);
           dispatch(login(data.result.token));
           async function dataUpdate() {
-            const response = await fetch("http://localhost:8000/profile/", {
+            const response = await fetch("http://localhost:8000/profile", {
               headers: {
                 Authorization: "Bearer " + data.result.token,
               },
