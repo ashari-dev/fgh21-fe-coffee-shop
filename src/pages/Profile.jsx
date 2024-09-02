@@ -12,15 +12,13 @@ import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthPopUp from "../components/AuthPopUp";
 
 function Profile() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
-  console.log(token);
   const profile = useSelector((state) => state.profile.data);
-  console.log(profile);
   let [pass, setPassword] = React.useState("password");
   function changePassword() {
     if (pass === "password") {
@@ -61,12 +59,6 @@ function Profile() {
     const password = formik.values.password;
     const address = formik.values.address;
 
-    console.log(fullName);
-    console.log(email);
-    console.log(phoneNumber);
-    console.log(password);
-    console.log(address);
-
     const formData = new URLSearchParams();
     formData.append("fullName", fullName);
     formData.append("email", email);
@@ -81,7 +73,6 @@ function Profile() {
       },
       body: formData,
     });
-    console.log(dataProfile);
     const response = await dataProfile.json();
     if (response.success) {
       setAuthResponse(response);
