@@ -66,9 +66,17 @@ function Login() {
             });
             const json = await response.json();
             dispatch(addData(json.result));
+
+            if (json.result.roleId == 2) {
+              navigate("/dashboard-admin");
+              return;
+            } else {
+              navigate("/");
+              return;
+            }
           }
           dataUpdate();
-          navigate("/");
+          // navigate("/");
         } else {
           setErr(true);
           setTimeout(() => {
