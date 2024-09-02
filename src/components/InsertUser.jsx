@@ -12,6 +12,7 @@ import * as yup from "yup"
 function InsertUser(props) {
   const [role, setRole] = useState(0)
 
+
   async function inputForm() {
     const file = formik.values.file
     const fullName = formik.values.fullName
