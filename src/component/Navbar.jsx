@@ -23,6 +23,7 @@ function Navbar() {
     dispatch(editProfile({}));
     navigate("/login");
   };
+
   return (
     <>
       <div className="fixed z-10 w-full flex justify-between py-2 px-5 md:px-32 items-center bg-[#0B090921]">
@@ -115,16 +116,8 @@ function Navbar() {
                       </button>
                     </div>
                   </div>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate("/history-order");
-                  }}
-                >
-                  <IoIosArrowDown className="text-2xl text-[#4F5665]" />
-                </button>
-              </div>
+                )}
+              </button>
             )}
           </div>
         </div>
