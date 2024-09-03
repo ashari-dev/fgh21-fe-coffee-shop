@@ -14,7 +14,8 @@ function UserList() {
   const [showAdd, SetShowAdd] = useState(false);
   const [listUser, setListUser] = useState([])
   const [dataPage, setDataPage] = useState({})
-
+  const [page, setPage] = useState(1)
+  
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
       method: 'DELETE',
@@ -25,24 +26,33 @@ function UserList() {
   async function filterUsers(e) {
     e.preventDefault();
     const findUser = e.target.search.value;
-    console.log(findUser)
-    const listDataUser = await fetch(`http://localhost:8000/profile?search=${findUser}`, {});
+    let page = 0
+    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${findUser}`, {});
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
   }
 
+  async function paginationUsers(e) {
+    e.preventDefault();
+    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}`, {});
+    const listFilterUser = await listDataUser.json();
+    setListUser(listFilterUser.result);
+  }
+  
   async function dataUser() {
-    const endPoint = 'http://localhost:8000/profile'
+    const endPoint = (`http://localhost:8000/profile`)
     const response = await fetch(endPoint);
     const data = await response.json()
     const listData = data.result
     const pageInfo = data.pageInfo
     setListUser(listData)
     setDataPage(pageInfo)
-}
-useEffect(() => {
+  }
+  useEffect(() => {
+    paginationUsers()
+    filterUsers()
     dataUser()
-},[showAdd, showUpdate])
+  },[showAdd, showUpdate])
   return (
     <>
       <NavbarAdmin />
@@ -147,19 +157,43 @@ useEffect(() => {
                 <div>
                   <p>Show {listUser.length} user of {dataPage.totalData} user</p>
                 </div>
-                <div className="flex gap-3">
-                  <span>Prev</span>
-                  <span className="text-[#FF8906]">1</span>
-                  <span>2</span>
-                  <span>3</span>
-                  <span>4</span>
-                  <span>5</span>
-                  <span>6</span>
-                  <span>7</span>
-                  <span>8</span>
-                  <span>9</span>
-                  <span className="text-black">Next</span>
-                </div>
+                  <form action="" onSubmit={paginationUsers}>
+                    <div className="flex gap-3">
+                      <button type="submit" onClick={page > 1?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="Prev"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="1"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
+                        <input type="button" value="2"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(3)} className="hover:text-[#FF8906]">
+                        <input type="button" value="3"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(4)} className="hover:text-[#FF8906]">
+                        <input type="button" value="4"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(5)} className="hover:text-[#FF8906]">
+                        <input type="button" value="5"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(6)} className="hover:text-[#FF8906]">
+                        <input type="button" value="6"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(7)} className="hover:text-[#FF8906]">
+                        <input type="button" value="7"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(8)} className="hover:text-[#FF8906]">
+                        <input type="button" value="8"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
+                        <input type="button" value="9"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(page + 1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="Next"/>
+                      </button>
+                    </div>
+                  </form>
               </div>
             </div>
           </div>
