@@ -57,7 +57,7 @@ function InsertUser(props) {
         },
         onSubmit: inputForm,
         validationSchema: yup.object().shape({
-            fullName: yup.string().required('Please Enter your name').min(3).max(10),
+            fullName: yup.string().required('Please Enter your name').min(3).max(50),
             email: yup.string().required('Please Enter your email').email(),
             password: yup.string().required('Please Enter your password').min(8)
         })

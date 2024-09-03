@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/reducers/auth";
 import { addData } from "../redux/reducers/profile";
 import HandlerError from "../component/handlerError";
+import Loading from "../component/Loading";
 
 function Login() {
   const datatoken = useSelector((state) => state.auth.token);
@@ -20,6 +21,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [err, setErr] = useState(false);
+  const [itemLoading, setLoading] = React.useState(true);
   let [pass, setPassword] = React.useState("password");
   function changePassword() {
     if (pass === "password") {
@@ -37,7 +39,7 @@ function Login() {
     validationSchema: Yup.object().shape({
       email: Yup.string().email("Invalid email address").required("Required!"),
       password: Yup.string()
-        .min(6, "Minimum 6 characters")
+        .min(8, "Minimum 8 characters")
         .required("Required!"),
     }),
   });
@@ -46,6 +48,7 @@ function Login() {
     const email = formik.values.email;
     const password = formik.values.password;
 
+    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("email", email);
     formData.append("password", password);
@@ -66,10 +69,18 @@ function Login() {
             });
             const json = await response.json();
             dispatch(addData(json.result));
+
+            if (json.result.roleId == 2) {
+              navigate("/dashboard-admin");
+              return;
+            } else {
+              navigate("/");
+              return;
+            }
           }
           dataUpdate();
-          navigate("/");
         } else {
+          setLoading(false);
           setErr(true);
           setTimeout(() => {
             setErr(false);
@@ -82,6 +93,7 @@ function Login() {
 
   return (
     <div className="flex justify-center flex-col md:flex-row gap-16 h-screen">
+      {itemLoading ? "" : <Loading />}
       <div className="md:w-1/4 h-screen md:flex hidden">
         <img src={ImgLogin} alt="" className="object-cover" />
       </div>

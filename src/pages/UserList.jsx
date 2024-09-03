@@ -22,9 +22,14 @@ function UserList() {
     dataUser();
   }
 
-  function editData(id) {
-    nav("/profile/"+id)
-}
+  async function filterUsers(e) {
+    e.preventDefault();
+    const findUser = e.target.search.value;
+    console.log(findUser)
+    const listDataUser = await fetch(`http://localhost:8000/profile?search=${findUser}`, {});
+    const listFilterUser = await listDataUser.json();
+    setListUser(listFilterUser.result);
+  }
 
   async function dataUser() {
     const endPoint = 'http://localhost:8000/profile'
@@ -62,7 +67,7 @@ useEffect(() => {
                 </button>
               </div>
               <div>
-                <form className="flex flex-col gap-2">
+                <form onSubmit={filterUsers} className="flex flex-col gap-2">
                   <label htmlFor="search" className="text-xs text-[#4F5665]">
                     Search user
                   </label>
@@ -71,6 +76,7 @@ useEffect(() => {
                       <input
                         type="text"
                         id="search"
+                        name="search"
                         placeholder="Enter User Name"
                         className="outline-none"
                       />
@@ -112,7 +118,7 @@ useEffect(() => {
                             </div>
                           </td>
                           <td className="text-center">{item.fullName}</td>
-                          <td className="text-center">{item.phoneNumber}</td>
+                          <td className="text-center">{item.phoneNUmber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
                           <td className="justify-center flex">

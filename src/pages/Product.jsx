@@ -11,6 +11,12 @@ import { useListProductsQuery } from "../redux/services/products";
 function Product() {
   // const [dataProduct, setDataProduct] = useState([]);
   const { data, err, isLoading } = useListProductsQuery([1,9]);
+  async function products(props) {
+    const dataProducts = await fetch("http://localhost:8000/products/our-product/", {});
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+
   return (
     <>
       <Navbar />

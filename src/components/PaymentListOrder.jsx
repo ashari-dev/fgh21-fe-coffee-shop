@@ -10,6 +10,7 @@ import Kopie from "../img/Kopie.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetProductsQuery } from "../redux/services/products.js";
+import Loading from "../component/Loading";
 
 function PaymentListOrder() {
   const [selectedDelivery, setSelectedDelivery] = React.useState("Dine In");
@@ -18,16 +19,27 @@ function PaymentListOrder() {
   const size = useSelector((state) => state.payment.size);
   const variant = useSelector((state) => state.payment.variant);
   const id = useSelector((state) => state.payment.productId);
+  const [itemLoading, setLoading] = React.useState(true);
 
   const { data, err, isLoading } = useGetProductsQuery(id);
   const price = data.result.price;
-  
+
   const order = price * quantity;
   const tax = (price * quantity * 10) / 100;
   const subTotal = price * quantity + (price * quantity * 10) / 100;
+  function btnCheckout() {
+    if (itemLoading == true) {
+      setLoading(false);
+      nav("/history-order");
+    } else {
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col md:p-32 py-32 px-5">
+        {itemLoading ? "" : <Loading />}
         <div className="text-4xl font-medium mb-12">Payment Details</div>
         <div className="flex gap-12 items-center mb-6">
           <div className="flex justify-between items-center w-full md:w-1/2">
@@ -240,9 +252,7 @@ function PaymentListOrder() {
                 </div>
               </div>
               <button
-                onClick={() => {
-                  nav("/history-order");
-                }}
+                onClick={btnCheckout}
                 className="bg-orange-400 py-2 rounded-lg"
               >
                 Checkout
