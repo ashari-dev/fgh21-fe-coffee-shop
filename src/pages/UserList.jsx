@@ -12,12 +12,12 @@ import NavbarAdmin from "../component/NavbarAdmin";
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
-  const [listUser, setListUser] = useState([])
-  const [dataPage, setDataPage] = useState({})
+  const [listUser, setListUser] = useState([]);
+  const [dataPage, setDataPage] = useState({});
 
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     dataUser();
   }
@@ -25,24 +25,27 @@ function UserList() {
   async function filterUsers(e) {
     e.preventDefault();
     const findUser = e.target.search.value;
-    console.log(findUser)
-    const listDataUser = await fetch(`http://localhost:8000/profile?search=${findUser}`, {});
+    console.log(findUser);
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?search=${findUser}`,
+      {}
+    );
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
   }
 
   async function dataUser() {
-    const endPoint = 'http://localhost:8000/profile'
+    const endPoint = "http://localhost:8000/profile";
     const response = await fetch(endPoint);
-    const data = await response.json()
-    const listData = data.result
-    const pageInfo = data.pageInfo
-    setListUser(listData)
-    setDataPage(pageInfo)
-}
-useEffect(() => {
-    dataUser()
-},[showAdd, showUpdate])
+    const data = await response.json();
+    const listData = data.result;
+    const pageInfo = data.pageInfo;
+    setListUser(listData);
+    setDataPage(pageInfo);
+  }
+  useEffect(() => {
+    dataUser();
+  }, [showAdd, showUpdate]);
   return (
     <>
       <NavbarAdmin />
@@ -51,7 +54,11 @@ useEffect(() => {
         <SidebarAdmin />
         <div className="relative w-full">
           {showAdd ? <InsertUser closeMenu={SetShowAdd} /> : ""}
-          {showUpdate ? <EditUser closeMenu={setShowUpdate} id={showUpdate}/> : ""}
+          {showUpdate ? (
+            <EditUser closeMenu={setShowUpdate} id={showUpdate} />
+          ) : (
+            ""
+          )}
 
           <div className="border-l w-full min-h-screen pt-6 pl-7 pr-20 flex flex-col gap-5">
             <div className="text-2xl">User List</div>
@@ -105,15 +112,22 @@ useEffect(() => {
                     </tr>
                   </thead>
                   <tbody>
-                    {listUser.map((item)=>{
-                      return(
-                        <tr key={item.id}  data={item.id} className="border-t text-[#4F5665]">
+                    {listUser.map((item) => {
+                      return (
+                        <tr
+                          key={item.id}
+                          data={item.id}
+                          className="border-t text-[#4F5665]"
+                        >
                           <td className="text-center ">
                             <input type="checkbox" />
                           </td>
                           <td className="py-3 flex items-center justify-center">
-                            <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                              <img src={item.image?item.image:<FaUserCircle />} alt="" />
+                            <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12 overflow-hidden">
+                              <img
+                                src={item.image ? item.image : <FaUserCircle />}
+                                alt=""
+                              />
                               {/* {item.image?item.image:<FaUserCircle />} */}
                             </div>
                           </td>
@@ -121,7 +135,7 @@ useEffect(() => {
                           <td className="text-center">{item.phoneNUmber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
-                          <td className="justify-center flex">
+                          <td className="flex justify-center">
                             <div className="flex gap-3">
                               <div className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center">
                                 <FaRegListAlt className="text-[#8E6447]" />
@@ -132,20 +146,25 @@ useEffect(() => {
                               >
                                 <FiEdit3 className="text-[#FF8906]" />
                               </button>
-                              <button onClick={() => deleteItem(item.id)} className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                              <button
+                                onClick={() => deleteItem(item.id)}
+                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center"
+                              >
                                 <AiOutlineDelete className="text-[#d00000]" />
                               </button>
                             </div>
                           </td>
                         </tr>
-                      )
+                      );
                     })}
                   </tbody>
                 </table>
               </div>
               <div className="flex justify-between text-[#4F5665]">
                 <div>
-                  <p>Show {listUser.length} user of {dataPage.totalData} user</p>
+                  <p>
+                    Show {listUser.length} user of {dataPage.totalData} user
+                  </p>
                 </div>
                 <div className="flex gap-3">
                   <span>Prev</span>
