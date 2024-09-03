@@ -97,6 +97,7 @@ function Profile() {
     setFile(e.target.files[0]);
   }
   async function uploadImage(e) {
+    setLoading(true)
     e.preventDefault();
     const url = "http://localhost:8000/profile/img";
     const formData = new FormData();
@@ -107,27 +108,31 @@ function Profile() {
         "content-type": "multipart/form-data",
       },
     };
-    const respont = await axios.patch(url, formData, config);
-
-    if (respont.data.success) {
-      const response = await fetch("http://localhost:8000/profile/login", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      const json = await response.json();
-      dispatch(addData(json.result));
+    try{
+      const respont = await axios.patch(url, formData, config);
+      if (respont.data.success) {
+        const response = await fetch("http://localhost:8000/profile/login", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        const json = await response.json();
+        dispatch(addData(json.result));
+      }
+      e.target.reset();
+    }catch(err){
+      setAuthResponse({message: err?.response?.data?.message || 'Failed'})
+      setShowPopUp(true)
+    }finally{
+      setLoading(false)
     }
-    e.target.reset();
   }
   return (
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
 
-        {itemLoading ? "" : <Loading />}
-
-        {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
+        {isLoading == true && <Loading />}
 
         {showPopUp ? (
           <PopUp
