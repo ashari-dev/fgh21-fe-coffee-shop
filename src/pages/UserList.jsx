@@ -15,6 +15,8 @@ function UserList() {
   const [listUser, setListUser] = useState([])
   const [dataPage, setDataPage] = useState({})
   const [page, setPage] = useState(1)
+
+  // push ulang
   
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
