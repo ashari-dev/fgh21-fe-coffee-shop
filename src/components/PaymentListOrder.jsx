@@ -9,17 +9,13 @@ import {
 import Kopie from "../img/Kopie.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import { useGetProductsQuery } from "../redux/services/products.js";
+
 import { useGetCartQuery } from "../redux/services/cart.js";
 
 function PaymentListOrder(id) {
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
   const nav = useNavigate();
   const token = useSelector((state) => state.auth.token);
-  // const quantity = useSelector((state) => state.payment.quantity);
-  // const size = useSelector((state) => state.payment.size);
-  // const variant = useSelector((state) => state.payment.variant);
-  // const id = useSelector((state) => state.payment.productId);
   const { data, err, isLoading } = useGetCartQuery(token);
   console.log(data)
   const price = isLoading ? [] : data.result.map((item)=> item.price)
@@ -50,6 +46,8 @@ function PaymentListOrder(id) {
       transactionStatus: 2,
     })
 
+  
+
     const response = await fetch(`http://localhost:8000/transaction`, {
       method: "POST",
       headers:{
@@ -71,6 +69,7 @@ function PaymentListOrder(id) {
   return (
     <>
       <div className="flex flex-col md:p-32 py-32 px-5">
+        {itemLoading ? "" : <Loading />}
         <div className="text-4xl font-medium mb-12">Payment Details</div>
         <div className="flex gap-12 items-center mb-6">
           <div className="flex justify-between items-center w-full md:w-1/2">
@@ -127,36 +126,8 @@ function PaymentListOrder(id) {
                       </div> 
                       )
                     })}
-            {/* <div className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
-              <div className="">
-                <img src={Kopie} alt="" className="object-cover" />
-              </div>
-              <div className="flex justify-between md:items-center">
-                <div className="flex flex-col gap-4">
-                  <div className="flex justify-center max-w-32 bg-[#D00000] p-2 text-white rounded-full">
-                    FLASH SALE!
-                  </div>
-                  <div className="text-[#0B0909] font-bold text-lg">
-                    Hazelnut Latte
-                  </div>
-                  <div className="flex gap-2 ">
-                    <div className="">2pcs</div>
-                    <div className="">|</div>
-                    <div className="">Regular</div>
-                    <div className="">|</div>
-                    <div className="">Ice</div>
-                    <div className="">|</div>
-                    <div className="">Dine In</div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-[#D00000] font-medium text-xs line-through">
-                      IDR 40.000
-                    </div>
-                    <div className="font-medium text-[#FF8906]">IDR 20.000</div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+
+            
             <div className="flex flex-col gap-2">
               <div className="font-bold">Payment Info & Delivery</div>
               <form className="flex flex-col gap-2">
@@ -264,24 +235,28 @@ function PaymentListOrder(id) {
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Order</div>
                   <div className="font-bold text-[#0B132A]">Idr. 
-                    {total}
+                    {total.toLocaleString("id")}
+
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Delivery</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 0</div>
+                  <div className="font-bold text-[#0B132A]">IDR. 0</div>
                 </div>
                 <div className="flex justify-between ">
                   <div className="text-[#4F5665] font-bold">Tax</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 
-                    {total * 10/100}
+
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {tax.toLocaleString("id")}
+
                   </div>
                 </div>
                 <div className="border-b-2"></div>
                 <div className="flex justify-between">
                   <div className="text-[#4F5665] font-bold">Subtotal</div>
-                  <div className="font-bold text-[#0B132A]">Idr. 
-                    {(total) + ((total) * 10/100)}
+                  <div className="font-bold text-[#0B132A]">
+                    IDR. {subTotal.toLocaleString("id")}
+
                   </div>
                 </div>
               </div>

@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addQuantity, addVariant, addSize, addProductId } from "../redux/reducers/payment.js";
 import { useGetProductsQuery } from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
+import Loading from "../component/Loading";
 
 function DetailProduct() {
   const dispatch = useDispatch()
@@ -21,13 +22,14 @@ function DetailProduct() {
   const response = {message: "purchases cannot be empty"}
   const token = useSelector((state) => state.auth.token);
   const id = useParams().id;
-  console.log(typeof id)
-  const [showPopUp, setShowPopUp] = React.useState(false)
+  console.log(typeof id);
+  const [itemLoading, setLoading] = React.useState(true);
+  const [showPopUp, setShowPopUp] = React.useState(false);
   const [num, setNum] = React.useState(0);
   const [selectedSize, setSelectedSize] = React.useState(1);
   const [selectedTemperature, setSelectedTemperature] = React.useState(1);
   const { data, err, isLoading } = useGetProductsQuery(id);
-  console.log(data)
+  console.log(data);
   function mins() {
     if (num > 0) {
       setNum(num - 1);
@@ -38,12 +40,20 @@ function DetailProduct() {
       setNum(num + 1);
     }
   }
+
 async function pay (e) {
     e.preventDefault()
+
     if (num == 0) {
-      setShowPopUp(true)
-      return
+      setShowPopUp(true);
+      return;
+    } else {
+      setLoading(false);
+
+      navigate("/payment-detail");
+      return;
     }
+
     dispatch(addQuantity(num))
     dispatch(addVariant(selectedSize))
     dispatch(addSize(selectedTemperature))
@@ -88,7 +98,8 @@ async function pay (e) {
     <div className="">
       <Navbar />
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
-        {showPopUp? <AuthPopUp data={response}/>:""}
+        {itemLoading ? "" : <Loading />}
+        {showPopUp ? <AuthPopUp data={response} /> : ""}
         <div className="md:w-1/2 flex flex-col gap-4">
           <img src={coffe_1} className="bg-black w-full object-cover" />
           <div className="grid grid-cols-3 gap-4 w-full">
@@ -112,7 +123,7 @@ async function pay (e) {
                 IDR 20.000
               </div>
               <div className="text-[#FF8906] font-medium text-2xl">
-                IDR.{data.result.price}
+                IDR {data.result.price.toLocaleString("id")}
               </div>
             </div>
             <div className="flex gap-3 items-center  text-sm">

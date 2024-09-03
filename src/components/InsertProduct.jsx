@@ -21,7 +21,6 @@ function InsertProduct(props) {
     const description = e.target.description.value;
     const price = e.target.price.value;
     const stock = e.target.stock.value;
-    console.log(stock)
     const form = new URLSearchParams();
     form.append("title", title);
     form.append("description", description);
@@ -35,6 +34,7 @@ function InsertProduct(props) {
       body: form,
     });
     const listData = await dataProduct.json();
+    setMessage(listData.message)
     console.log(listData)
     props.effect()
     

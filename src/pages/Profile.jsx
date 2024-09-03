@@ -12,16 +12,19 @@ import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthPopUp from "../components/AuthPopUp";
+import Loading from "../component/Loading";
+import PopUp from "../components/PopUp";
+
 
 function Profile() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
-  console.log(token);
   const profile = useSelector((state) => state.profile.data);
-  console.log(profile);
+  const [isLoading, setLoading] = React.useState(false);
   let [pass, setPassword] = React.useState("password");
+  let [disabledPassword, setDisabledPassword] = React.useState(true);
   function changePassword() {
     if (pass === "password") {
       setPassword("text");
@@ -31,12 +34,13 @@ function Profile() {
   }
   const formik = useFormik({
     onSubmit: Update,
+    enableReinitialize: true,
     initialValues: {
-      fullName: "",
-      email: "",
-      phoneNumber: "",
+      fullName: profile.fullName,
+      email: profile.email,
+      phoneNumber: profile.phoneNumber,
       password: "",
-      address: "",
+      address: profile.address,
     },
     validationSchema: Yup.object().shape({
       fullName: Yup.string()
@@ -46,32 +50,29 @@ function Profile() {
       phoneNumber: Yup.string()
         .min(8, "Minimum 8 characters")
         .required("Required!"),
-      password: Yup.string()
-        .min(6, "Minimum 6 characters")
-        .required("Required!"),
+      password: disabledPassword
+        ? Yup.string()
+        : Yup.string().min(6, "Minimum 6 characters").required("Required!"),
       address: Yup.string().required("Required!"),
     }),
   });
   const [authResponse, setAuthResponse] = useState({});
   const [showPopUp, setShowPopUp] = useState(false);
   async function Update() {
+    setLoading(true)
     const fullName = formik.values.fullName;
     const email = formik.values.email;
     const phoneNumber = formik.values.phoneNumber;
     const password = formik.values.password;
     const address = formik.values.address;
 
-    console.log(fullName);
-    console.log(email);
-    console.log(phoneNumber);
-    console.log(password);
-    console.log(address);
-
     const formData = new URLSearchParams();
     formData.append("fullName", fullName);
     formData.append("email", email);
     formData.append("phoneNumber", phoneNumber);
-    formData.append("password", password);
+    if(password){
+      formData.append("password", password);
+    }
     formData.append("address", address);
 
     const dataProfile = await fetch("http://localhost:8000/profile", {
@@ -81,21 +82,24 @@ function Profile() {
       },
       body: formData,
     });
-    console.log(dataProfile);
     const response = await dataProfile.json();
-    if (response.success) {
-      setAuthResponse(response);
-      setShowPopUp(true);
-    } else {
-      setAuthResponse(response);
-      setShowPopUp(true);
-    }
+    setLoading(false);
+    setAuthResponse(response);
+    setShowPopUp(true);
   }
+
+  const passwordInput = React.useRef(null);
+
   return (
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
+
+        {isLoading === true && <Loading />}
         {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
+
+        {showPopUp ? <PopUp nextAction={()=>{setShowPopUp(!showPopUp)}} message={authResponse.message} /> : ""}
+
         <div className="flex flex-col justify-center gap-[44px]">
           <h1 className="font-bold text-[48px]">Profile</h1>
           <div className="md:flex md:flex-row flex flex-col justify-center gap-[30px] md:gap-[10px]">
@@ -129,7 +133,7 @@ function Profile() {
                     <input
                       type="name"
                       name="fullName"
-                      placeholder="Ghaluh Wizard"
+                      placeholder="Enter Full Name"
                       className="outline-none w-full"
                       onChange={formik.handleChange}
                       defaultValue={profile.fullName}
@@ -146,7 +150,7 @@ function Profile() {
                     <input
                       type="email"
                       name="email"
-                      placeholder="ghaluhwizz@gmail.com"
+                      placeholder="Enter Email"
                       className="outline-none w-full"
                       onChange={formik.handleChange}
                       defaultValue={profile.email}
@@ -163,7 +167,7 @@ function Profile() {
                     <input
                       type="text"
                       name="phoneNumber"
-                      placeholder="082116304338"
+                      placeholder="Enter Phone Number"
                       className="outline-none w-full"
                       onChange={formik.handleChange}
                       defaultValue={profile.phoneNumber}
@@ -176,36 +180,50 @@ function Profile() {
                 <div className="flex flex-col gap-[14px]">
                   <div className="flex justify-between">
                     <label className="text-[16px] font-bold">Password</label>
-                    <div className="flex justify-end text-[#FF8906]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDisabledPassword(!disabledPassword);
+                        setTimeout(() => {
+                          passwordInput.current.focus();
+                        }, 200);
+                      }}
+                      className="flex justify-end text-[#FF8906] hover:underline"
+                    >
                       Set New Password
-                    </div>
+                    </button>
                   </div>
-                  <div className="border border-[#DEDEDE] flex gap-[10px] items-center  p-[14px] rounded-lg">
-                    <FaKey />
+                  <div className="border border-[#DEDEDE] flex gap-[10px] items-center rounded-lg relative overflow-hidden">
+                    <div className="left-[14px] absolute">
+                      <FaKey />
+                    </div>
                     <input
+                      ref={passwordInput}
                       type={pass}
                       name="password"
-                      placeholder="*************"
+                      disabled={disabledPassword}
+                      placeholder="Enter Password"
                       onChange={formik.handleChange}
-                      className="outline-none w-full"
+                      className="outline-none w-full flex-1 py-4 px-10"
                     />
-                    <button type="button" onClick={changePassword}>
-                      <FaEye />
-                    </button>
+                    <div className="right-[14px] absolute">
+                      <button type="button" onClick={changePassword}>
+                        <FaEye />
+                      </button>
+                    </div>
                   </div>
                   {formik.errors.password && formik.touched.password && (
                     <p className="text-red-500">{formik.errors.password}</p>
                   )}
                 </div>
                 <div className="flex flex-col gap-[14px]">
-                  <label className="text-[16px] font-bold">Addres</label>
+                  <label className="text-[16px] font-bold">Address</label>
                   <div className="border border-[#DEDEDE] flex gap-[10px] items-center  p-[14px] rounded-lg">
                     <FaLocationDot />
-                    <input
-                      type="text"
+                    <textarea
                       name="address"
-                      placeholder="Griya Bandung Indah"
-                      className="outline-none w-full"
+                      placeholder="Enter full address"
+                      className="outline-none w-full h-6"
                       onChange={formik.handleChange}
                       defaultValue={profile.address}
                     />
