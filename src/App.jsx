@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <Forgetpassword />,
   },
   {
-    path: "/detail-order",
+    path: "/detail-order/:id",
     element: <DetailOrder />,
   },
   {

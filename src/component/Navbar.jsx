@@ -49,7 +49,11 @@ function Navbar() {
           <button>
             <FaSearch className="text-white text-xl"></FaSearch>
           </button>
-          <button>
+          <button
+            onClick={() => {
+              navigate("/payment-detail");
+            }}
+          >
             <FaShoppingCart className="text-white text-xl"></FaShoppingCart>
           </button>
           <div className="">
@@ -112,8 +116,16 @@ function Navbar() {
                       </button>
                     </div>
                   </div>
-                )}
-              </button>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate("/history-order");
+                  }}
+                >
+                  <IoIosArrowDown className="text-2xl text-[#4F5665]" />
+                </button>
+              </div>
             )}
           </div>
         </div>
