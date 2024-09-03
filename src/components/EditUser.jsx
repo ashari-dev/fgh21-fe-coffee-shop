@@ -19,12 +19,11 @@ function EditUser(props) {
         email: "",
         phone: "",
         password: "",
-        address: "",
-        role: ""
+        address: ""
     },
     onSubmit: updateProfile,
     validationSchema: yup.object().shape({
-        fullName: yup.string().required('Please Enter your name').min(3).max(10),
+        fullName: yup.string().required('Please Enter your name').min(3).max(50),
         email: yup.string().required('Please Enter your email').email()
         // password: yup.string().required('Please Enter your password').min(8)
     })
@@ -53,7 +52,7 @@ function EditUser(props) {
       // const userData = await response.json()
       // const listData = userData.result
       // console.log(listData)
-      // props.closeMenu(false)
+      props.closeMenu(false)
     }
     async function getData() {
         const endPoint = 'http://localhost:8000/profile/' + props.id

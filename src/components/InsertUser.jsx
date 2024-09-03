@@ -12,6 +12,7 @@ import * as yup from "yup"
 function InsertUser(props) {
   const [role, setRole] = useState(0)
 
+
   async function inputForm() {
     const file = formik.values.file
     const fullName = formik.values.fullName
@@ -56,7 +57,7 @@ function InsertUser(props) {
         },
         onSubmit: inputForm,
         validationSchema: yup.object().shape({
-            fullName: yup.string().required('Please Enter your name').min(3).max(10),
+            fullName: yup.string().required('Please Enter your name').min(3).max(50),
             email: yup.string().required('Please Enter your email').email(),
             password: yup.string().required('Please Enter your password').min(8)
         })

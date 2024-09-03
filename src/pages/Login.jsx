@@ -39,7 +39,7 @@ function Login() {
     validationSchema: Yup.object().shape({
       email: Yup.string().email("Invalid email address").required("Required!"),
       password: Yup.string()
-        .min(6, "Minimum 6 characters")
+        .min(8, "Minimum 8 characters")
         .required("Required!"),
     }),
   });
@@ -69,9 +69,16 @@ function Login() {
             });
             const json = await response.json();
             dispatch(addData(json.result));
+
+            if (json.result.roleId == 2) {
+              navigate("/dashboard-admin");
+              return;
+            } else {
+              navigate("/");
+              return;
+            }
           }
           dataUpdate();
-          navigate("/profile");
         } else {
           setLoading(false);
           setErr(true);

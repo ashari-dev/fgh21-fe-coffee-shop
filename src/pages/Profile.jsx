@@ -15,6 +15,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthPopUp from "../components/AuthPopUp";
 import Loading from "../component/Loading";
+import PopUp from "../components/PopUp";
+
 
 function Profile() {
   const navigate = useNavigate();
@@ -68,7 +70,9 @@ function Profile() {
     formData.append("fullName", fullName);
     formData.append("email", email);
     formData.append("phoneNumber", phoneNumber);
-    formData.append("password", password);
+    if(password){
+      formData.append("password", password);
+    }
     formData.append("address", address);
 
     const dataProfile = await fetch("http://localhost:8000/profile/", {
@@ -97,8 +101,12 @@ function Profile() {
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
+
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
+
+        {showPopUp ? <PopUp nextAction={()=>{setShowPopUp(!showPopUp)}} message={authResponse.message} /> : ""}
+
         <div className="flex flex-col justify-center gap-[44px]">
           <h1 className="font-bold text-[48px]">Profile</h1>
           <div className="md:flex md:flex-row flex flex-col justify-center gap-[30px] md:gap-[10px]">

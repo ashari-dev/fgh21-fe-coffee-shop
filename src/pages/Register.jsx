@@ -11,14 +11,55 @@ import AuthPopUp from "../components/AuthPopUp";
 import Loading from "../component/Loading";
 
 function Register() {
-  const [authResponse, setAuthResponse] = useState({});
-  const [showPopUp, setShowPopUp] = useState(false);
   const [itemLoading, setLoading] = React.useState(true);
-  async function inputForm() {
-    const name = formik.values.name;
-    const email = formik.values.email;
-    const password = formik.values.password;
-    const confirmPassword = formik.values.confirmpassword;
+    const [authResponse, setAuthResponse] = useState({})
+    const [showPopUp, setShowPopUp] = useState(false)
+    async function inputForm() {
+        const name = formik.values.name
+        const email = formik.values.email
+        const password = formik.values.password
+        const confirmPassword = formik.values.confirmpassword
+        
+        const data = new URLSearchParams()
+        data.append('fullName', name)
+        data.append('email', email)
+        data.append('password', password)
+        data.append('cPassword', confirmPassword)
+        const response = await fetch('http://localhost:8000/auth/register', {
+            method: 'POST',
+            body: data
+        })
+        const dataResponse = await response.json()
+        if (dataResponse.success) {
+            setAuthResponse(dataResponse)
+            setShowPopUp(true)
+        } else {
+            setAuthResponse(dataResponse)
+            setShowPopUp(true)
+        }    
+        }
+    
+        const formik = useFormik({
+            initialValues: {
+                name: "",
+                email: "",
+                password: "",
+                confirmpassword: "",
+            },
+            onSubmit: inputForm,
+            validationSchema: yup.object().shape({
+                name: yup.string().required('Please Enter your name').min(3).max(50),
+                email: yup.string().required('Please Enter your email').email(),
+                password: yup.string().required('Please Enter your password').min(8),
+                confirmpassword: yup.string().required('Please Enter your password').min(8)
+            })
+        })
+    
+        const handleForm = (event) => {
+            const {target} = event
+            formik.setFieldValue(target.name, target.value)
+        }
+
 
     setLoading(false);
     const data = new URLSearchParams();
