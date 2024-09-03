@@ -10,7 +10,6 @@ import Logo from "../assets/components/Logo";
 import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowDown, IoIosArrowUp, IoMdSearch } from "react-icons/io";
-import { BsCart3 } from "react-icons/bs";
 import { logout } from "../redux/reducers/auth";
 import { editProfile } from "../redux/reducers/profile";
 

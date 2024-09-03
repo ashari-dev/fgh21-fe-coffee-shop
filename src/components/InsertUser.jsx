@@ -33,16 +33,9 @@ function InsertUser(props) {
         method: 'POST',
         body: data
     })
-    // const dataResponse = await response.json()
-    // if (dataResponse.success) {
-    //     setAuthResponse(dataResponse)
-    //     setShowPopUp(true)
-    // } else {
-    //     setAuthResponse(dataResponse)
-    //     setShowPopUp(true)
-    // }
-    // e.target.reset({})
-    props.closeMenu(false)
+    const userData = await response.json()
+    
+    // props.closeMenu(false)
   }
 
     const formik = useFormik({

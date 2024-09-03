@@ -17,7 +17,6 @@ import Loading from "../component/Loading";
 
 function Login() {
   const datatoken = useSelector((state) => state.auth.token);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [err, setErr] = useState(false);
@@ -62,11 +61,15 @@ function Login() {
           console.log(data.result.token);
           dispatch(login(data.result.token));
           async function dataUpdate() {
-            const response = await fetch("http://localhost:8000/profile/login", {
-              headers: {
-                Authorization: "Bearer " + data.result.token,
-              },
-            });
+            const response = await fetch(
+              "http://localhost:8000/profile/login",
+              {
+                headers: {
+                  Authorization: "Bearer " + data.result.token,
+                },
+              }
+            );
+
             const json = await response.json();
             dispatch(addData(json.result));
 
