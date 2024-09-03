@@ -56,17 +56,20 @@ function Login() {
     }).then((response) => {
       response.json().then((data) => {
         if (data.success) {
-          console.log(data.result.token);
+          const token = data.result.token;
           dispatch(login(data.result.token));
           async function dataUpdate() {
-            const response = await fetch("http://localhost:8000/profile", {
-              headers: {
-                Authorization: "Bearer " + data.result.token,
-              },
-            });
+            const response = await fetch(
+              "http://localhost:8000/profile/login",
+              {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              }
+            );
             const json = await response.json();
             dispatch(addData(json.result));
-
+            console.log(json.result);
             if (json.result.roleId == 2) {
               navigate("/dashboard-admin");
               return;

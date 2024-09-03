@@ -12,8 +12,7 @@ import { useNavigate } from "react-router-dom";
 function InsertProduct(props) {
   const dataToken = useSelector((state) => state.auth.token);
   const [message, setMessage] = React.useState(true);
-  const navigate = useNavigate()
-  const [effect, setEffect] = React.useState()
+  const navigate = useNavigate();
 
   async function updateProduct(e) {
     e.preventDefault();
@@ -34,10 +33,9 @@ function InsertProduct(props) {
       body: form,
     });
     const listData = await dataProduct.json();
-    setMessage(listData.message)
-    console.log(listData)
-    props.effect()
-    
+    setMessage(listData.message);
+    console.log(listData);
+    props.effect();
   }
   return (
     <div>
@@ -55,16 +53,22 @@ function InsertProduct(props) {
             </button>
           </div>
           <div className="text-red-600 mb-5">{message}</div>
-          <form onSubmit={updateProduct} className="flex flex-col gap-2">
+          <form action="">
             <div className="flex flex-col gap-2">
               <span className="text-sm">Photos Product</span>
               <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
                 <CiImageOn />
               </div>
+              <div className="relative inline-block">
+                <input type="file" name="file" className="file:absolute file:right-0 
+    file:bg-blue-500 file:text-white file:border-0"/>
+              </div>
               <button className="bg-[#FF8906] w-[80px] rounded-md px-[16px]">
                 <span className="text-xs">Upload</span>
               </button>
             </div>
+          </form>
+          <form onSubmit={updateProduct} className="flex flex-col gap-2">
             <div className="flex gap-2 flex-col">
               <label htmlFor="productName" className="font-bold">
                 Product Name

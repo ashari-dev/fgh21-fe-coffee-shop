@@ -8,11 +8,13 @@ function GridProduct(props) {
   return (
     <div className="gap-4 p-8 min-h-[490px]">
       <div className="flex flex-col md:pb-32 relative">
-        {<img
-          className="min-w-[300px] max-w-[200px] max-h-[200px] bg-black"
-          src={props.data.image}
-          alt=""
-        />}
+        {
+          <img
+            className="max-w-[200px] max-h-[200px] bg-black"
+            src={props.data.image}
+            alt=""
+          />
+        }
         <div className="max-w-[262px] md:absolute bg-white p-2 flex flex-col gap-2 md:top-60 md:left-2">
           <div className="text-2xl font-semibold">{props.data.title}</div>
           <p className="text-gray-600">{props.data.description}</p>

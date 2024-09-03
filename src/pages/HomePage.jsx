@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 function HomePage() {
 
   const dataprofile = useSelector((state) => state.profile.data);
-  console.log(dataprofile);
 
 
   return (

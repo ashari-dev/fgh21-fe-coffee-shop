@@ -23,14 +23,17 @@ function ProductList(props) {
   async function filterProducts(e) {
     e.preventDefault();
     const datas = e.target.search.value;
-    console.log(datas)
-    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${datas}`, {});
+    console.log(datas);
+    const dataProducts = await fetch(
+      `http://localhost:8000/products/filter/?title=${datas}`,
+      {}
+    );
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
 
   useEffect(() => {
-    products()
+    products();
   }, []);
   function removeData(id) {
     fetch("http://localhost:8000/products/" + id, {
@@ -38,22 +41,25 @@ function ProductList(props) {
     })
       .then(() => {
         console.log("removed");
-        products()
+        products();
       })
       .catch((err) => {
         console.log(err);
       });
-      effect = product()
-
+    effect = product();
   }
   return (
     <>
-        <NavbarAdmin/>
-        <div className="flex">
+      <NavbarAdmin />
+      <div className="flex">
         <SidebarAdmin />
         <div className="relative w-full">
           {showAdd ? <InsertProduct closeMenu={SetShowAdd} /> : ""}
-          {showUpdate ? <EditProduct closeMenu={setShowUpdate} id={showUpdate}/> : ""}
+          {showUpdate ? (
+            <EditProduct closeMenu={setShowUpdate} id={showUpdate} />
+          ) : (
+            ""
+          )}
 
           <div className="border-l w-full min-h-screen pt-6 pl-7 pr-20 flex flex-col gap-5">
             <div className="text-2xl">Product List</div>
@@ -110,7 +116,7 @@ function ProductList(props) {
                   </thead>
                   <tbody>
                     {product.map((item) => {
-                      console.log(item.id)
+                      console.log(item.id);
                       return (
                         <tr className="border-t text-[#4F5665]">
                           <td className="text-center ">
@@ -124,15 +130,21 @@ function ProductList(props) {
                           <td className="text-center px-3 py-3">
                             {item.title}
                           </td>
-                          <td className="text-center px-3 py-3">{item.price}</td>
+                          <td className="text-center px-3 py-3">
+                            {item.price.toLocaleString("id")}
+                          </td>
                           <td className="text-center px-3 py-3">
                             {item.description}
                           </td>
-                          <td className="text-center px-3 py-3">R,L,XL,250gr</td>
+                          <td className="text-center px-3 py-3">
+                            R,L,XL,250gr
+                          </td>
                           <td className="text-center px-3 py-3">
                             Deliver, Dine In
                           </td>
-                          <td className="text-center px-3 py-3">{item.stock}</td>
+                          <td className="text-center px-3 py-3">
+                            {item.stock}
+                          </td>
                           <td className="justify-center text-center">
                             <div className="flex gap-3 w-full justify-center">
                               <button
@@ -143,7 +155,8 @@ function ProductList(props) {
                               </button>
                               <button
                                 onClick={() => removeData(item.id)}
-                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center"
+                              >
                                 <AiOutlineDelete className="text-[#d00000]" />
                               </button>
                             </div>
