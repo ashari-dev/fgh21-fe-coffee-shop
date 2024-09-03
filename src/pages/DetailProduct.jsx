@@ -10,7 +10,7 @@ import Pagination from "../components/Pagination.jsx";
 import GridProduct from "../components/GridProduct.jsx";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addQuantity, addVariant, addSize, addProductId } from "../redux/reducers/payment.js";
 import { useGetProductsQuery } from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
@@ -19,12 +19,13 @@ function DetailProduct() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const response = {message: "purchases cannot be empty"}
+  const token = useSelector((state) => state.auth.token);
   const id = useParams().id;
   console.log(typeof id)
   const [showPopUp, setShowPopUp] = React.useState(false)
   const [num, setNum] = React.useState(0);
-  const [selectedSize, setSelectedSize] = React.useState("Reguler");
-  const [selectedTemperature, setSelectedTemperature] = React.useState("Ice");
+  const [selectedSize, setSelectedSize] = React.useState(1);
+  const [selectedTemperature, setSelectedTemperature] = React.useState(1);
   const { data, err, isLoading } = useGetProductsQuery(id);
   console.log(data)
   function mins() {
@@ -37,7 +38,8 @@ function DetailProduct() {
       setNum(num + 1);
     }
   }
-  function pay () {
+async function pay (e) {
+    e.preventDefault()
     if (num == 0) {
       setShowPopUp(true)
       return
@@ -46,7 +48,41 @@ function DetailProduct() {
     dispatch(addVariant(selectedSize))
     dispatch(addSize(selectedTemperature))
     dispatch(addProductId(id))
-    navigate("/payment-detail")
+
+    const formData = new URLSearchParams();
+    formData.append("quantity", num);
+    formData.append("variant", selectedTemperature);
+    formData.append("productSize", selectedSize);
+
+    const response = await fetch(`http://localhost:8000/transaction/${id}`, {
+      method: "POST",
+      body: formData,
+    })
+    const json = await response.json()
+    if (json.success) {
+      const ids = json.result.id
+      console.log(id)
+      cart(ids)
+      navigate("/payment-detail")
+    }
+  }
+  async function cart(ids) {
+    const formData = new URLSearchParams();
+    formData.append("transactionDetail", ids);
+    formData.append("quantity", num);
+    formData.append("variant", selectedTemperature);
+    formData.append("productSize", selectedSize);
+
+    const response = await fetch(`http://localhost:8000/carts/${id}`, {
+      method: "POST",
+      headers:{
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    })
+    const json = await response.json()
+    console.log(json)
+    
   }
   return (
     <div className="">
@@ -116,9 +152,9 @@ function DetailProduct() {
             <div className="flex gap-5">
               <button
                 type="button"
-                onClick={() => setSelectedSize("Reguler")}
+                onClick={() => setSelectedSize(1)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === "Reguler"
+                  selectedSize === 1
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -127,9 +163,9 @@ function DetailProduct() {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedSize("Medium")}
+                onClick={() => setSelectedSize(2)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === "Medium"
+                  selectedSize === 2
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -138,9 +174,9 @@ function DetailProduct() {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedSize("Large")}
+                onClick={() => setSelectedSize(3)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === "Large"
+                  selectedSize === 3
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -152,9 +188,9 @@ function DetailProduct() {
             <div className="flex gap-5 w-full mb-4">
               <button
                 type="button"
-                onClick={() => setSelectedTemperature("Ice")}
+                onClick={() => setSelectedTemperature(1)}
                 className={`flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedTemperature === "Ice"
+                  selectedTemperature === 1
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -163,9 +199,9 @@ function DetailProduct() {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedTemperature("Hot")}
+                onClick={() => setSelectedTemperature(2)}
                 className={`flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedTemperature === "Hot"
+                  selectedTemperature === 2
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -182,6 +218,7 @@ function DetailProduct() {
                 Buy
               </button>
               <button
+                // onClick={cart}
                 type="button"
                 className="flex gap-1 items-center justify-center h-11 w-1/2 border-2 text-base border-[#FF8906] rounded-md text-[#FF8906]"
               >

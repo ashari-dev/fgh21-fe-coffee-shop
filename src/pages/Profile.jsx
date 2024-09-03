@@ -74,7 +74,7 @@ function Profile() {
     formData.append("password", password);
     formData.append("address", address);
 
-    const dataProfile = await fetch("http://localhost:8000/profile/", {
+    const dataProfile = await fetch("http://localhost:8000/profile", {
       method: "PATCH",
       headers: {
         Authorization: "Bearer " + token,
