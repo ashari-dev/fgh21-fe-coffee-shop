@@ -21,7 +21,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [err, setErr] = useState(false);
-  const [itemLoading, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = React.useState(false);
   let [pass, setPassword] = React.useState("password");
   function changePassword() {
     if (pass === "password") {
@@ -45,15 +45,15 @@ function Login() {
   });
 
   async function dataNew() {
+    setLoading(true);
     const email = formik.values.email;
     const password = formik.values.password;
 
-    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("email", email);
     formData.append("password", password);
 
-    const datalogin = await fetch("http://localhost:8000/auth/login", {
+    fetch("http://localhost:8000/auth/login", {
       method: "POST",
       body: formData,
     }).then((response) => {
@@ -93,7 +93,7 @@ function Login() {
 
   return (
     <div className="flex justify-center flex-col md:flex-row gap-16 h-screen">
-      {itemLoading ? "" : <Loading />}
+      {isLoading === true && <Loading />}
       <div className="md:w-1/4 h-screen md:flex hidden">
         <img src={ImgLogin} alt="" className="object-cover" />
       </div>
