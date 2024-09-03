@@ -22,7 +22,7 @@ function Profile() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
-  const [itemLoading, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = React.useState(false);
   let [pass, setPassword] = React.useState("password");
   let [disabledPassword, setDisabledPassword] = React.useState(true);
   function changePassword() {
@@ -59,13 +59,13 @@ function Profile() {
   const [authResponse, setAuthResponse] = useState({});
   const [showPopUp, setShowPopUp] = useState(false);
   async function Update() {
+    setLoading(true)
     const fullName = formik.values.fullName;
     const email = formik.values.email;
     const phoneNumber = formik.values.phoneNumber;
     const password = formik.values.password;
     const address = formik.values.address;
 
-    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("fullName", fullName);
     formData.append("email", email);
@@ -75,7 +75,7 @@ function Profile() {
     }
     formData.append("address", address);
 
-    const dataProfile = await fetch("http://localhost:8000/profile/", {
+    const dataProfile = await fetch("http://localhost:8000/profile", {
       method: "PATCH",
       headers: {
         Authorization: "Bearer " + token,
@@ -83,16 +83,9 @@ function Profile() {
       body: formData,
     });
     const response = await dataProfile.json();
-    if (response.success) {
-      setLoading(true);
-      setAuthResponse(response);
-      setShowPopUp(true);
-    } else {
-      setLoading(false);
-      setAuthResponse(response);
-      setShowPopUp(true);
-    }
-    setTimeout(() => setLoading(true), 2000);
+    setLoading(false);
+    setAuthResponse(response);
+    setShowPopUp(true);
   }
 
   const passwordInput = React.useRef(null);
@@ -102,7 +95,7 @@ function Profile() {
       <Navbar />
       <div className="md:p-32 px-5">
 
-        {itemLoading ? "" : <Loading />}
+        {isLoading === true && <Loading />}
         {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
 
         {showPopUp ? <PopUp nextAction={()=>{setShowPopUp(!showPopUp)}} message={authResponse.message} /> : ""}
