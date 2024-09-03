@@ -8,7 +8,7 @@ import { FaKey } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import ImgProfileUser from "../assets/img/profileUser.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
@@ -16,13 +16,15 @@ import { useNavigate } from "react-router-dom";
 import AuthPopUp from "../components/AuthPopUp";
 import Loading from "../component/Loading";
 import PopUp from "../components/PopUp";
-
+import axios, { Axios } from "axios";
+import { addData } from "../redux/reducers/profile";
 
 function Profile() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
-  const [itemLoading, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = React.useState(false);
   let [pass, setPassword] = React.useState("password");
   let [disabledPassword, setDisabledPassword] = React.useState(true);
   function changePassword() {
@@ -59,23 +61,23 @@ function Profile() {
   const [authResponse, setAuthResponse] = useState({});
   const [showPopUp, setShowPopUp] = useState(false);
   async function Update() {
+    setLoading(true)
     const fullName = formik.values.fullName;
     const email = formik.values.email;
     const phoneNumber = formik.values.phoneNumber;
     const password = formik.values.password;
     const address = formik.values.address;
 
-    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("fullName", fullName);
     formData.append("email", email);
     formData.append("phoneNumber", phoneNumber);
-    if(password){
+    if (password) {
       formData.append("password", password);
     }
     formData.append("address", address);
 
-    const dataProfile = await fetch("http://localhost:8000/profile/", {
+    const dataProfile = await fetch("http://localhost:8000/profile", {
       method: "PATCH",
       headers: {
         Authorization: "Bearer " + token,
@@ -83,50 +85,97 @@ function Profile() {
       body: formData,
     });
     const response = await dataProfile.json();
-    if (response.success) {
-      setLoading(true);
-      setAuthResponse(response);
-      setShowPopUp(true);
-    } else {
-      setLoading(false);
-      setAuthResponse(response);
-      setShowPopUp(true);
-    }
-    setTimeout(() => setLoading(true), 2000);
+    setLoading(false);
+    setAuthResponse(response);
+    setShowPopUp(true);
   }
 
   const passwordInput = React.useRef(null);
 
+  const [file, setFile] = useState();
+  function handlerChange(e) {
+    setFile(e.target.files[0]);
+  }
+  async function uploadImage(e) {
+    e.preventDefault();
+    const url = "http://localhost:8000/profile/img";
+    const formData = new FormData();
+    formData.append("profileImg", file);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
+      },
+    };
+    const respont = await axios.patch(url, formData, config);
+
+    if (respont.data.success) {
+      const response = await fetch("http://localhost:8000/profile/login", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      const json = await response.json();
+      dispatch(addData(json.result));
+    }
+    e.target.reset();
+  }
   return (
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
 
         {itemLoading ? "" : <Loading />}
+
         {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
 
-        {showPopUp ? <PopUp nextAction={()=>{setShowPopUp(!showPopUp)}} message={authResponse.message} /> : ""}
+        {showPopUp ? (
+          <PopUp
+            nextAction={() => {
+              setShowPopUp(!showPopUp);
+            }}
+            message={authResponse.message}
+          />
+        ) : (
+          ""
+        )}
 
         <div className="flex flex-col justify-center gap-[44px]">
           <h1 className="font-bold text-[48px]">Profile</h1>
           <div className="md:flex md:flex-row flex flex-col justify-center gap-[30px] md:gap-[10px]">
             <div className="md:w-[500px] w-full h-[443px] gap-[15px] border rounded-lg border-[#E8E8E8]">
-              <div className="flex flex-col p-[20px]  gap-[30px] justify-center items-center ">
-                <h2 className="font-bold">Galuh Wizard</h2>
-                <p className="text-[#4F5665] text-[16px]">
-                  ghaluhwizz@gmail.com
-                </p>
-                <img
-                  src={ImgProfileUser}
-                  className=" w-[113px] border-2 border-black  rounded-full"
-                ></img>
+              <form
+                onSubmit={uploadImage}
+                className="flex flex-col p-[20px]  gap-[30px] justify-center items-center "
+              >
+                <h2 className="font-bold">{profile.fullName}</h2>
+                <p className="text-[#4F5665] text-[16px]">{profile.email}</p>
+                <label htmlFor="img" className=" w-[113px] h-[113px] border border-black  rounded-full overflow-hidden">
+                  <img
+                    src={
+                      profile.image === null
+                        ? "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                        : profile.image
+                    }
+                  ></img>
+                </label>
+
+                <div className="flex text-center w-full">
+                  <input
+                    type="file"
+                    name="img"
+                    id="img"
+                    className="hidden"
+                    onChange={handlerChange}
+                  />
+                </div>
                 <button className="bg-[#FF8906] rounded-lg p-[12px]">
                   Upload New Photo
                 </button>
                 <p className="text-[#4F5665] font-semibold">
                   Since 20 January 2022
                 </p>
-              </div>
+              </form>
             </div>
             <div className="w-full gap-[15px] border rounded-lg border-[#E8E8E8]">
               <form

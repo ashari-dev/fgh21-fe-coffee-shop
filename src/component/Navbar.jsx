@@ -10,7 +10,6 @@ import Logo from "../assets/components/Logo";
 import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowDown, IoIosArrowUp, IoMdSearch } from "react-icons/io";
-import { BsCart3 } from "react-icons/bs";
 import { logout } from "../redux/reducers/auth";
 import { editProfile } from "../redux/reducers/profile";
 
@@ -24,6 +23,7 @@ function Navbar() {
     dispatch(editProfile({}));
     navigate("/login");
   };
+
   return (
     <>
       <div className="fixed z-10 w-full flex justify-between py-2 px-5 md:px-32 items-center bg-[#0B090921]">
@@ -42,14 +42,18 @@ function Navbar() {
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
             <Link to={"/"}>Home</Link>
-            <Link to={"/list-product"}>Product</Link>
+            <Link to={"/product"}>Product</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">
           <button>
             <FaSearch className="text-white text-xl"></FaSearch>
           </button>
-          <button>
+          <button
+            onClick={() => {
+              navigate("/payment-detail");
+            }}
+          >
             <FaShoppingCart className="text-white text-xl"></FaShoppingCart>
           </button>
           <div className="">
