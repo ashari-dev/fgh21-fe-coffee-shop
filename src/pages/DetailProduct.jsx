@@ -19,6 +19,7 @@ import {
 } from "../redux/reducers/payment.js";
 import { useGetProductsQuery } from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
+import Loading from "../component/Loading";
 
 function DetailProduct() {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function DetailProduct() {
   const response = { message: "purchases cannot be empty" };
   const id = useParams().id;
   console.log(typeof id);
+  const [itemLoading, setLoading] = React.useState(true);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [num, setNum] = React.useState(0);
   const [selectedSize, setSelectedSize] = React.useState("Reguler");
@@ -46,17 +48,22 @@ function DetailProduct() {
     if (num == 0) {
       setShowPopUp(true);
       return;
+    } else {
+      setLoading(false);
+
+      navigate("/payment-detail");
+      return;
     }
     dispatch(addQuantity(num));
     dispatch(addVariant(selectedSize));
     dispatch(addSize(selectedTemperature));
     dispatch(addProductId(id));
-    navigate("/payment-detail");
   }
   return (
     <div className="">
       <Navbar />
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
+        {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
         <div className="md:w-1/2 flex flex-col gap-4">
           <img src={coffe_1} className="bg-black w-full object-cover" />
