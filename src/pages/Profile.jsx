@@ -14,11 +14,13 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthPopUp from "../components/AuthPopUp";
+import Loading from "../component/Loading";
 
 function Profile() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
+  const [itemLoading, setLoading] = React.useState(true);
   let [pass, setPassword] = React.useState("password");
   let [disabledPassword, setDisabledPassword] = React.useState(true);
   function changePassword() {
@@ -46,9 +48,9 @@ function Profile() {
       phoneNumber: Yup.string()
         .min(8, "Minimum 8 characters")
         .required("Required!"),
-      password: disabledPassword ? Yup.string() : Yup.string()
-        .min(6, "Minimum 6 characters")
-        .required("Required!"),
+      password: disabledPassword
+        ? Yup.string()
+        : Yup.string().min(6, "Minimum 6 characters").required("Required!"),
       address: Yup.string().required("Required!"),
     }),
   });
@@ -61,6 +63,7 @@ function Profile() {
     const password = formik.values.password;
     const address = formik.values.address;
 
+    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("fullName", fullName);
     formData.append("email", email);
@@ -77,20 +80,24 @@ function Profile() {
     });
     const response = await dataProfile.json();
     if (response.success) {
+      setLoading(true);
       setAuthResponse(response);
       setShowPopUp(true);
     } else {
+      setLoading(false);
       setAuthResponse(response);
       setShowPopUp(true);
     }
+    setTimeout(() => setLoading(true), 2000);
   }
 
-  const passwordInput = React.useRef(null)
+  const passwordInput = React.useRef(null);
 
   return (
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
+        {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
         <div className="flex flex-col justify-center gap-[44px]">
           <h1 className="font-bold text-[48px]">Profile</h1>
@@ -172,12 +179,16 @@ function Profile() {
                 <div className="flex flex-col gap-[14px]">
                   <div className="flex justify-between">
                     <label className="text-[16px] font-bold">Password</label>
-                    <button type="button" onClick={()=>{
-                      setDisabledPassword(!disabledPassword)
-                      setTimeout(()=>{
-                          passwordInput.current.focus()
-                      },200)
-                    }} className="flex justify-end text-[#FF8906] hover:underline">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDisabledPassword(!disabledPassword);
+                        setTimeout(() => {
+                          passwordInput.current.focus();
+                        }, 200);
+                      }}
+                      className="flex justify-end text-[#FF8906] hover:underline"
+                    >
                       Set New Password
                     </button>
                   </div>
