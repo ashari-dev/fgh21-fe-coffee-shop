@@ -11,34 +11,50 @@ import * as yup from "yup"
 
 function InsertUser(props) {
   const [role, setRole] = useState(0)
+  const [message, setMessage] = useState(""); 
 
 
-  async function inputForm() {
-    const file = formik.values.file
-    const fullName = formik.values.fullName
-    const email = formik.values.email
-    const phone = formik.values.phone
-    const password = formik.values.password
-    const address = formik.values.address
-    
-    const data = new URLSearchParams()
-    data.append('image', file)
-    data.append('fullName', fullName)
-    data.append('email', email)
-    data.append('phoneNumber', phone)
-    data.append('password', password)
-    data.append('address', address)
-    data.append('roleId', role)
-    const response = await fetch('http://localhost:8000/profile', {
-        method: 'POST',
-        body: data
-    })
-    const userData = await response.json()
-    
-    // props.closeMenu(false)
+    async function inputForm() {
+    const file = formik.values.file;
+    const fullName = formik.values.fullName;
+    const email = formik.values.email;
+    const phone = formik.values.phone;
+    const password = formik.values.password;
+    const address = formik.values.address;
+  
+
+    const data = new FormData();
+    data.append("profileImage", file); 
+    data.append("fullName", fullName);
+    data.append("email", email);
+    data.append("phoneNumber", phone);
+    data.append("password", password);
+    data.append("address", address);
+    data.append("roleId", role);
+  
+    try {
+      const response = await fetch("http://localhost:8000/users/insertuser", {
+        method: "POST",
+        body: data,
+      });
+  
+      if (!response.ok) {
+        setMessage("Failed to insert user");
+        return;
+      }
+  
+      const userData = await response.json();
+      console.log("User Data:", userData);
+      setMessage("User successfully inserted!")
+
+    } catch (error) {
+      console.error("Error inserting user:", error);
+      setMessage("An error occurred. Please try again.")
+    }
   }
 
     const formik = useFormik({
+      onSubmit: inputForm,
         initialValues: {
             file: "",
             fullName: "",
@@ -47,8 +63,7 @@ function InsertUser(props) {
             password: "",
             address: "",
             role: ""
-        },
-        onSubmit: inputForm,
+        },    
         validationSchema: yup.object().shape({
             fullName: yup.string().required('Please Enter your name').min(3).max(50),
             email: yup.string().required('Please Enter your email').email(),
@@ -57,10 +72,15 @@ function InsertUser(props) {
     })
 
     const handleForm = (event) => {
-        const {target} = event
-        formik.setFieldValue(target.name, target.value)
-    }
+      const { target } = event;
+      
+      if (target.name === "file") {
 
+        formik.setFieldValue(target.name, target.files[0]);
+      } else {
+        formik.setFieldValue(target.name, target.value);
+      }
+    };
   return (
     <div>
       <div className="absolute bg-[#00000099] w-full flex h-screen justify-end">
@@ -71,6 +91,7 @@ function InsertUser(props) {
                 <IoMdCloseCircleOutline />
               </button>
             </div>
+            {message && <div className="mt-2 text-red-600">{message}</div>}
           <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
             <div className="flex flex-col gap-2">
               <span className="text-sm">Image User</span>

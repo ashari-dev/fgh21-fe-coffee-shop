@@ -52,6 +52,7 @@ function UserList() {
     const data = await response.json()
     const listData = data.result
     const pageInfo = data.pageInfo
+ 
     setDataPage(pageInfo)
     setListUser(listData)
   }
@@ -149,7 +150,7 @@ function UserList() {
                             </div>
                           </td>
                           <td className="text-center">{item.fullName}</td>
-                          <td className="text-center">{item.phoneNUmber}</td>
+                          <td className="text-center">{item.phoneNumber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
                           <td className="flex justify-center">
