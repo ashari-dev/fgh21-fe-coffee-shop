@@ -46,7 +46,12 @@ function SidebarAdmin() {
         <HiUsers />
         <span>User</span>
       </button>
-      <button className="flex items-center gap-2 ml-[42px] mr-[12px] hover:bg-[#FF8906] rounded-lg py-3 px-[11px]">
+      <button
+        onClick={() => {
+          nav("/login");
+        }}
+        className="flex items-center gap-2 ml-[42px] mr-[12px] hover:bg-[#FF8906] rounded-lg py-3 px-[11px]"
+      >
         <RxExit />
         <span>Keluar</span>
       </button>

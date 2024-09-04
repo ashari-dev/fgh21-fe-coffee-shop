@@ -6,7 +6,6 @@ import {
   FaRegCreditCard,
   FaTruck,
   FaRepeat,
-  FaX,
 } from "react-icons/fa6";
 import Kopie from "../img/Kopie.svg";
 import Layout from "../components/Layout";

@@ -17,6 +17,7 @@ import { editProfile } from "../redux/reducers/profile";
 function Navbar() {
   const navigate = useNavigate();
   const dataToken = useSelector((state) => state.auth.token);
+  const profile = useSelector((state) => state.profile.data);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const dispatch = useDispatch();
   const processLogout = () => {
@@ -86,11 +87,14 @@ function Navbar() {
                 className="flex items-center gap-3 relative"
               >
                 <div className="flex rounded-full overflow-hidden border border-[#4F5665] ">
-                  <img
+                  {profile.image && <img
                     className="h-12 w-12 p-1 rounded-full"
-                    src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/corporate-user-icon.png"
+                    src={profile.image}
                     alt="img"
-                  />
+                  />}
+                  {!profile.image && <div className="bg-[#FF8906] text-white h-12 w-12 flex justify-center items-center rounded-full">
+                    <FaUser size={24} />
+                    </div>}
                 </div>
                 <div>
                   {!showDropdown && (

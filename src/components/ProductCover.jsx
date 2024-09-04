@@ -4,7 +4,7 @@ import Cover from "../assets/img/product_cover.png"
 function ProductCover() {
    return(
     <>
-        <div className="bg-black w-screen h-24"></div>
+        <div className="bg-black w-full h-24"></div>
         <div className="w-full h-72 md:block hidden">
             <div className="">
                 <img src={Cover} alt="product_img" className="w-full"/>
