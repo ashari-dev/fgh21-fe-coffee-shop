@@ -8,27 +8,49 @@ import { AiOutlineDelete } from "react-icons/ai";
 import InsertProduct from "../components/InsertProduct";
 import EditProduct from "../components/EditProduct";
 import NavbarAdmin from "../component/NavbarAdmin";
+import { Form } from "formik";
 
-function ProductList(props) {
+function ProductList() {
   const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
   const [product, setProduct] = React.useState([]);
+  const [page, setPage] = React.useState(1)
+  const [totalPages, setTotalPages] = useState([]);
+  const [search, setSearch] = React.useState("")
 
+  // console.log(totalPages.result)
+  // if (page < 1) {
+  //   setPage(1)
+  // }
+  // function pageDown() {
+  //   setPage(page - 1)
+  // }
+  // function pageUp() {
+  //   setPage(page + 1)
+  // }
   async function products() {
+
     const dataProducts = await fetch("http://localhost:8000/products/", {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
+    setTotalPages(listProduct.result)
   }
+  
 
   async function filterProducts(e) {
-    e.preventDefault();
-    const datas = e.target.search.value;
-    console.log(datas)
-    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${datas}`, {});
+    e.preventDefault()
+    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&page=${page}`, {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
-  }
 
+  }
+  async function pageProduct(e) {
+    e.preventDefault()
+    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&?page=${page}`, {});
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+    setTotalPages(listProduct.totalPages)
+  }
   useEffect(() => {
     products()
   }, []);
@@ -43,9 +65,9 @@ function ProductList(props) {
       .catch((err) => {
         console.log(err);
       });
-      effect = product()
 
   }
+
   return (
     <>
         <NavbarAdmin/>
@@ -81,6 +103,8 @@ function ProductList(props) {
                         name="search"
                         placeholder="Enter Product Name"
                         className="outline-none"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                       />
                       <IoMdSearch className="text-[#4F5665]" />
                     </div>
@@ -108,11 +132,11 @@ function ProductList(props) {
                       <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {product.map((item) => {
-                      console.log(item.id)
-                      return (
-                        <tr className="border-t text-[#4F5665]">
+                  <tbody>   
+                    {product.map((item) => 
+               
+                      (
+                        <tr key={item.id}className="border-t text-[#4F5665]">
                           <td className="text-center ">
                             <input type="checkbox" />
                           </td>
@@ -149,28 +173,56 @@ function ProductList(props) {
                             </div>
                           </td>
                         </tr>
-                      );
-                    })}
+                      
+                    ))}
                   </tbody>
                 </table>
               </div>
               <div className="flex justify-between text-[#4F5665]">
                 <div>
-                  <p>Show 5 user of 100 user</p>
+                  <p>Show page {page} of 100 page</p>
                 </div>
+                
                 <div className="flex gap-3">
-                  <span>Prev</span>
-                  <span className="text-[#FF8906]">1</span>
-                  <span>2</span>
-                  <span>3</span>
-                  <span>4</span>
-                  <span>5</span>
-                  <span>6</span>
-                  <span>7</span>
-                  <span>8</span>
-                  <span>9</span>
-                  <span className="text-black">Next</span>
+                <form action="" onSubmit={filterProducts}>
+                    <div className="flex gap-3">
+                      <button type="submit" onClick={page > 1 ?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="Prev"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="1"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
+                        <input type="button" value="2"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(3)} className="hover:text-[#FF8906]">
+                        <input type="button" value="3"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(4)} className="hover:text-[#FF8906]">
+                        <input type="button" value="4"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(5)} className="hover:text-[#FF8906]">
+                        <input type="button" value="5"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(6)} className="hover:text-[#FF8906]">
+                        <input type="button" value="6"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(7)} className="hover:text-[#FF8906]">
+                        <input type="button" value="7"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(8)} className="hover:text-[#FF8906]">
+                        <input type="button" value="8"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
+                        <input type="button" value="9"/>
+                      </button>
+                      <button type="submit" onClick={()=>setPage(page + 1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="Next"/>
+                      </button>
+                    </div>
+                  </form>
                 </div>
+           
               </div>
             </div>
           </div>

@@ -7,9 +7,31 @@ import GridProduct from "../components/GridProduct";
 import Pagination from "../components/Pagination";
 import Footer from "../component/Footer";
 import { useListProductsQuery } from "../redux/services/products";
+import { useEffect } from "react";
 
 function Product() {
-  const { data, err, isLoading } = useListProductsQuery([1, 9]);
+
+  const [product, setProduct] = useState([]);
+  async function products() {
+    const page = 1
+    const limit = 100
+    const dataProducts = await fetch(
+      `http://localhost:8000/products/our-product/?page=${page}&limit=${limit}`
+    );
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+  async function fetchProducts(lowPrice = 0, highPrice = 50000) {
+    const dataProducts = await fetch(
+      `http://localhost:8000/products/filter/price?lowPrice=${lowPrice}&highPrice=${highPrice}`
+    );
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+  useEffect(() => {
+    products()
+  }, []);
+  console.log(product)
   return (
     <>
       <Navbar />
@@ -20,22 +42,18 @@ function Product() {
           <h2 className="text-5xl mx-5">
             Our <span className="text-[#8e6447]">Product</span>
           </h2>
+
           <div className="flex gap-5">
-            <SideBarProduct />
+            <SideBarProduct fetchProducts={fetchProducts} />
             <div className="flex flex-col">
-              <div className="flex justify-center md:justify-start flex-wrap ">
-                {/* <div className="grid grid-cols-3 "> */}
-                {isLoading || err
-                  ? ""
-                  : data.result.map((item) => {
-                      return (
-                        <GridProduct
-                          className="w-1/4"
-                          key={item.id}
-                          data={item}
-                        />
-                      );
-                    })}
+              <div className="flex justify-center md:justify-start flex-wrap">
+                {product.length > 0 ? (
+                  product.map((item) => (
+                    <GridProduct key={item.id} data={item} />
+                  ))
+                ) : (
+                  <p>No products found</p>
+                )}
               </div>
               <div className="flex justify-center py-24">
                 <Pagination />
