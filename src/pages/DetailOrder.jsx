@@ -13,27 +13,39 @@ import { useParams } from "react-router-dom";
 
 function DetailOrder() {
   let { id } = useParams();
+  const [loading, setLoading] = React.useState(true)
   const [data, setData] = React.useState({})
   const [product, setProduct] = React.useState({})
+  const [subTotal, setSubTotal] = React.useState(0)
   async function GetPayment() {
     const response = await fetch(`http://localhost:8000/transaction/${id}`)
     const json = await response.json()
     setData(json.result)
+      if (data.price.length > 1 && data.quantity.length > 1) {
+        const price = data.price.reduce((a, b) => a + b, 0);
+        const quantity = data.quantity.reduce((a, b) => a + b, 0);
+        setSubTotal(price * quantity)
+      }
+      setSubTotal(data.price * data.quantity)
   }
   async function GetProduct() {
     const response = await fetch(`http://localhost:8000/transaction/products/${id}`)
     const json = await response.json()
     setProduct(json.result)
+    setLoading(false)
   }
   React.useEffect(()=>{
     GetPayment()
     GetProduct()
   },[])
-  console.log(data.price)
-  console.log(product)
-  const price = data.price.reduce((a, b) => a + b, 0);
-  const quantity = data.quantity.reduce((a, b) => a + b, 0);
-  const subTotal = price * quantity
+  // console.log(data.price)
+  console.log(subTotal)
+  // console.log(data.price.length)
+  // if (data.price.length > 1 && data.quantity.length > 1) {
+  //   const price = data.price.reduce((a, b) => a + b, 0);
+  //   const quantity = data.quantity.reduce((a, b) => a + b, 0);
+  //   setSubTotal(price * quantity)
+  // }
   return (
     <Layout>
       <div className="bg-black w-screen h-24"></div>
@@ -105,7 +117,7 @@ function DetailOrder() {
           </div>
           <div className="md:w-1/2 flex flex-col gap-4 pl-2">
             <div className="text-[#0B132A] font-medium text-xl">Your Order</div>
-            {product.map((item) => {
+            {loading ? "" : product.map((item) => {
                 return (
                   <div key={item.id} className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
                     <div className="">

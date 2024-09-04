@@ -12,6 +12,9 @@ function HistoryOrder() {
     const token = useSelector((state) => state.auth.token);
     console.log(token)
     const { data, err, isLoading } = useGetTransactionQuery(token);
+    const datas = isLoading ? [] : data.result.Price
+  
+        console.log(datas);  
     return (
         <div className="">
             <Navbar />
@@ -27,6 +30,11 @@ function HistoryOrder() {
                         {isLoading || err
                         ? ""
                         : data.result.map((item) => {
+                            // const numbers = item.Price
+                            const price = item.Price.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                            const quantity = item.Quantity.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                            console.log(price)
+                            console.log(quantity)
                             return (
                                 <>
                                 <div className="flex gap-5 bg-[#E8E8E8]/30 p-4 rounded-lg" key={item.id}>
@@ -60,7 +68,7 @@ function HistoryOrder() {
                                                 Total
                                             </div>
                                         </div>
-                                        <div className="font-bold py-2 text-[#0B132A]">Idr {(item.Price * item.Quantity).toLocaleString("id")}</div>
+                                        <div className="font-bold py-2 text-[#0B132A]">Idr {(price * quantity).toLocaleString("id")}</div>
                                     </div>
                                     <div className="flex flex-col gap-3 py-3">
                                         <div className="flex items-center gap-2">
