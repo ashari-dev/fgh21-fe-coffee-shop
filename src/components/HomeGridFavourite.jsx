@@ -5,7 +5,8 @@ import { useListProductsQuery } from "../redux/services/products";
 
 function HomeGridFavourite() {
   const { data, err, isLoading } = useListProductsQuery([1, 4]);
-  useEffect(()=>{},[])
+  console.log(data);
+  useEffect(() => {}, []);
   return (
     <div className="flex flex-col mt-8">
       <div className="flex flex-col justify-center items-center">
