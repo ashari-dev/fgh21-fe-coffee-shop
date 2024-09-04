@@ -42,7 +42,7 @@ function Navbar() {
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
             <Link to={"/"}>Home</Link>
-            <Link to={"/list-product"}>Product</Link>
+            <Link to={"/product"}>Product</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">

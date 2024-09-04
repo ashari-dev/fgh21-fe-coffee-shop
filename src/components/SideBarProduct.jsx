@@ -1,10 +1,30 @@
 import React from "react";
 import range from "../img/range.svg"
+import { useState } from "react";
 
-function SideBarProduct(){
+function SideBarProduct({ fetchProducts }) {
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(20001);
+
+    const handleMinChange = (e) => {
+        const value = Math.min(Number(e.target.value), maxPrice - 1);
+        setMinPrice(value);
+    };
+
+    const handleMaxChange = (e) => {
+        const value = Math.max(Number(e.target.value), minPrice + 1);
+        setMaxPrice(value);
+    };
+    async function filterProducts(e) {
+      e.preventDefault();
+      const lowPrice = e.target.lowPrice.value;
+      const highPrice = e.target.highPrice.value;
+
+      fetchProducts(lowPrice, highPrice);
+    }
     return(
         <div className="bg-black h-full w-full max-w-96 rounded-xl md:block hidden">
-            <form className="p-5 flex flex-col gap-8">
+            <form onSubmit={filterProducts} className="p-5 flex flex-col gap-8">
                 <div className="flex justify-between">
                     <div className="text-white font-semibold text-xl">Filter</div>
                     <div className="text-white font-bold text-lg">Reset Filter</div>
@@ -54,9 +74,14 @@ function SideBarProduct(){
                 <div className="flex flex-col gap-2">
                     <div className="text-white font-bold text-lg">Range Price</div>
                     <div className="">
-                    <div className="flex">
-                        <input type="range" id="range" name="range" min="0" max="1000000" className="w-1/2"/>
-                        <input type="range" id="range" name="range" min="0" max="1000000" className="w-1/2"/>                    </div>
+                        <div className="flex">
+                            <input type="range" id="lowPrice" name="lowPrice" min="0" max="20000" value={minPrice} onChange={handleMinChange} className="w-1/2"/>
+                            <input type="range" id="highPrice" name="highPrice" min="20001" max="50000" value={maxPrice} onChange={handleMaxChange} className="w-1/2"/>
+                        </div>
+                        <div className="flex justify-between text-white mt-2">
+                            <span>Idr.{minPrice}</span>
+                            <span>Idr.{maxPrice}</span>
+                        </div>
                     </div>
                     <button type="submit" className="w-full bg-[#FF8906] py-3 rounded-lg font-medium text-sm mb-4">Apply Filter</button>
                 </div>
