@@ -11,10 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetCartQuery } from "../redux/services/cart.js";
 import Loading from "../component/Loading";
+import HandlerError from "../component/HandlerError.jsx";
 
 function PaymentListOrder() {
   const navigate = useNavigate();
   const [itemLoading, setLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState(false)
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
   const token = useSelector((state) => state.auth.token);
   const { data, err, isLoading } = useGetCartQuery(token);
@@ -38,9 +40,14 @@ function PaymentListOrder() {
   }
 
   async function TransactionPayment() {
+    // console.log(data.result)
     const email = document.getElementById("email").value;
     const fullName = document.getElementById("name").value;
     const address = document.getElementById("address").value;
+    if (email === "" && fullName === "" && address === "") {
+      setIsError(true)
+      return
+    }
     const data1 = isLoading ? [] : data.result[0].transactionDetail;
 
     setLoading(true);
@@ -68,7 +75,7 @@ function PaymentListOrder() {
     if (json.success) {
       DeleteCarts()
       console.log(json);
-      nav("/history-order")      
+      navigate("/history-order")      
     }
   }
   let Delivery = "";
@@ -91,7 +98,7 @@ function PaymentListOrder() {
             <div className="font-medium text-xl">Your Order</div>
             <button
               onClick={() => {
-                nav("/product");
+                navigate("/product");
               }}
               className="flex items-center gap-3 bg-orange-400 px-4 py-2 rounded-lg"
             >
@@ -146,6 +153,7 @@ function PaymentListOrder() {
                 })}
 
             <div className="flex flex-col gap-2">
+            {isError ? <HandlerError msg={"Please fill in the orderer's personal data"}/>:""}
               <div className="font-bold">Payment Info & Delivery</div>
               <form className="flex flex-col gap-2">
                 <label

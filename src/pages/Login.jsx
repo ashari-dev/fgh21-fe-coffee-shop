@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/reducers/auth";
 import { addData } from "../redux/reducers/profile";
-import HandlerError from "../component/handlerError";
+import HandlerError from "../component/HandlerError";
 import Loading from "../component/Loading";
 
 function Login() {
