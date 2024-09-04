@@ -12,7 +12,7 @@ export const cart = createApi({
         headers:{
           Authorization: "Bearer " + token,
         },
-    }),
+      }),
     }),
   }),
 });

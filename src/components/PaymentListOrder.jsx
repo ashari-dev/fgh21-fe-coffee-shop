@@ -67,9 +67,9 @@ function PaymentListOrder() {
     const json = await response.json();
     if (json.success) {
       DeleteCarts()
+      console.log(json);
       nav("/history-order")      
     }
-    console.log(json);
   }
   let Delivery = "";
   if (selectedDelivery === 1) {
