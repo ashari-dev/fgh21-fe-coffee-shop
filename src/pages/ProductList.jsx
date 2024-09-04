@@ -15,52 +15,55 @@ function ProductList() {
   const [showAdd, SetShowAdd] = useState(false);
   const [product, setProduct] = React.useState([]);
   const [page, setPage] = React.useState(1)
-  const [totalPages, setTotalPages] = useState([]);
+  const [totalProduct, setTotalProduct] = useState([]);
   const [search, setSearch] = React.useState("")
 
-  // console.log(totalPages.result)
-  // if (page < 1) {
-  //   setPage(1)
-  // }
-  // function pageDown() {
-  //   setPage(page - 1)
-  // }
-  // function pageUp() {
-  //   setPage(page + 1)
-  // }
-  async function products() {
 
+
+
+  async function products() {
     const dataProducts = await fetch("http://localhost:8000/products/", {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
-    setTotalPages(listProduct.result)
   }
   
-
   async function filterProducts(e) {
     e.preventDefault()
     const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&page=${page}`, {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
+  }
 
-  }
-  async function pageProduct(e) {
-    e.preventDefault()
-    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&?page=${page}`, {});
+  async function allProduct() {
+    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&limit=1000&page=${page}`, {});
     const listProduct = await dataProducts.json();
-    setProduct(listProduct.result);
-    setTotalPages(listProduct.totalPages)
-  }
+    setTotalProduct(listProduct.result.length)
+  } 
+
+
+  const itemPerPage = 3; 
+  const startIndex = (page - 1) * itemPerPage + 1; 
+  const endIndex = Math.min(page * itemPerPage, totalProduct); 
+
+
+
   useEffect(() => {
+    allProduct()
     products()
-  }, []);
+  }, [search]);
+
+  useEffect(() => {
+    filterProducts()
+  }, [page, search]);
+
+
   function removeData(id) {
     fetch("http://localhost:8000/products/" + id, {
       method: "DELETE",
     })
       .then(() => {
         console.log("removed");
-        products()
+        filterProducts()
       })
       .catch((err) => {
         console.log(err);
@@ -180,45 +183,29 @@ function ProductList() {
               </div>
               <div className="flex justify-between text-[#4F5665]">
                 <div>
-                  <p>Show page {page} of 100 page</p>
+                  <p>Show {totalProduct > 0 ? startIndex : 0} - {endIndex} of {totalProduct} products</p>
                 </div>
                 
                 <div className="flex gap-3">
                 <form action="" onSubmit={filterProducts}>
                     <div className="flex gap-3">
-                      <button type="submit" onClick={page > 1 ?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
+                      {/* <button type="submit" onClick={page > 1 ?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
                         <input type="button" value="Prev"/>
+                      </button> */}
+                      <button
+                          onClick={() => setPage(Math.max(1, page - 1))}
+                          className="hover:text-[#FF8906]">
+                          Prev
                       </button>
-                      <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="1"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
-                        <input type="button" value="2"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(3)} className="hover:text-[#FF8906]">
-                        <input type="button" value="3"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(4)} className="hover:text-[#FF8906]">
-                        <input type="button" value="4"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(5)} className="hover:text-[#FF8906]">
-                        <input type="button" value="5"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(6)} className="hover:text-[#FF8906]">
-                        <input type="button" value="6"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(7)} className="hover:text-[#FF8906]">
-                        <input type="button" value="7"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(8)} className="hover:text-[#FF8906]">
-                        <input type="button" value="8"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
-                        <input type="button" value="9"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(page + 1)} className="hover:text-[#FF8906]">
+                      <div>{page}</div>
+                      {/* <button type="submit" onClick={page < Math.ceil(totalProduct / itemPerPage) ? () => setPage(page + 1) : () => setPage(page)} className="hover:text-[#FF8906]">
                         <input type="button" value="Next"/>
-                      </button>
+                      </button> */}
+                      <button
+                          onClick={() => setPage(Math.min(page + 1, Math.ceil(totalProduct / itemPerPage)))}
+                          className="hover:text-[#FF8906]">
+                          Next
+                  </button>
                     </div>
                   </form>
                 </div>
