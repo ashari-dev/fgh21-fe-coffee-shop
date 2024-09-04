@@ -12,11 +12,10 @@ import { useSelector } from "react-redux";
 import { useGetCartQuery } from "../redux/services/cart.js";
 import Loading from "../component/Loading";
 
-function PaymentListOrder(id) {
+function PaymentListOrder() {
   const navigate = useNavigate();
   const [itemLoading, setLoading] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
-  const nav = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const { data, err, isLoading } = useGetCartQuery(token);
   const price = isLoading ? [] : data.result.map((item) => item.price);

@@ -6,7 +6,6 @@ import {
   FaRegCreditCard,
   FaTruck,
   FaRepeat,
-  FaX,
 } from "react-icons/fa6";
 import Kopie from "../img/Kopie.svg";
 import Layout from "../components/Layout";
@@ -130,34 +129,6 @@ function DetailOrder() {
                 </div>
               </div>
             </div>
-            {/* <div className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
-              <div className="">
-                <img src={Kopie} alt="" className="w-44 h-44" />
-              </div>
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-center bg-[#D00000] p-2 text-white rounded-full">
-                  FLASH SALE!
-                </div>
-                <div className="text-[#0B0909] font-bold text-lg">
-                  Hazelnut Latte
-                </div>
-                <div className="flex gap-2 ">
-                  <div className="">2pcs</div>
-                  <div className="">|</div>
-                  <div className="">Regular</div>
-                  <div className="">|</div>
-                  <div className="">Ice</div>
-                  <div className="">|</div>
-                  <div className="">Dine In</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-[#D00000] font-medium text-xs line-through">
-                    IDR 40.000
-                  </div>
-                  <div className="font-medium text-[#FF8906]">IDR 20.000</div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
