@@ -16,7 +16,6 @@ import Payment from "./pages/Payment";
 import HistoryOrder from "./pages/HistoryOrder";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-// import Try from "./pages/Try"
 
 const router = createBrowserRouter([
   {
@@ -83,10 +82,6 @@ const router = createBrowserRouter([
     path: "/history-order",
     element: <HistoryOrder />,
   },
-  // {
-  //   path: "/try",
-  //   element: <Try />,
-  // },
 ]);
 
 function App() {

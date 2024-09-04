@@ -6,17 +6,15 @@ import SideBarProduct from "../components/SideBarProduct";
 import GridProduct from "../components/GridProduct";
 import Pagination from "../components/Pagination";
 import Footer from "../component/Footer";
-import { useListProductsQuery } from "../redux/services/products";
 import { useEffect } from "react";
 
 function Product() {
-
   const [product, setProduct] = useState([]);
   async function products() {
-    const page = 1
-    const limit = 100
+    const page = 1;
+    const limit = 100;
     const dataProducts = await fetch(
-      `http://localhost:8000/products/our-product/?page=${page}&limit=${limit}`
+      `http://localhost:8000/products/our-product?page=${page}&limit=${limit}`
     );
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
@@ -29,9 +27,8 @@ function Product() {
     setProduct(listProduct.result);
   }
   useEffect(() => {
-    products()
+    products();
   }, []);
-  console.log(product)
   return (
     <>
       <Navbar />
