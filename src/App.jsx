@@ -16,8 +16,11 @@ import Payment from "./pages/Payment";
 import HistoryOrder from "./pages/HistoryOrder";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist"
 // import Try from "./pages/Try"
 
+let persistor = persistStore(store)
 const router = createBrowserRouter([
   {
     path: "/forget-password",
@@ -92,7 +95,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />;
+      <PersistGate persistor={persistor}>
+        <RouterProvider router={router} />; 
+      </PersistGate>
     </Provider>
   );
 }

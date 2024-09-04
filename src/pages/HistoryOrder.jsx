@@ -61,7 +61,7 @@ function HistoryOrder() {
                                                 Total
                                             </div>
                                         </div>
-                                        <div className="font-bold py-2 text-[#0B132A]">Idr {item.Price * item.Quantity}</div>
+                                        <div className="font-bold py-2 text-[#0B132A]">Idr {(item.Price * item.Quantity).toLocaleString("id")}</div>
                                     </div>
                                     <div className="flex flex-col gap-3 py-3">
                                         <div className="flex items-center gap-2">

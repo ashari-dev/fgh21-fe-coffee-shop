@@ -31,6 +31,17 @@ function PaymentListOrder(id) {
   const subTotal = total + tax;
   console.log(price);
 
+  async function DeleteCarts() {
+    const response = await fetch(`http://localhost:8000/carts`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const json = response.json()
+    console.log(json)
+  }
+
   async function TransactionPayment() {
     const email = document.getElementById("email").value;
     const fullName = document.getElementById("name").value;
@@ -63,6 +74,10 @@ function PaymentListOrder(id) {
       body: formData,
     });
     const json = await response.json();
+    if (json.success) {
+      DeleteCarts()
+      nav("/history-order")      
+    }
     console.log(json);
   }
   let Delivery = "";
@@ -131,8 +146,7 @@ function PaymentListOrder(id) {
                               IDR 40.000
                             </div> */}
                           <div className="font-medium text-[#FF8906]">
-                            IDR
-                            {item.price}
+                            IDR. {item.price.toLocaleString("id")}
                           </div>
                         </div>
                       </div>
