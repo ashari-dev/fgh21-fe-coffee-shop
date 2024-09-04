@@ -28,6 +28,15 @@ function PaymentListOrder() {
   const tax = (total * 10) / 100;
   const subTotal = total + tax;
 
+  async function GetCarts() {
+    const response = await fetch(`http://localhost:8000/carts`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const json = response.json()
+    console.log(json)
+  }
   async function DeleteCarts() {
     const response = await fetch(`http://localhost:8000/carts`, {
       method: "DELETE",
@@ -38,6 +47,10 @@ function PaymentListOrder() {
     const json = response.json()
     console.log(json)
   }
+
+  React.useEffect(()=>{
+    GetCarts
+  },[])
 
   async function TransactionPayment() {
     // console.log(data.result)

@@ -10,11 +10,8 @@ import { useSelector } from "react-redux";
 
 function HistoryOrder() {
     const token = useSelector((state) => state.auth.token);
-    console.log(token)
     const { data, err, isLoading } = useGetTransactionQuery(token);
-    const datas = isLoading ? [] : data.result.Price
-  
-        console.log(datas);  
+    // const datas = isLoading ? [] : data.result.Price
     return (
         <div className="">
             <Navbar />
