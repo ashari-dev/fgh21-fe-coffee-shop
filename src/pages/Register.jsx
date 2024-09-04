@@ -45,7 +45,7 @@ function Register() {
     },
     onSubmit: inputForm,
     validationSchema: yup.object().shape({
-      name: yup.string().required("Please Enter your name").min(3).max(10),
+      name: yup.string().required("Please Enter your name").min(3),
       email: yup.string().required("Please Enter your email").email(),
       password: yup.string().required("Please Enter your password").min(8),
       confirmpassword: yup
