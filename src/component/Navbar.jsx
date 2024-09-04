@@ -5,6 +5,7 @@ import {
   FaBars,
   FaUser,
   FaPowerOff,
+  FaFileInvoice,
 } from "react-icons/fa";
 import Logo from "../assets/components/Logo";
 import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
@@ -105,6 +106,10 @@ function Navbar() {
                       <Link to="/profile" className="flex gap-5 items-center">
                         <FaUser />
                         <span>Profile</span>
+                      </Link>
+                      <Link to="/history-order" className="flex gap-5 items-center">
+                        <FaFileInvoice />
+                        <span>Your Order</span>
                       </Link>
                       <button
                         onClick={processLogout}

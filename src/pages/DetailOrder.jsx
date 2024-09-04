@@ -97,7 +97,7 @@ function DetailOrder() {
             </div>
             <div className="flex items-center justify-between p-4 gap-2">
               <div className="font-medium text-[#4F5665]">Total Transaksi</div>
-              <div className="text-[#FF8906] font-bold">IDR {data.price * data.quantity}</div>
+              <div className="text-[#FF8906] font-bold">IDR {(data.price * data.quantity).toLocaleString("id")}</div>
             </div>
           </div>
           <div className="md:w-1/2 flex flex-col gap-4 pl-2">
@@ -124,9 +124,9 @@ function DetailOrder() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-[#D00000] line-through font-medium text-xs">
-                    IDR 40.000
+                    IDR {(product.price * 2).toLocaleString("id")}
                   </div>
-                  <div className="font-medium text-[#FF8906]">IDR {product.price}</div>
+                  <div className="font-medium text-[#FF8906]">IDR {product.price.toLocaleString("id")}</div>
                 </div>
               </div>
             </div>
