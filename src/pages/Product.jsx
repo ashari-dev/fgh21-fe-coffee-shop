@@ -7,15 +7,36 @@ import GridProduct from "../components/GridProduct";
 import Pagination from "../components/Pagination";
 import Footer from "../component/Footer";
 import { useListProductsQuery } from "../redux/services/products";
+import { useEffect } from "react";
 
 function Product() {
   // const [dataProduct, setDataProduct] = useState([]);
-  const { data, err, isLoading } = useListProductsQuery([1,9]);
-  async function products(props) {
-    const dataProducts = await fetch("http://localhost:8000/products/our-product/", {});
+  const [product, setProduct] = useState([]);
+  // const { data, err, isLoading } = useListProductsQuery([1,9]);
+  // React.useEffect(()=>{
+  //   setProduct(isLoading || err ? [] : data);
+  // },[])
+  // console.log(product)
+  async function products() {
+    const page = 1
+    const limit = 100
+    const dataProducts = await fetch(
+      `http://localhost:8000/products/our-product/?page=${page}&limit=${limit}`
+    );
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
+  async function fetchProducts(lowPrice = 0, highPrice = 50000) {
+    const dataProducts = await fetch(
+      `http://localhost:8000/products/filter/price?lowPrice=${lowPrice}&highPrice=${highPrice}`
+    );
+    const listProduct = await dataProducts.json();
+    setProduct(listProduct.result);
+  }
+  useEffect(() => {
+    products()
+  }, []);
+  console.log(product)
 
   return (
     <>
@@ -28,14 +49,21 @@ function Product() {
             Our <span className="text-[#8e6447]">Product</span>
           </h2>
           <div className="flex gap-10">
-            <SideBarProduct />
+            <SideBarProduct fetchProducts={fetchProducts} />
             <div className="flex flex-col gap-10">
               <div className="grid md:grid-cols-3 grid-cols-2">
-                {isLoading || err
+                {/* {isLoading || err
                   ? ""
                   : data.result.map((item) => {
                       return <GridProduct key={item.id} data={item}/>;
-                    })}
+                    })} */}
+                {product.length > 0 ? (
+                  product.map((item) => (
+                    <GridProduct key={item.id} data={item} />
+                  ))
+                ) : (
+                  <p>No products found</p>
+                )}
               </div>
               <div className="flex justify-center py-24">
                 <Pagination />
