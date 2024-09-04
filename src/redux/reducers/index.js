@@ -5,13 +5,11 @@ import payment from "./payment";
 import { services } from "../services";
 
 const reducer = combineReducers({
+  auth,
   profile,
   payment,
   ...services,
 });
+// console.log(services)
 
-const reducers = combineReducers({
-  auth,
-})
-
-export default (reducer, reducers);
+export default reducer;
