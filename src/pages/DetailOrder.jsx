@@ -14,23 +14,25 @@ import { useParams } from "react-router-dom";
 
 function DetailOrder() {
   let { id } = useParams();
-  const [data, setData] = React.useState({})
-  const [product, setProduct] = React.useState({})
+  const [data, setData] = React.useState({});
+  const [product, setProduct] = React.useState({});
   async function GetPayment() {
-    const response = await fetch(`http://localhost:8000/transaction/${id}`)
-    const json = await response.json()
-    setData(json.result)
+    const response = await fetch(`http://localhost:8000/transaction/${id}`);
+    const json = await response.json();
+    setData(json.result);
   }
   async function GetProduct() {
-    const response = await fetch(`http://localhost:8000/transaction/products/${id}`)
-    const json = await response.json()
-    setProduct(json.result)
+    const response = await fetch(
+      `http://localhost:8000/transaction/products/${id}`
+    );
+    const json = await response.json();
+    setProduct(json.result);
   }
-  React.useEffect(()=>{
-    GetPayment()
-    GetProduct()
-  },[])
-  console.log(product)
+  React.useEffect(() => {
+    GetPayment();
+    GetProduct();
+  }, []);
+  console.log(product);
   return (
     <Layout>
       <div className="bg-black w-screen h-24"></div>
@@ -51,25 +53,23 @@ function DetailOrder() {
               <FaRegUser className="text-[#4F5665]" />
               <div className="flex w-full justify-between">
                 <div className="font-medium text-[#4F5665]">Full Name</div>
-                <div className="text-[#0B132A] font-bold">
-                  {data.fullName}
-                </div>
+                <div className="text-[#0B132A] font-bold">{data.fullName}</div>
               </div>
             </div>
             <div className="flex items-center p-4 gap-2 border-b-2">
               <FaLocationDot className="text-[#4F5665]" />
               <div className="flex w-full justify-between">
                 <div className="font-medium text-[#4F5665]">Address</div>
-                <div className="text-[#0B132A] font-bold">
-                  {data.address}
-                </div>
+                <div className="text-[#0B132A] font-bold">{data.address}</div>
               </div>
             </div>
             <div className="flex items-center p-4 gap-2 border-b-2">
               <FaPhone className="text-[#4F5665]" />
               <div className="flex w-full justify-between">
                 <div className="font-medium text-[#4F5665]">Phone</div>
-                <div className="text-[#0B132A] font-bold">{data.phoneNumber ? data.phoneNumber :"-"}</div>
+                <div className="text-[#0B132A] font-bold">
+                  {data.phoneNumber ? data.phoneNumber : "-"}
+                </div>
               </div>
             </div>
             <div className="flex items-center p-4 gap-2 border-b-2">
@@ -97,14 +97,16 @@ function DetailOrder() {
             </div>
             <div className="flex items-center justify-between p-4 gap-2">
               <div className="font-medium text-[#4F5665]">Total Transaksi</div>
-              <div className="text-[#FF8906] font-bold">IDR {data.price * data.quantity}</div>
+              <div className="text-[#FF8906] font-bold">
+                IDR {data.price * data.quantity}
+              </div>
             </div>
           </div>
           <div className="md:w-1/2 flex flex-col gap-4 pl-2">
             <div className="text-[#0B132A] font-medium text-xl">Your Order</div>
             <div className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
               <div className="">
-                <img src={Kopie} alt="" className="w-44 h-44" />
+                <img src={data.image} alt="" className="w-44 h-44" />
               </div>
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center bg-[#D00000] p-2 text-white rounded-full">
@@ -126,7 +128,9 @@ function DetailOrder() {
                   <div className="text-[#D00000] line-through font-medium text-xs">
                     IDR 40.000
                   </div>
-                  <div className="font-medium text-[#FF8906]">IDR {product.price}</div>
+                  <div className="font-medium text-[#FF8906]">
+                    IDR {product.price}
+                  </div>
                 </div>
               </div>
             </div>

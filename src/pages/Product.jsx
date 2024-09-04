@@ -16,8 +16,6 @@ function Product() {
     const dataProducts = await fetch(
       `http://localhost:8000/products/our-product?page=${page}&limit=${limit}`
     );
-    const listProduct = await dataProducts.json();
-    setProduct(listProduct.result);
   }
   async function fetchProducts(lowPrice = 0, highPrice = 50000) {
     const dataProducts = await fetch(
@@ -29,6 +27,7 @@ function Product() {
   useEffect(() => {
     products();
   }, []);
+
   return (
     <>
       <Navbar />

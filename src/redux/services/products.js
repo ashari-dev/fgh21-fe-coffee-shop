@@ -11,7 +11,7 @@ export const products = createApi({
         `/products/our-product/?page=${page}&limit=${limit}`,
     }),
     getProducts: builder.query({
-      query: (id) => `/products/${id}`,
+      query: (id) => `/products/our-product/${id}`,
     }),
   }),
 });
