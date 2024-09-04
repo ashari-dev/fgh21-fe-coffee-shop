@@ -11,15 +11,20 @@ import GridProduct from "../components/GridProduct.jsx";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addQuantity, addVariant, addSize, addProductId } from "../redux/reducers/payment.js";
+import {
+  addQuantity,
+  addVariant,
+  addSize,
+  addProductId,
+} from "../redux/reducers/payment.js";
 import { useGetProductsQuery } from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
 import Loading from "../component/Loading";
 
 function DetailProduct() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const response = {message: "purchases cannot be empty"}
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const response = { message: "purchases cannot be empty" };
   const token = useSelector((state) => state.auth.token);
   const id = useParams().id;
   console.log(typeof id);
@@ -41,24 +46,19 @@ function DetailProduct() {
     }
   }
 
-async function pay (e) {
-    e.preventDefault()
+  async function pay(e) {
+    e.preventDefault();
 
     if (num == 0) {
       setShowPopUp(true);
       return;
-    } else {
-      setLoading(false);
-
-      navigate("/payment-detail");
-      return;
     }
 
-    dispatch(addQuantity(num))
-    dispatch(addVariant(selectedSize))
-    dispatch(addSize(selectedTemperature))
-    dispatch(addProductId(id))
-
+    dispatch(addQuantity(num));
+    dispatch(addVariant(selectedSize));
+    dispatch(addSize(selectedTemperature));
+    dispatch(addProductId(id));
+    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("quantity", num);
     formData.append("variant", selectedTemperature);
@@ -67,13 +67,16 @@ async function pay (e) {
     const response = await fetch(`http://localhost:8000/transaction/${id}`, {
       method: "POST",
       body: formData,
-    })
-    const json = await response.json()
+    });
+    const json = await response.json();
     if (json.success) {
-      const ids = json.result.id
-      console.log(id)
-      cart(ids)
-      navigate("/payment-detail")
+      const ids = json.result.id;
+      console.log(id);
+      cart(ids);
+      setTimeout(() => {
+        setLoading(true);
+        navigate("/payment-detail");
+      }, 3000);
     }
   }
   async function cart(ids) {
@@ -85,14 +88,13 @@ async function pay (e) {
 
     const response = await fetch(`http://localhost:8000/carts/${id}`, {
       method: "POST",
-      headers:{
+      headers: {
         Authorization: "Bearer " + token,
       },
       body: formData,
-    })
-    const json = await response.json()
-    console.log(json)
-    
+    });
+    const json = await response.json();
+    console.log(json);
   }
   return (
     <div className="">
@@ -165,9 +167,7 @@ async function pay (e) {
                 type="button"
                 onClick={() => setSelectedSize(1)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === 1
-                    ? "border-[#FF8906]"
-                    : "border-[#E8E8E8]"
+                  selectedSize === 1 ? "border-[#FF8906]" : "border-[#E8E8E8]"
                 }`}
               >
                 Reguler
@@ -176,9 +176,7 @@ async function pay (e) {
                 type="button"
                 onClick={() => setSelectedSize(2)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === 2
-                    ? "border-[#FF8906]"
-                    : "border-[#E8E8E8]"
+                  selectedSize === 2 ? "border-[#FF8906]" : "border-[#E8E8E8]"
                 }`}
               >
                 Medium
@@ -187,9 +185,7 @@ async function pay (e) {
                 type="button"
                 onClick={() => setSelectedSize(3)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === 3
-                    ? "border-[#FF8906]"
-                    : "border-[#E8E8E8]"
+                  selectedSize === 3 ? "border-[#FF8906]" : "border-[#E8E8E8]"
                 }`}
               >
                 Large

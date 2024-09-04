@@ -84,10 +84,13 @@ function Login() {
           dataUpdate();
         } else {
           setLoading(false);
+          setTimeout(() => {
+            setLoading(true);
+          }, 2000);
           setErr(true);
           setTimeout(() => {
             setErr(false);
-          }, 3000);
+          }, 5000);
           console.log("error");
         }
       });

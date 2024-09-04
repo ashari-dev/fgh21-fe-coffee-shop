@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
 import { FaUser } from "react-icons/fa6";
@@ -24,6 +24,7 @@ function Profile() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
+
   const [isLoading, setLoading] = React.useState(false);
   let [pass, setPassword] = React.useState("password");
   let [disabledPassword, setDisabledPassword] = React.useState(true);
@@ -61,7 +62,6 @@ function Profile() {
   const [authResponse, setAuthResponse] = useState({});
   const [showPopUp, setShowPopUp] = useState(false);
   async function Update() {
-    setLoading(true)
     const fullName = formik.values.fullName;
     const email = formik.values.email;
     const phoneNumber = formik.values.phoneNumber;
@@ -85,9 +85,14 @@ function Profile() {
       body: formData,
     });
     const response = await dataProfile.json();
-    setLoading(false);
-    setAuthResponse(response);
-    setShowPopUp(true);
+    if (response.success) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setAuthResponse(response);
+        setShowPopUp(true);
+      }, 5000);
+    }
   }
 
   const passwordInput = React.useRef(null);
@@ -120,12 +125,12 @@ function Profile() {
     }
     e.target.reset();
   }
+
   return (
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
-
-        {itemLoading ? "" : <Loading />}
+        {isLoading ? <Loading /> : ""}
 
         {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
 
@@ -150,7 +155,10 @@ function Profile() {
               >
                 <h2 className="font-bold">{profile.fullName}</h2>
                 <p className="text-[#4F5665] text-[16px]">{profile.email}</p>
-                <label htmlFor="img" className=" w-[113px] h-[113px] border border-black  rounded-full overflow-hidden">
+                <label
+                  htmlFor="img"
+                  className=" w-[113px] h-[113px] border border-black  rounded-full overflow-hidden"
+                >
                   <img
                     src={
                       profile.image === null
