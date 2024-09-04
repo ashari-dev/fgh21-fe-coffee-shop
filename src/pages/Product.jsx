@@ -6,22 +6,15 @@ import SideBarProduct from "../components/SideBarProduct";
 import GridProduct from "../components/GridProduct";
 import Pagination from "../components/Pagination";
 import Footer from "../component/Footer";
-import { useListProductsQuery } from "../redux/services/products";
 import { useEffect } from "react";
 
 function Product() {
-  // const [dataProduct, setDataProduct] = useState([]);
   const [product, setProduct] = useState([]);
-  // const { data, err, isLoading } = useListProductsQuery([1,9]);
-  // React.useEffect(()=>{
-  //   setProduct(isLoading || err ? [] : data);
-  // },[])
-  // console.log(product)
   async function products() {
-    const page = 1
-    const limit = 100
+    const page = 1;
+    const limit = 100;
     const dataProducts = await fetch(
-      `http://localhost:8000/products/our-product/?page=${page}&limit=${limit}`
+      `http://localhost:8000/products/our-product?page=${page}&limit=${limit}`
     );
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
@@ -34,29 +27,23 @@ function Product() {
     setProduct(listProduct.result);
   }
   useEffect(() => {
-    products()
+    products();
   }, []);
-  console.log(product)
-
   return (
     <>
       <Navbar />
       <div className="flex flex-col">
         <ProductCover />
         <PromoList />
-        <div className="flex flex-col gap-10 md:px-32 mt-20">
+        <div className="flex flex-col gap-10 md:pl-24 mt-20">
           <h2 className="text-5xl mx-5">
             Our <span className="text-[#8e6447]">Product</span>
           </h2>
-          <div className="flex gap-10">
+
+          <div className="flex gap-5">
             <SideBarProduct fetchProducts={fetchProducts} />
-            <div className="flex flex-col gap-10">
-              <div className="grid md:grid-cols-3 grid-cols-2">
-                {/* {isLoading || err
-                  ? ""
-                  : data.result.map((item) => {
-                      return <GridProduct key={item.id} data={item}/>;
-                    })} */}
+            <div className="flex flex-col">
+              <div className="flex justify-center md:justify-start flex-wrap">
                 {product.length > 0 ? (
                   product.map((item) => (
                     <GridProduct key={item.id} data={item} />

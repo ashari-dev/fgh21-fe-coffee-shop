@@ -18,7 +18,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist"
-// import Try from "./pages/Try"
+
 
 let persistor = persistStore(store)
 const router = createBrowserRouter([
@@ -86,10 +86,6 @@ const router = createBrowserRouter([
     path: "/history-order",
     element: <HistoryOrder />,
   },
-  // {
-  //   path: "/try",
-  //   element: <Try />,
-  // },
 ]);
 
 function App() {
