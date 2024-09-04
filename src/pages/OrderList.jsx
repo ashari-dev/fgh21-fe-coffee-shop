@@ -6,15 +6,15 @@ import { IoMdSearch } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import DetailOrderSheet from "../components/DetailOrderSheet";
-import NavbarAdmin from "../component/NavbarAdmin";
+import Navbar from "../component/Navbar";
 
 function OrderList() {
   const [detailOrder, SetDetailOrder] = useState(false);
 
   return (
     <>
-      <NavbarAdmin />
-
+      <Navbar />
+      <div className="py-8 flex items-center justify-between border-b"></div>
       <div className="flex ">
         <SidebarAdmin />
         <div className="relative w-full">

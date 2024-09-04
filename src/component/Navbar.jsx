@@ -6,6 +6,7 @@ import {
   FaUser,
   FaPowerOff,
   FaFileInvoice,
+  FaUserTie,
 } from "react-icons/fa";
 import Logo from "../assets/components/Logo";
 import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
@@ -13,9 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowDown, IoIosArrowUp, IoMdSearch } from "react-icons/io";
 import { logout } from "../redux/reducers/auth";
 import { editProfile } from "../redux/reducers/profile";
+import { jwtDecode } from "jwt-decode";
 
 function Navbar() {
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.token);
+  const decoded = jwtDecode(token);
+  console.log(decoded); 
   const dataToken = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
   const [showDropdown, setShowDropdown] = React.useState(false);
@@ -105,7 +110,7 @@ function Navbar() {
                   )}
                 </div>
                 {showDropdown && (
-                  <div className="absolute -bottom-[115px] p-5 right-0 w-full min-w-[200px] bg-white shadow rounded">
+                  <div className="absolute top-10 p-5 right-0 w-full min-w-[200px] bg-white shadow rounded">
                     <div className="flex flex-col gap-5">
                       <Link to="/profile" className="flex gap-5 items-center">
                         <FaUser />
@@ -115,6 +120,13 @@ function Navbar() {
                         <FaFileInvoice />
                         <span>Your Order</span>
                       </Link>
+                      {
+                        decoded.role === 2 ? 
+                        <Link to="/dashboard-admin" className="flex gap-5 items-center">
+                          <FaUserTie />
+                          <span>Dashboard</span>
+                        </Link> : ""
+                      }
                       <button
                         onClick={processLogout}
                         type="button"

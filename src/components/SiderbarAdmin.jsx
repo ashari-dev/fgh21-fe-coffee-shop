@@ -5,9 +5,16 @@ import { FaShoppingBag } from "react-icons/fa";
 import { HiUsers } from "react-icons/hi2";
 import { RxExit } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/reducers/auth";
 
 function SidebarAdmin() {
   const nav = useNavigate();
+  const dispatch = useDispatch()
+  const processLogout = () => {
+    dispatch(logout());
+    nav("/login");
+  };
   return (
     <div className="w-1/5 bg-white flex flex-col gap-2 pt-[24px] h-full">
       <button
@@ -47,9 +54,7 @@ function SidebarAdmin() {
         <span>User</span>
       </button>
       <button
-        onClick={() => {
-          nav("/login");
-        }}
+        onClick={processLogout}
         className="flex items-center gap-2 ml-[42px] mr-[12px] hover:bg-[#FF8906] rounded-lg py-3 px-[11px]"
       >
         <RxExit />

@@ -7,7 +7,7 @@ import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import EditUser from "../components/EditUser";
 import InsertUser from "../components/InsertUser";
-import NavbarAdmin from "../component/NavbarAdmin";
+import Navbar from "../component/Navbar";
 
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(0);
@@ -63,8 +63,8 @@ function UserList() {
   const dataTotalPage = dataPage.totalPage
   return (
     <>
-      <NavbarAdmin />
-
+      <Navbar />
+      <div className="py-8 flex items-center justify-between border-b"></div>
       <div className="flex ">
         <SidebarAdmin />
         <div className="relative w-full">
