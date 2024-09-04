@@ -238,7 +238,7 @@ function DetailProduct() {
           </div>
         )}
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center px-32 py-16 gap-1 font-medium text-5xl mb-6">
+      <div className="flex flex-col md:flex-row items-center justify-center px-32 py-16 gap-1 font-medium text-4xl md:text-5xl mb-6">
         <div className="text-[#0B0909]">Recommendation</div>
         <div className="text-[#8E6447]">For You</div>
       </div>

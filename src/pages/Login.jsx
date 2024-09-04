@@ -44,10 +44,10 @@ function Login() {
   });
 
   async function dataNew() {
-    setLoading(true);
     const email = formik.values.email;
     const password = formik.values.password;
 
+    setLoading(false);
     const formData = new URLSearchParams();
     formData.append("email", email);
     formData.append("password", password);
@@ -58,6 +58,7 @@ function Login() {
     }).then((response) => {
       response.json().then((data) => {
         if (data.success) {
+          setLoading(true);
           console.log(data.result.token);
           dispatch(login(data.result.token));
           async function dataUpdate() {
@@ -83,14 +84,11 @@ function Login() {
           }
           dataUpdate();
         } else {
-          setLoading(false);
-          setTimeout(() => {
-            setLoading(true);
-          }, 2000);
           setErr(true);
           setTimeout(() => {
             setErr(false);
           }, 5000);
+
           console.log("error");
         }
       });
