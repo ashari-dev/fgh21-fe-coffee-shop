@@ -3,7 +3,7 @@ import range from "../img/range.svg"
 
 function SideBarProduct(){
     return(
-        <div className="bg-black h-full w-full max-w-96 rounded-xl md:block hidden">
+        <div className="bg-black h-full shrink-0 rounded-xl md:block hidden">
             <form className="p-5 flex flex-col gap-8">
                 <div className="flex justify-between">
                     <div className="text-white font-semibold text-xl">Filter</div>

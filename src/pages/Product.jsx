@@ -9,32 +9,32 @@ import Footer from "../component/Footer";
 import { useListProductsQuery } from "../redux/services/products";
 
 function Product() {
-  // const [dataProduct, setDataProduct] = useState([]);
-  const { data, err, isLoading } = useListProductsQuery([1,9]);
-  async function products(props) {
-    const dataProducts = await fetch("http://localhost:8000/products/our-product/", {});
-    const listProduct = await dataProducts.json();
-    setProduct(listProduct.result);
-  }
-
+  const { data, err, isLoading } = useListProductsQuery([1, 9]);
   return (
     <>
       <Navbar />
       <div className="flex flex-col">
         <ProductCover />
         <PromoList />
-        <div className="flex flex-col gap-10 md:px-32 mt-20">
+        <div className="flex flex-col gap-10 md:pl-24 mt-20">
           <h2 className="text-5xl mx-5">
             Our <span className="text-[#8e6447]">Product</span>
           </h2>
-          <div className="flex gap-10">
+          <div className="flex gap-5">
             <SideBarProduct />
-            <div className="flex flex-col gap-10">
-              <div className="grid md:grid-cols-3 grid-cols-2">
+            <div className="flex flex-col">
+              <div className="flex justify-center md:justify-start flex-wrap ">
+                {/* <div className="grid grid-cols-3 "> */}
                 {isLoading || err
                   ? ""
                   : data.result.map((item) => {
-                      return <GridProduct key={item.id} data={item}/>;
+                      return (
+                        <GridProduct
+                          className="w-1/4"
+                          key={item.id}
+                          data={item}
+                        />
+                      );
                     })}
               </div>
               <div className="flex justify-center py-24">
