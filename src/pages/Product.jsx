@@ -11,14 +11,13 @@ import { useEffect } from "react";
 function Product() {
   const [product, setProduct] = useState([]);
   async function products() {
-    const page = 1;
-    const limit = 100;
     const dataProducts = await fetch(
-      `http://localhost:8000/products/our-product?page=${page}&limit=${limit}`
+      `http://localhost:8000/products/our-product`
     );
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
+
   async function fetchProducts(lowPrice = 0, highPrice = 50000, name="", title="") {
     const dataProducts = await fetch(
       `http://localhost:8000/products/filter/price?title=${title}&lowPrice=${lowPrice}&highPrice=${highPrice}&name=${name}`
