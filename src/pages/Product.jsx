@@ -29,22 +29,21 @@ function Product() {
   useEffect(() => {
     products();
   }, []);
-  console.log(product);
-
   return (
     <>
       <Navbar />
       <div className="flex flex-col">
         <ProductCover />
         <PromoList />
-        <div className="flex flex-col gap-10 md:px-32 mt-20">
+        <div className="flex flex-col gap-10 md:pl-24 mt-20">
           <h2 className="text-5xl mx-5">
             Our <span className="text-[#8e6447]">Product</span>
           </h2>
-          <div className="flex gap-10">
+
+          <div className="flex gap-5">
             <SideBarProduct fetchProducts={fetchProducts} />
-            <div className="flex flex-col gap-10">
-              <div className="grid md:grid-cols-3 grid-cols-2">
+            <div className="flex flex-col">
+              <div className="flex justify-center md:justify-start flex-wrap">
                 {product.length > 0 ? (
                   product.map((item) => (
                     <GridProduct key={item.id} data={item} />

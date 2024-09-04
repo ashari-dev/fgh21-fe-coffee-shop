@@ -83,15 +83,20 @@ function Login() {
           }
           dataUpdate();
         } else {
-          setLoading(false);
-          setTimeout(() => {
-            setLoading(true);
-          }, 2000);
+          // setLoading(false);
+          // setTimeout(() => {
+          //   setLoading(true);
+          // }, 2000);
+          // setErr(true);
+          // setTimeout(() => {
+          //   setErr(false);
+          // }, 5000);
+          // console.log("error");
           setErr(true);
           setTimeout(() => {
             setErr(false);
-          }, 5000);
-          console.log("error");
+          }, 1000);
+          setTimeout(() => setLoading(false), 1000);
         }
       });
     });
