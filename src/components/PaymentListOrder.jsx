@@ -13,33 +13,25 @@ import { useGetCartQuery } from "../redux/services/cart.js";
 import Loading from "../component/Loading";
 
 function PaymentListOrder(id) {
+  const navigate = useNavigate();
   const [itemLoading, setLoading] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
   const nav = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const { data, err, isLoading } = useGetCartQuery(token);
-  console.log(data);
   const price = isLoading ? [] : data.result.map((item) => item.price);
   const sumPrice = price.reduce((a, b) => a + b, 0);
   const quantity = isLoading ? [] : data.result.map((item) => item.quantity);
   const sumQuantity = quantity.reduce((a, b) => a + b, 0);
-  console.log(sumPrice);
-  console.log(sumQuantity);
-  console.log(data);
   const total = sumPrice * sumQuantity;
   const tax = (total * 10) / 100;
   const subTotal = total + tax;
-  console.log(price);
 
   async function TransactionPayment() {
     const email = document.getElementById("email").value;
     const fullName = document.getElementById("name").value;
     const address = document.getElementById("address").value;
-    console.log(email);
-    console.log(fullName);
-    console.log(address);
     const data1 = isLoading ? [] : data.result[0].transactionDetail;
-    console.log(data1);
 
     setLoading(true);
     setTimeout(() => {
@@ -63,6 +55,7 @@ function PaymentListOrder(id) {
       body: formData,
     });
     const json = await response.json();
+    navigate("/history-order");
     console.log(json);
   }
   let Delivery = "";
@@ -131,8 +124,8 @@ function PaymentListOrder(id) {
                               IDR 40.000
                             </div> */}
                           <div className="font-medium text-[#FF8906]">
-                            IDR
-                            {item.price}
+                            IDR.
+                            {item.price.toLocaleString("id")}
                           </div>
                         </div>
                       </div>

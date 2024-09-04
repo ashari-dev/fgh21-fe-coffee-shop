@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 function GridProduct(props) {
   const nav = useNavigate();
   return (
-    <div className="gap-4 p-8 min-h-[600px]">
-      <div className="flex flex-col md:pb-32 relative">
+
+    <div className="gap-4 p-8 h-[490px] ">
+      <div className="flex flex-col md:max-w-1/4 md:pb-32 relative">
         {
           <img
-            className="w-full object-fit max-h-[200px] bg-black"
+            className="min-w-[300px] max-w-[200px] max-h-[300px] bg-black"
             src={props.data.image}
             alt=""
           />
@@ -21,12 +22,12 @@ function GridProduct(props) {
           <p className="text-orange-400 text-2xl">
             IDR. {props.data.price.toLocaleString("id")}
           </p>
-          <div className="flex flex-col md:flex-row md:gap-4 gap-2 w-full">
+          <div className="flex md:flex-row md:gap-4 gap-2 w-full">
             <button
               onClick={() => {
                 nav("/detail-product/" + props.data.id);
               }}
-              className="md:w-3/4 w-full bg-orange-400 rounded-[6px] p-2"
+              className="w-3/4 bg-orange-400 rounded-[6px] p-2"
             >
               Buy
             </button>
