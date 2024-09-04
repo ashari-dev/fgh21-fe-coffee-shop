@@ -15,12 +15,12 @@ function Register() {
   const [authResponse, setAuthResponse] = useState({});
   const [showPopUp, setShowPopUp] = useState(false);
   async function inputForm() {
-    setLoading(true);
     const name = formik.values.name;
     const email = formik.values.email;
     const password = formik.values.password;
     const confirmPassword = formik.values.confirmpassword;
 
+    setLoading(true);
     const data = new URLSearchParams();
     data.append("fullName", name);
     data.append("email", email);
