@@ -71,7 +71,7 @@ function UserList() {
       <NavbarAdmin />
 
       <div className="flex ">
-        <SidebarAdmin />
+        <SidebarAdmin active={4} />
         <div className="relative w-full">
           {showAdd ? <InsertUser closeMenu={SetShowAdd} /> : ""}
           {showUpdate ? (
@@ -104,6 +104,9 @@ function UserList() {
                         type="text"
                         id="search"
                         name="search"
+//                         value={inputSearch}
+//                         onChange={(e) => setInputSearch(e.target.value)}
+
                         placeholder="Enter User Name"
                         className="outline-none"
                       />
