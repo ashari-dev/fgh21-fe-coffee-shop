@@ -96,7 +96,7 @@ function DetailProduct() {
 
   async function recommendation() {
     const respont = await axios.get(
-      "http://localhost:8000/products/our-product?page=1&limit=4"
+      "http://localhost:8000/products/our-product/?page=1&limit=4"
     );
     setRecomend(respont.data.result);
   }
