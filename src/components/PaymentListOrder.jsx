@@ -127,16 +127,16 @@ function PaymentListOrder() {
                   return (
                     <div
                       key={item.id}
-                      className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full"
+                      className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md"
                     >
-                      <div className="">
+                      <div className="w-1/3">
                         <img
                           src={isLoading || err ? "" : item.image}
                           alt=""
                           className="object-cover max-h-40"
                         />
                       </div>
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-4 w-2/3">
                         <div className="flex justify-center max-w-32 bg-[#D00000] p-2 text-white rounded-full">
                           FLASH SALE!
                         </div>
