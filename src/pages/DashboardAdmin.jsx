@@ -11,7 +11,7 @@ function DashboarAdmin() {
       <NavbarAdmin />
 
       <div className="flex">
-        <SidebarAdmin />
+        <SidebarAdmin active={1} />
         <div>
           <CardInformation />
           <OrderStatic />

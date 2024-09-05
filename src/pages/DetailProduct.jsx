@@ -15,7 +15,10 @@ import {
   addSize,
   addProductId,
 } from "../redux/reducers/payment.js";
-import { useGetProductsQuery } from "../redux/services/products.js";
+import {
+  useGetProductsQuery,
+  useListProductsQuery,
+} from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
 import Loading from "../component/Loading";
 import axios from "axios";
@@ -100,6 +103,7 @@ function DetailProduct() {
     );
     setRecomend(respont.data.result);
   }
+
   useEffect(() => {
     recommendation();
   }, []);
@@ -254,9 +258,7 @@ function DetailProduct() {
       </div>
       <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
         {recomend &&
-          recomend.map((item) => (
-            <GridProduct key={item.id} data={item} />
-          ))}
+          recomend.map((item) => <GridProduct key={item.id} data={item} />)}
       </div>
       <Footer />
     </div>

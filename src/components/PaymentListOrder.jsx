@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  FaCircleXmark,
   FaPlus,
   FaRegEnvelope,
   FaRegUser,
   FaLocationDot,
 } from "react-icons/fa6";
-import Kopie from "../img/Kopie.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetCartQuery } from "../redux/services/cart.js";
@@ -15,10 +13,10 @@ import HandlerError from "../component/HandlerError.jsx";
 
 function PaymentListOrder() {
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.token);
   const [itemLoading, setLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
-  const token = useSelector((state) => state.auth.token);
   const { data, err, isLoading } = useGetCartQuery(token);
   const price = isLoading ? [] : data.result.map((item) => item.price);
   const sumPrice = price.reduce((a, b) => a + b, 0);
@@ -27,7 +25,6 @@ function PaymentListOrder() {
   const total = sumPrice * sumQuantity;
   const tax = (total * 10) / 100;
   const subTotal = total + tax;
-
   async function GetCarts() {
     const response = await fetch(`http://localhost:8000/carts`, {
       headers: {
@@ -53,7 +50,6 @@ function PaymentListOrder() {
   }, []);
 
   async function TransactionPayment() {
-    // console.log(data.result)
     const email = document.getElementById("email").value;
     const fullName = document.getElementById("name").value;
     const address = document.getElementById("address").value;
@@ -137,7 +133,7 @@ function PaymentListOrder() {
                         <img
                           src={isLoading || err ? "" : item.image}
                           alt=""
-                          className="object-cover"
+                          className="object-cover max-h-40"
                         />
                       </div>
                       <div className="flex flex-col gap-4 w-2/3">
@@ -157,9 +153,6 @@ function PaymentListOrder() {
                           <div className="">{Delivery}</div>
                         </div>
                         <div className="flex items-center gap-4">
-                          {/* <div className="text-[#D00000] font-medium text-xs line-through">
-                              IDR 40.000
-                            </div> */}
                           <div className="font-medium text-[#FF8906]">
                             IDR. {item.price.toLocaleString("id")}
                           </div>
