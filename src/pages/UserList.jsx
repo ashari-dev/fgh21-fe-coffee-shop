@@ -12,10 +12,10 @@ import NavbarAdmin from "../component/NavbarAdmin";
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
-  const [listUser, setListUser] = useState([])
-  const [dataPage, setDataPage] = useState({})
-  const [inputSearch, setInputSearch] = useState("")
-  const [page, setPage] = useState(1)
+  const [listUser, setListUser] = useState([]);
+  const [dataPage, setDataPage] = useState({});
+  const [inputSearch, setInputSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
@@ -26,36 +26,42 @@ function UserList() {
 
   async function filterUsers(e) {
     e.preventDefault();
-    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      {}
+    );
 
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
-    const pageInfo = listFilterUser.pageInfo
-    setDataPage(pageInfo)
+    const pageInfo = listFilterUser.pageInfo;
+    setDataPage(pageInfo);
   }
-  
+
   async function paginationUsers(e) {
     e.preventDefault();
-    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      {}
+    );
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
-    const pageInfo = listFilterUser.pageInfo
-    setDataPage(pageInfo)
+    const pageInfo = listFilterUser.pageInfo;
+    setDataPage(pageInfo);
   }
-  
+
   async function dataUser() {
-    const endPoint = (`http://localhost:8000/profile`)
+    const endPoint = `http://localhost:8000/profile`;
     const response = await fetch(endPoint);
-    const data = await response.json()
-    const listData = data.result
-    const pageInfo = data.pageInfo
-    setDataPage(pageInfo)
-    setListUser(listData)
+    const data = await response.json();
+    const listData = data.result;
+    const pageInfo = data.pageInfo;
+    setDataPage(pageInfo);
+    setListUser(listData);
   }
   useEffect(() => {
-    dataUser()
-  },[showAdd, showUpdate])
-  const dataTotalPage = dataPage.totalPage
+    dataUser();
+  }, [showAdd, showUpdate]);
+  const dataTotalPage = dataPage.totalPage;
   return (
     <>
       <NavbarAdmin />
@@ -97,8 +103,6 @@ function UserList() {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder="Enter User Name"
-                        value={inputSearch}
-                        onChange={(e)=>setInputSearch(e.target.value)}
                         className="outline-none"
                       />
                       <IoMdSearch className="text-[#4F5665]" />
@@ -179,17 +183,31 @@ function UserList() {
                     Show {listUser.length} user of {dataPage.totalData} user
                   </p>
                 </div>
-                  <form action="" onSubmit={paginationUsers}>
-                    <div className="flex gap-3">
-                      <button type="submit" onClick={page > 1?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="Prev"/>
-                      </button>
-                      <div>{page}</div>
-                      <button type="submit" onClick={page < dataPage.totalPage?()=>setPage(page + 1):()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="Next"/>
-                      </button>
-                    </div>
-                  </form>
+                <form action="" onSubmit={paginationUsers}>
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      onClick={
+                        page > 1 ? () => setPage(page - 1) : () => setPage(1)
+                      }
+                      className="hover:text-[#FF8906]"
+                    >
+                      <input type="button" value="Prev" />
+                    </button>
+                    <div>{page}</div>
+                    <button
+                      type="submit"
+                      onClick={
+                        page < dataPage.totalPage
+                          ? () => setPage(page + 1)
+                          : () => setPage(1)
+                      }
+                      className="hover:text-[#FF8906]"
+                    >
+                      <input type="button" value="Next" />
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
