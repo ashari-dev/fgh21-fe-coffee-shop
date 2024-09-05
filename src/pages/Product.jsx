@@ -6,7 +6,6 @@ import SideBarProduct from "../components/SideBarProduct";
 import GridProduct from "../components/GridProduct";
 import Pagination from "../components/Pagination";
 import Footer from "../component/Footer";
-import { useListProductsQuery } from "../redux/services/products";
 import { useEffect } from "react";
 
 function Product() {
@@ -17,7 +16,11 @@ function Product() {
     const dataProducts = await fetch(
       `http://localhost:8000/products/our-product`
     );
+    const jsonData = await dataProducts.json();
+    console.log(jsonData);
+    setProduct(jsonData.result);
   }
+
   async function fetchProducts(
     lowPrice = 0,
     highPrice = 50000,
