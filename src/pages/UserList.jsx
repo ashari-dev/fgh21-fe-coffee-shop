@@ -8,6 +8,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import EditUser from "../components/EditUser";
 import InsertUser from "../components/InsertUser";
 import NavbarAdmin from "../component/NavbarAdmin";
+import { useParams } from "react-router-dom";
 
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(0);
@@ -16,6 +17,8 @@ function UserList() {
   const [dataPage, setDataPage] = useState({});
   const [inputSearch, setInputSearch] = useState("");
   const [page, setPage] = useState(1);
+  
+  
 
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
@@ -54,6 +57,7 @@ function UserList() {
     const response = await fetch(endPoint);
     const data = await response.json();
     const listData = data.result;
+    console.log(listData)
     const pageInfo = data.pageInfo;
     setDataPage(pageInfo);
     setListUser(listData);
@@ -100,8 +104,6 @@ function UserList() {
                         type="text"
                         id="search"
                         name="search"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
                         placeholder="Enter User Name"
                         className="outline-none"
                       />
