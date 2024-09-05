@@ -10,21 +10,13 @@ import { useListProductsQuery } from "../redux/services/products";
 import { useEffect } from "react";
 
 function Product() {
-  // const [dataProduct, setDataProduct] = useState([]);
   const [product, setProduct] = useState([]);
-  // const { data, err, isLoading } = useListProductsQuery([1,9]);
-  // React.useEffect(()=>{
-  //   setProduct(isLoading || err ? [] : data);
-  // },[])
-  // console.log(product)
   async function products() {
     const page = 1;
     const limit = 100;
     const dataProducts = await fetch(
       `http://localhost:8000/products/our-product`
     );
-    const listProduct = await dataProducts.json();
-    setProduct(listProduct.result);
   }
   async function fetchProducts(
     lowPrice = 0,
@@ -41,7 +33,6 @@ function Product() {
   useEffect(() => {
     products();
   }, []);
-  console.log(product);
 
   return (
     <>

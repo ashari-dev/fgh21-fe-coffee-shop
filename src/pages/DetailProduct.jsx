@@ -92,8 +92,6 @@ function DetailProduct() {
       },
       body: formData,
     });
-    const json = await response.json();
-    console.log(json);
   }
 
   async function recommendation() {
@@ -112,7 +110,10 @@ function DetailProduct() {
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
         <div className="md:w-1/2 flex flex-col gap-4">
-          <img src={coffe_1} className="bg-black w-full object-cover" />
+          <img
+            src={isLoading || err ? "" : data.result.image}
+            className="bg-black w-full h-full object-cover"
+          />
           <div className="grid grid-cols-3 gap-4 w-full">
             <img src={coffe_2} className="flex w-full bg-black" />
             <img src={coffe_3} className="flex w-full bg-black" />
