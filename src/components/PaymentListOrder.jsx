@@ -16,7 +16,7 @@ import HandlerError from "../component/HandlerError.jsx";
 function PaymentListOrder() {
   const navigate = useNavigate();
   const [itemLoading, setLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false)
+  const [isError, setIsError] = React.useState(false);
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
   const token = useSelector((state) => state.auth.token);
   const { data, err, isLoading } = useGetCartQuery(token);
@@ -34,8 +34,8 @@ function PaymentListOrder() {
         Authorization: "Bearer " + token,
       },
     });
-    const json = response.json()
-    console.log(json)
+    const json = response.json();
+    console.log(json);
   }
   async function DeleteCarts() {
     const response = await fetch(`http://localhost:8000/carts`, {
@@ -44,13 +44,13 @@ function PaymentListOrder() {
         Authorization: "Bearer " + token,
       },
     });
-    const json = response.json()
-    console.log(json)
+    const json = response.json();
+    console.log(json);
   }
 
-  React.useEffect(()=>{
-    GetCarts
-  },[])
+  React.useEffect(() => {
+    GetCarts;
+  }, []);
 
   async function TransactionPayment() {
     // console.log(data.result)
@@ -58,8 +58,8 @@ function PaymentListOrder() {
     const fullName = document.getElementById("name").value;
     const address = document.getElementById("address").value;
     if (email === "" && fullName === "" && address === "") {
-      setIsError(true)
-      return
+      setIsError(true);
+      return;
     }
     const data1 = isLoading ? [] : data.result[0].transactionDetail;
 
@@ -86,9 +86,9 @@ function PaymentListOrder() {
     });
     const json = await response.json();
     if (json.success) {
-      DeleteCarts()
+      DeleteCarts();
       console.log(json);
-      navigate("/history-order")      
+      navigate("/history-order");
     }
   }
   let Delivery = "";
@@ -131,16 +131,16 @@ function PaymentListOrder() {
                   return (
                     <div
                       key={item.id}
-                      className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full"
+                      className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md"
                     >
-                      <div className="">
+                      <div className="w-1/3">
                         <img
                           src={isLoading || err ? "" : item.image}
                           alt=""
                           className="object-cover"
                         />
                       </div>
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-4 w-2/3">
                         <div className="flex justify-center max-w-32 bg-[#D00000] p-2 text-white rounded-full">
                           FLASH SALE!
                         </div>
@@ -170,7 +170,13 @@ function PaymentListOrder() {
                 })}
 
             <div className="flex flex-col gap-2">
-            {isError ? <HandlerError msg={"Please fill in the orderer's personal data"}/>:""}
+              {isError ? (
+                <HandlerError
+                  msg={"Please fill in the orderer's personal data"}
+                />
+              ) : (
+                ""
+              )}
               <div className="font-bold">Payment Info & Delivery</div>
               <form className="flex flex-col gap-2">
                 <label
