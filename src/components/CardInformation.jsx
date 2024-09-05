@@ -7,7 +7,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 function CardInformation() {
   return (
     <div>
-      <div className="md:flex justify-between ml-20 mr-20 mt-6">
+      <div className="md:flex justify-between mx-20 mt-6">
         {/* {LEFT} */}
         <div className="bg-[#6FC276] w-96 h-32 rounded-md flex flex-col gap-4 justify-center pl-6">
           <div className="flex flex-row items-center gap-2">
