@@ -14,6 +14,7 @@ function UserList() {
   const [showAdd, SetShowAdd] = useState(false);
   const [listUser, setListUser] = useState([])
   const [dataPage, setDataPage] = useState({})
+  const [inputSearch, setInputSearch] = useState("")
   const [page, setPage] = useState(1)
 
 
@@ -28,19 +29,20 @@ function UserList() {
 
   async function filterUsers(e) {
     e.preventDefault();
-    const findUser = e.target.search.value;
-    let page = 0
-    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${findUser}`, {});
-
+    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
+    const pageInfo = listFilterUser.pageInfo
+    setDataPage(pageInfo)
   }
 
   async function paginationUsers(e) {
     e.preventDefault();
-    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}`, {});
+    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
+    const pageInfo = listFilterUser.pageInfo
+    setDataPage(pageInfo)
   }
   
   async function dataUser() {
@@ -49,8 +51,8 @@ function UserList() {
     const data = await response.json()
     const listData = data.result
     const pageInfo = data.pageInfo
-    setListUser(listData)
     setDataPage(pageInfo)
+    setListUser(listData)
   }
   useEffect(() => {
     paginationUsers()
@@ -96,6 +98,8 @@ function UserList() {
                         id="search"
                         name="search"
                         placeholder="Enter User Name"
+                        value={inputSearch}
+                        onChange={(e)=>setInputSearch(e.target.value)}
                         className="outline-none"
                       />
                       <IoMdSearch className="text-[#4F5665]" />
@@ -182,7 +186,8 @@ function UserList() {
                       <button type="submit" onClick={page > 1?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
                         <input type="button" value="Prev"/>
                       </button>
-                      <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
+                      <div>{page}</div>
+                      {/* <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
                         <input type="button" value="1"/>
                       </button>
                       <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
@@ -208,8 +213,8 @@ function UserList() {
                       </button>
                       <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
                         <input type="button" value="9"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(page + 1)} className="hover:text-[#FF8906]">
+                      </button> */}
+                      <button type="submit" onClick={page < dataPage.totalPage?()=>setPage(page + 1):()=>setPage(1)} className="hover:text-[#FF8906]">
                         <input type="button" value="Next"/>
                       </button>
                     </div>
