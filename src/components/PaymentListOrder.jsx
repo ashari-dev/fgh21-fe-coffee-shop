@@ -11,12 +11,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetCartQuery } from "../redux/services/cart.js";
 import Loading from "../component/Loading";
+import HandlerError from "../component/HandlerError.jsx";
 
-function PaymentListOrder(id) {
+function PaymentListOrder() {
   const navigate = useNavigate();
   const [itemLoading, setLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState(false)
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
-  const nav = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const { data, err, isLoading } = useGetCartQuery(token);
   const price = isLoading ? [] : data.result.map((item) => item.price);
@@ -27,10 +28,39 @@ function PaymentListOrder(id) {
   const tax = (total * 10) / 100;
   const subTotal = total + tax;
 
+  async function GetCarts() {
+    const response = await fetch(`http://localhost:8000/carts`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const json = response.json()
+    console.log(json)
+  }
+  async function DeleteCarts() {
+    const response = await fetch(`http://localhost:8000/carts`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const json = response.json()
+    console.log(json)
+  }
+
+  React.useEffect(()=>{
+    GetCarts
+  },[])
+
   async function TransactionPayment() {
+    // console.log(data.result)
     const email = document.getElementById("email").value;
     const fullName = document.getElementById("name").value;
     const address = document.getElementById("address").value;
+    if (email === "" && fullName === "" && address === "") {
+      setIsError(true)
+      return
+    }
     const data1 = isLoading ? [] : data.result[0].transactionDetail;
 
     setLoading(true);
@@ -55,8 +85,11 @@ function PaymentListOrder(id) {
       body: formData,
     });
     const json = await response.json();
-    navigate("/history-order");
-    console.log(json);
+    if (json.success) {
+      DeleteCarts()
+      console.log(json);
+      navigate("/history-order")      
+    }
   }
   let Delivery = "";
   if (selectedDelivery === 1) {
@@ -78,7 +111,7 @@ function PaymentListOrder(id) {
             <div className="font-medium text-xl">Your Order</div>
             <button
               onClick={() => {
-                nav("/product");
+                navigate("/product");
               }}
               className="flex items-center gap-3 bg-orange-400 px-4 py-2 rounded-lg"
             >
@@ -128,8 +161,7 @@ function PaymentListOrder(id) {
                               IDR 40.000
                             </div> */}
                           <div className="font-medium text-[#FF8906]">
-                            IDR.
-                            {item.price.toLocaleString("id")}
+                            IDR. {item.price.toLocaleString("id")}
                           </div>
                         </div>
                       </div>
@@ -138,6 +170,7 @@ function PaymentListOrder(id) {
                 })}
 
             <div className="flex flex-col gap-2">
+            {isError ? <HandlerError msg={"Please fill in the orderer's personal data"}/>:""}
               <div className="font-bold">Payment Info & Delivery</div>
               <form className="flex flex-col gap-2">
                 <label
