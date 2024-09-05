@@ -17,9 +17,6 @@ function UserList() {
   const [inputSearch, setInputSearch] = useState("")
   const [page, setPage] = useState(1)
 
-
-  // push
-  
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
       method: "DELETE",
@@ -30,12 +27,13 @@ function UserList() {
   async function filterUsers(e) {
     e.preventDefault();
     const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
+
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
     const pageInfo = listFilterUser.pageInfo
     setDataPage(pageInfo)
   }
-
+  
   async function paginationUsers(e) {
     e.preventDefault();
     const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
@@ -55,10 +53,9 @@ function UserList() {
     setListUser(listData)
   }
   useEffect(() => {
-    paginationUsers()
-    filterUsers()
     dataUser()
   },[showAdd, showUpdate])
+  const dataTotalPage = dataPage.totalPage
   return (
     <>
       <NavbarAdmin />
@@ -97,6 +94,8 @@ function UserList() {
                         type="text"
                         id="search"
                         name="search"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
                         placeholder="Enter User Name"
                         value={inputSearch}
                         onChange={(e)=>setInputSearch(e.target.value)}
@@ -143,11 +142,10 @@ function UserList() {
                                 src={item.image ? item.image : <FaUserCircle />}
                                 alt=""
                               />
-                              {/* {item.image?item.image:<FaUserCircle />} */}
                             </div>
                           </td>
                           <td className="text-center">{item.fullName}</td>
-                          <td className="text-center">{item.phoneNUmber}</td>
+                          <td className="text-center">{item.phoneNumber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
                           <td className="flex justify-center">
@@ -187,33 +185,6 @@ function UserList() {
                         <input type="button" value="Prev"/>
                       </button>
                       <div>{page}</div>
-                      {/* <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="1"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
-                        <input type="button" value="2"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(3)} className="hover:text-[#FF8906]">
-                        <input type="button" value="3"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(4)} className="hover:text-[#FF8906]">
-                        <input type="button" value="4"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(5)} className="hover:text-[#FF8906]">
-                        <input type="button" value="5"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(6)} className="hover:text-[#FF8906]">
-                        <input type="button" value="6"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(7)} className="hover:text-[#FF8906]">
-                        <input type="button" value="7"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(8)} className="hover:text-[#FF8906]">
-                        <input type="button" value="8"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
-                        <input type="button" value="9"/>
-                      </button> */}
                       <button type="submit" onClick={page < dataPage.totalPage?()=>setPage(page + 1):()=>setPage(1)} className="hover:text-[#FF8906]">
                         <input type="button" value="Next"/>
                       </button>

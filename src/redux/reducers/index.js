@@ -10,5 +10,6 @@ const reducer = combineReducers({
   payment,
   ...services,
 });
+// console.log(services)
 
 export default reducer;
