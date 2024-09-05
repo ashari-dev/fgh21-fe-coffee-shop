@@ -43,8 +43,8 @@ function Navbar() {
             </div>
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
-            <Link to={"/"}>Home</Link>
-            <Link to={"/product"}>Product</Link>
+            <Link className="hover:underline hover:font-semibold hover:-skew-y-3" to={"/"}>Home</Link>
+            <Link className="hover:underline hover:font-semibold hover:-skew-y-3" to={"/product"}>Product</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">
@@ -66,7 +66,7 @@ function Navbar() {
                     navigate("/login");
                   }}
                   type="button"
-                  className="border-2 border-white py-3 px-4 rounded text-white"
+                  className="border-2 border-white py-3 px-4 rounded text-white hover:bg-[#FF8906] hover:font-bold hover:border-transparent"
                 >
                   SignIn
                 </button>
@@ -75,7 +75,7 @@ function Navbar() {
                     navigate("/register");
                   }}
                   type="button"
-                  className="bg-[#FF8906] py-3 px-4 rounded"
+                  className="bg-[#FF8906] hover:text-white hover:font-semibold py-3 px-4 rounded"
                 >
                   SignUp
                 </button>
