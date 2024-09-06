@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import GridProduct from "../components/GridProduct";
 import { FaRegWindowMinimize } from "react-icons/fa";
 import { useListProductsQuery } from "../redux/services/products";
 
 function HomeGridFavourite() {
   const { data, err, isLoading } = useListProductsQuery([1, 4]);
+  const list = data?.result || [];
   return (
     <div className="flex flex-col mt-8">
       <div className="flex flex-col justify-center items-center">
@@ -26,7 +27,7 @@ function HomeGridFavourite() {
         <div className="grid md:grid-cols-4 grid-cols-2">
           {isLoading || err
             ? ""
-            : data.result.map((item) => {
+            : list.map((item) => {
                 return <GridProduct key={item.id} data={item} />;
               })}
         </div>

@@ -5,6 +5,7 @@ import {
   FaBars,
   FaUser,
   FaPowerOff,
+  FaFileInvoice,
 } from "react-icons/fa";
 import Logo from "../assets/components/Logo";
 import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ import { editProfile } from "../redux/reducers/profile";
 function Navbar() {
   const navigate = useNavigate();
   const dataToken = useSelector((state) => state.auth.token);
+  const profile = useSelector((state) => state.profile.data);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const dispatch = useDispatch();
   const processLogout = () => {
@@ -41,8 +43,8 @@ function Navbar() {
             </div>
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
-            <Link to={"/"}>Home</Link>
-            <Link to={"/product"}>Product</Link>
+            <Link className="hover:underline hover:font-semibold hover:-skew-y-3" to={"/"}>Home</Link>
+            <Link className="hover:underline hover:font-semibold hover:-skew-y-3" to={"/product"}>Product</Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">
@@ -64,7 +66,7 @@ function Navbar() {
                     navigate("/login");
                   }}
                   type="button"
-                  className="border-2 border-white py-3 px-4 rounded text-white"
+                  className="border-2 border-white py-3 px-4 rounded text-white hover:bg-[#FF8906] hover:font-bold hover:border-transparent"
                 >
                   SignIn
                 </button>
@@ -73,7 +75,7 @@ function Navbar() {
                     navigate("/register");
                   }}
                   type="button"
-                  className="bg-[#FF8906] py-3 px-4 rounded"
+                  className="bg-[#FF8906] hover:text-white hover:font-semibold py-3 px-4 rounded"
                 >
                   SignUp
                 </button>
@@ -85,11 +87,14 @@ function Navbar() {
                 className="flex items-center gap-3 relative"
               >
                 <div className="flex rounded-full overflow-hidden border border-[#4F5665] ">
-                  <img
+                  {profile.image && <img
                     className="h-12 w-12 p-1 rounded-full"
-                    src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/corporate-user-icon.png"
+                    src={profile.image}
                     alt="img"
-                  />
+                  />}
+                  {!profile.image && <div className="bg-[#FF8906] text-white h-12 w-12 flex justify-center items-center rounded-full">
+                    <FaUser size={24} />
+                    </div>}
                 </div>
                 <div>
                   {!showDropdown && (
@@ -105,6 +110,10 @@ function Navbar() {
                       <Link to="/profile" className="flex gap-5 items-center">
                         <FaUser />
                         <span>Profile</span>
+                      </Link>
+                      <Link to="/history-order" className="flex gap-5 items-center">
+                        <FaFileInvoice />
+                        <span>Your Order</span>
                       </Link>
                       <button
                         onClick={processLogout}

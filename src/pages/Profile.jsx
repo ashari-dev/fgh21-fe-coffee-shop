@@ -7,7 +7,6 @@ import { FaEnvelope } from "react-icons/fa6";
 import { FaKey } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
-import ImgProfileUser from "../assets/img/profileUser.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,12 +15,11 @@ import { useNavigate } from "react-router-dom";
 import AuthPopUp from "../components/AuthPopUp";
 import Loading from "../component/Loading";
 import PopUp from "../components/PopUp";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { addData } from "../redux/reducers/profile";
 
 function Profile() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
 
@@ -59,9 +57,10 @@ function Profile() {
       address: Yup.string().required("Required!"),
     }),
   });
-  const [authResponse, setAuthResponse] = useState({});
+  const [updateResponse, setUpdateResponse] = useState({});
   const [showPopUp, setShowPopUp] = useState(false);
   async function Update() {
+    setLoading(true);
     const fullName = formik.values.fullName;
     const email = formik.values.email;
     const phoneNumber = formik.values.phoneNumber;
@@ -86,13 +85,11 @@ function Profile() {
     });
     const response = await dataProfile.json();
     if (response.success) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setAuthResponse(response);
-        setShowPopUp(true);
-      }, 5000);
+      dispatch(addData(response.result));
+      setUpdateResponse(response);
+      setShowPopUp(true);
     }
+    setLoading(false);
   }
 
   const passwordInput = React.useRef(null);
@@ -126,7 +123,7 @@ function Profile() {
       }
       e.target.reset();
     }catch(err){
-      setAuthResponse({message: err?.response?.data?.message || 'Failed'})
+      setUpdateResponse({message: err?.response?.data?.message || 'Failed'})
       setShowPopUp(true)
     }finally{
       setLoading(false)
@@ -137,20 +134,15 @@ function Profile() {
     <div>
       <Navbar />
       <div className="md:p-32 px-5">
-        {isLoading ? <Loading /> : ""}
+        {isLoading == true && <Loading />}
 
-        {showPopUp ? <AuthPopUp data={authResponse} /> : ""}
-
-
-        {showPopUp ? (
+        {showPopUp == true && (
           <PopUp
             nextAction={() => {
               setShowPopUp(!showPopUp);
             }}
-            message={authResponse.message}
+            message={updateResponse.message}
           />
-        ) : (
-          ""
         )}
 
         <div className="flex flex-col justify-center gap-[44px]">

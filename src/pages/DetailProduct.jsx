@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../component/Navbar.jsx";
 import { FaStar, FaRegThumbsUp, FaMinus, FaPlus } from "react-icons/fa6";
 import { MdOutlineShoppingCart } from "react-icons/md";
@@ -6,8 +6,6 @@ import coffe_1 from "../assets/img/coffe_1.svg";
 import coffe_2 from "../assets/img/coffe_2.svg";
 import coffe_3 from "../assets/img/coffe_3.svg";
 import coffe_4 from "../assets/img/coffe_4.svg";
-import Pagination from "../components/Pagination.jsx";
-import GridProduct from "../components/GridProduct.jsx";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,9 +15,14 @@ import {
   addSize,
   addProductId,
 } from "../redux/reducers/payment.js";
-import { useGetProductsQuery } from "../redux/services/products.js";
+import {
+  useGetProductsQuery,
+  useListProductsQuery,
+} from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
 import Loading from "../component/Loading";
+import axios from "axios";
+import GridProduct from "../components/GridProduct.jsx";
 
 function DetailProduct() {
   const dispatch = useDispatch();
@@ -27,14 +30,13 @@ function DetailProduct() {
   const response = { message: "purchases cannot be empty" };
   const token = useSelector((state) => state.auth.token);
   const id = useParams().id;
-  console.log(typeof id);
   const [itemLoading, setLoading] = React.useState(true);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [num, setNum] = React.useState(0);
   const [selectedSize, setSelectedSize] = React.useState(1);
   const [selectedTemperature, setSelectedTemperature] = React.useState(1);
   const { data, err, isLoading } = useGetProductsQuery(id);
-  console.log(data);
+  const [recomend, setRecomend] = useState([]);
   function mins() {
     if (num > 0) {
       setNum(num - 1);
@@ -93,17 +95,29 @@ function DetailProduct() {
       },
       body: formData,
     });
-    const json = await response.json();
-    console.log(json);
   }
+
+  async function recommendation() {
+    const respont = await axios.get(
+      "http://localhost:8000/products/our-product/?page=1&limit=4"
+    );
+    setRecomend(respont.data.result);
+  }
+
+  useEffect(() => {
+    recommendation();
+  }, []);
   return (
     <div className="">
       <Navbar />
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
-        <div className="md:w-1/2 flex flex-col gap-4">
-          <img src={coffe_1} className="bg-black w-full object-cover" />
+        <div className="md:w-1/2 flex flex-col gap-4 max-h-96">
+          <img
+            src={isLoading || err ? "" : data.result.image}
+            className=" w-full h-full object-contain"
+          />
           <div className="grid grid-cols-3 gap-4 w-full">
             <img src={coffe_2} className="flex w-full bg-black" />
             <img src={coffe_3} className="flex w-full bg-black" />
@@ -238,15 +252,13 @@ function DetailProduct() {
           </div>
         )}
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center px-32 py-16 gap-1 font-medium text-5xl mb-6">
+      <div className="flex flex-col md:flex-row items-center justify-center px-32 py-16 gap-1 font-medium text-4xl md:text-5xl mb-6">
         <div className="text-[#0B0909]">Recommendation</div>
         <div className="text-[#8E6447]">For You</div>
       </div>
       <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
-        {/* <GridProduct />
-        <GridProduct />
-        <GridProduct />
-        <GridProduct /> */}
+        {recomend &&
+          recomend.map((item) => <GridProduct key={item.id} data={item} />)}
       </div>
       <Footer />
     </div>

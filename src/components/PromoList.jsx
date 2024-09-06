@@ -33,7 +33,7 @@ function PromoList() {
         <div className="flex overflow-x-scroll gap-12 md:mx-0 mx-5">
           {promos.map((item) => {
             return (
-              <button className="p-2 bg-[#88B788] max-w-lg flex rounded-2xl flex-shrink-0 ">
+              <button key={item.id} className="p-2 bg-[#88B788] max-w-lg flex rounded-2xl flex-shrink-0 ">
                 <img src={Coupon} alt="" />
                 <div className="flex flex-col gap-5 text-left">
                   <div>

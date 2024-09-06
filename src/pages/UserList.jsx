@@ -8,18 +8,18 @@ import { AiOutlineDelete } from "react-icons/ai";
 import EditUser from "../components/EditUser";
 import InsertUser from "../components/InsertUser";
 import NavbarAdmin from "../component/NavbarAdmin";
+import { useParams } from "react-router-dom";
 
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
-  const [listUser, setListUser] = useState([])
-  const [dataPage, setDataPage] = useState({})
-  const [inputSearch, setInputSearch] = useState("")
-  const [page, setPage] = useState(1)
-
-
-  // push
+  const [listUser, setListUser] = useState([]);
+  const [dataPage, setDataPage] = useState({});
+  const [inputSearch, setInputSearch] = useState("");
+  const [page, setPage] = useState(1);
   
+  
+
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
       method: "DELETE",
@@ -29,42 +29,49 @@ function UserList() {
 
   async function filterUsers(e) {
     e.preventDefault();
-    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      {}
+    );
+
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
-    const pageInfo = listFilterUser.pageInfo
-    setDataPage(pageInfo)
+    const pageInfo = listFilterUser.pageInfo;
+    setDataPage(pageInfo);
   }
 
   async function paginationUsers(e) {
     e.preventDefault();
-    const listDataUser = await fetch(`http://localhost:8000/profile?page=${page}&search=${inputSearch}`, {});
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      {}
+    );
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
-    const pageInfo = listFilterUser.pageInfo
-    setDataPage(pageInfo)
+    const pageInfo = listFilterUser.pageInfo;
+    setDataPage(pageInfo);
   }
-  
+
   async function dataUser() {
-    const endPoint = (`http://localhost:8000/profile`)
+    const endPoint = `http://localhost:8000/profile`;
     const response = await fetch(endPoint);
-    const data = await response.json()
-    const listData = data.result
-    const pageInfo = data.pageInfo
-    setDataPage(pageInfo)
-    setListUser(listData)
+    const data = await response.json();
+    const listData = data.result;
+    console.log(listData)
+    const pageInfo = data.pageInfo;
+    setDataPage(pageInfo);
+    setListUser(listData);
   }
   useEffect(() => {
-    paginationUsers()
-    filterUsers()
-    dataUser()
-  },[showAdd, showUpdate])
+    dataUser();
+  }, [showAdd, showUpdate]);
+  const dataTotalPage = dataPage.totalPage;
   return (
     <>
       <NavbarAdmin />
 
       <div className="flex ">
-        <SidebarAdmin />
+        <SidebarAdmin active={4} />
         <div className="relative w-full">
           {showAdd ? <InsertUser closeMenu={SetShowAdd} /> : ""}
           {showUpdate ? (
@@ -97,9 +104,10 @@ function UserList() {
                         type="text"
                         id="search"
                         name="search"
+//                         value={inputSearch}
+//                         onChange={(e) => setInputSearch(e.target.value)}
+
                         placeholder="Enter User Name"
-                        value={inputSearch}
-                        onChange={(e)=>setInputSearch(e.target.value)}
                         className="outline-none"
                       />
                       <IoMdSearch className="text-[#4F5665]" />
@@ -143,11 +151,10 @@ function UserList() {
                                 src={item.image ? item.image : <FaUserCircle />}
                                 alt=""
                               />
-                              {/* {item.image?item.image:<FaUserCircle />} */}
                             </div>
                           </td>
                           <td className="text-center">{item.fullName}</td>
-                          <td className="text-center">{item.phoneNUmber}</td>
+                          <td className="text-center">{item.phoneNumber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
                           <td className="flex justify-center">
@@ -181,44 +188,31 @@ function UserList() {
                     Show {listUser.length} user of {dataPage.totalData} user
                   </p>
                 </div>
-                  <form action="" onSubmit={paginationUsers}>
-                    <div className="flex gap-3">
-                      <button type="submit" onClick={page > 1?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="Prev"/>
-                      </button>
-                      <div>{page}</div>
-                      {/* <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="1"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
-                        <input type="button" value="2"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(3)} className="hover:text-[#FF8906]">
-                        <input type="button" value="3"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(4)} className="hover:text-[#FF8906]">
-                        <input type="button" value="4"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(5)} className="hover:text-[#FF8906]">
-                        <input type="button" value="5"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(6)} className="hover:text-[#FF8906]">
-                        <input type="button" value="6"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(7)} className="hover:text-[#FF8906]">
-                        <input type="button" value="7"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(8)} className="hover:text-[#FF8906]">
-                        <input type="button" value="8"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
-                        <input type="button" value="9"/>
-                      </button> */}
-                      <button type="submit" onClick={page < dataPage.totalPage?()=>setPage(page + 1):()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="Next"/>
-                      </button>
-                    </div>
-                  </form>
+                <form action="" onSubmit={paginationUsers}>
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      onClick={
+                        page > 1 ? () => setPage(page - 1) : () => setPage(1)
+                      }
+                      className="hover:text-[#FF8906]"
+                    >
+                      <input type="button" value="Prev" />
+                    </button>
+                    <div>{page}</div>
+                    <button
+                      type="submit"
+                      onClick={
+                        page < dataPage.totalPage
+                          ? () => setPage(page + 1)
+                          : () => setPage(1)
+                      }
+                      className="hover:text-[#FF8906]"
+                    >
+                      <input type="button" value="Next" />
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
