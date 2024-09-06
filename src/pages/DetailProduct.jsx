@@ -113,10 +113,10 @@ function DetailProduct() {
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
-        <div className="md:w-1/2 flex flex-col gap-4">
+        <div className="md:w-1/2 flex flex-col gap-4 max-h-96">
           <img
             src={isLoading || err ? "" : data.result.image}
-            className="bg-black w-full h-full object-cover"
+            className=" w-full h-full object-contain"
           />
           <div className="grid grid-cols-3 gap-4 w-full">
             <img src={coffe_2} className="flex w-full bg-black" />
