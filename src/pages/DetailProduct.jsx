@@ -15,7 +15,10 @@ import {
   addSize,
   addProductId,
 } from "../redux/reducers/payment.js";
-import { useGetProductsQuery } from "../redux/services/products.js";
+import {
+  useGetProductsQuery,
+  useListProductsQuery,
+} from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
 import Loading from "../component/Loading";
 import axios from "axios";
@@ -100,6 +103,7 @@ function DetailProduct() {
     );
     setRecomend(respont.data.result);
   }
+
   useEffect(() => {
     recommendation();
   }, []);
@@ -109,10 +113,10 @@ function DetailProduct() {
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
-        <div className="md:w-1/2 flex flex-col gap-4">
+        <div className="md:w-1/2 flex flex-col gap-4 max-h-96">
           <img
             src={isLoading || err ? "" : data.result.image}
-            className="bg-black w-full h-full object-cover"
+            className=" w-full h-full object-contain"
           />
           <div className="grid grid-cols-3 gap-4 w-full">
             <img src={coffe_2} className="flex w-full bg-black" />
@@ -254,9 +258,7 @@ function DetailProduct() {
       </div>
       <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
         {recomend &&
-          recomend.map((item) => (
-            <GridProduct key={item.id} data={item} />
-          ))}
+          recomend.map((item) => <GridProduct key={item.id} data={item} />)}
       </div>
       <Footer />
     </div>

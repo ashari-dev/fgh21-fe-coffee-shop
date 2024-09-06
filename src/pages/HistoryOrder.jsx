@@ -34,7 +34,7 @@ function HistoryOrder() {
           <div className="flex flex-col md:w-2/3 gap-5">
             {isLoading || err
               ? ""
-              : data.result.map((item) => {
+              : data?.result.map((item) => {
                   return (
                     <>
                       <div

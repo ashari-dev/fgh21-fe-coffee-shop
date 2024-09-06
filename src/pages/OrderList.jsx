@@ -18,16 +18,16 @@ function OrderList() {
   const [page, setPage] = useState(1);
   const [data, setDataOrder] = useState({});
 
-  // push
-
-  // async function deleteItem(id) {
-  //   await fetch(`http://localhost:8000/profile/${id}`, {
-  //     method: "DELETE",
-  //   });
-  //   dataTransaction();
-  // }
+  
+  async function deleteItem(id) {
+    await fetch(`http://localhost:8000/transaction/${id}`, {
+      method: "DELETE",
+    });
+    dataTransaction();
+  }
 
   async function filterTransactions(e) {
+    console.log(inputSearch);
     e.preventDefault();
     const listDataTransaction = await fetch(
       `http://localhost:8000/transaction/admin?page=${page}&search=${inputSearch}`,
@@ -78,6 +78,11 @@ function OrderList() {
   useEffect(() => {
     filterStatus();
   }, [status]);
+  
+  useEffect(()=>{
+    dataTransaction();
+    filterStatus()
+  }, [status])
 
   useEffect(() => {
     dataTransaction();
@@ -91,7 +96,7 @@ function OrderList() {
       <NavbarAdmin />
 
       <div className="flex ">
-        <SidebarAdmin />
+        <SidebarAdmin active={3} />
         <div className="relative w-full">
           {detailOrder ? (
             <DetailOrderSheet closeMenu={SetDetailOrder} data={data} />
@@ -181,7 +186,7 @@ function OrderList() {
                           <td className="py-3">
                             <div className="flex w-full  justify-center">
                               <ul className="list-disc">
-                                <li className="">{item.title}</li>
+                                <li className="">{item.title} x{item.quantity}</li>
                                 {/* <li>Caramel Machiato L 1x</li> */}
                               </ul>
                             </div>
@@ -205,9 +210,11 @@ function OrderList() {
                               <button className="bg-[#FF89061A] h-6 w-6 rounded-full flex items-center justify-center">
                                 <FiEdit3 className="text-[#FF8906]" />
                               </button>
-                              <div className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                              <button
+                                onClick={() => deleteItem(item.id)}
+                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
                                 <AiOutlineDelete className="text-[#d00000]" />
-                              </div>
+                              </button>
                             </div>
                           </td>
                         </tr>

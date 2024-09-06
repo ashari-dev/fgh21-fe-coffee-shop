@@ -75,7 +75,7 @@ function ProductList() {
     <>
         <NavbarAdmin/>
         <div className="flex">
-        <SidebarAdmin />
+        <SidebarAdmin active={2} />
         <div className="relative w-full">
           {showAdd ? <InsertProduct closeMenu={SetShowAdd} /> : ""}
           {showUpdate ? <EditProduct closeMenu={setShowUpdate} id={showUpdate}/> : ""}
