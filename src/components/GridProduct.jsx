@@ -10,7 +10,7 @@ function GridProduct(props) {
       <div className="flex flex-col md:max-w-1/4 md:pb-32 relative">
         {
           <img
-            className="min-w-[300px] max-w-[200px] max-h-[300px] bg-black"
+            className="w-40 h-40 md:w-80 md:h-80 bg-black object-cover"
             src={props.data.image}
             alt=""
           />
