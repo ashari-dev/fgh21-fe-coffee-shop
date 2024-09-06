@@ -13,7 +13,7 @@ import Kopie from "../img/Kopie.svg";
 import { useSelector } from "react-redux";
 
 function DetailOrderSheet(props) {
-  const dataToken = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.auth.token);
   async function Update(e) {
     e.preventDefault();
     const status = e.target.status.value;
@@ -29,7 +29,7 @@ function DetailOrderSheet(props) {
       {
         method: "PATCH",
         headers: {
-          Authorization: "Bearer " + dataToken,
+          Authorization: "Bearer " + token,
         },
         body: formData,
       }

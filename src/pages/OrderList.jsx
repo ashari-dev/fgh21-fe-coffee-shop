@@ -16,7 +16,7 @@ function OrderList() {
   const [inputSearch, setInputSearch] = useState("");
   const [status, setStatus] = useState(1);
   const [page, setPage] = useState(1);
-  const [data, setData] = useState({});
+  const [data, setDataOrder] = useState({});
 
   // push
 
@@ -83,7 +83,7 @@ function OrderList() {
     dataTransaction();
   }, [detailOrder]);
   const changetData = (data) => {
-    setData(data);
+    setDataOrder(data);
     SetDetailOrder(true);
   };
   return (
