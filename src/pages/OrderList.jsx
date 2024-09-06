@@ -16,6 +16,8 @@ function OrderList() {
   const [inputSearch, setInputSearch] = useState("");
   const [status, setStatus] = useState(1);
   const [page, setPage] = useState(1);
+  const [data, setDataOrder] = useState({});
+
   
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/transaction/${id}`, {
@@ -74,14 +76,21 @@ function OrderList() {
   }
 
   useEffect(() => {
-    dataTransaction()
-  },[])
+    filterStatus();
+  }, [status]);
   
   useEffect(()=>{
     dataTransaction();
     filterStatus()
   }, [status])
 
+  useEffect(() => {
+    dataTransaction();
+  }, [detailOrder]);
+  const changetData = (data) => {
+    setDataOrder(data);
+    SetDetailOrder(true);
+  };
   return (
     <>
       <NavbarAdmin />
@@ -89,7 +98,11 @@ function OrderList() {
       <div className="flex ">
         <SidebarAdmin active={3} />
         <div className="relative w-full">
-          {detailOrder ? <DetailOrderSheet closeMenu={SetDetailOrder} /> : ""}
+          {detailOrder ? (
+            <DetailOrderSheet closeMenu={SetDetailOrder} data={data} />
+          ) : (
+            ""
+          )}
           <div className="border-l w-full min-h-screen pt-6 pl-7 pr-20 flex flex-col gap-5">
             <div className="text-2xl">Order List</div>
             <div className="flex justify-between items-center">
@@ -189,7 +202,7 @@ function OrderList() {
                           <td className="">
                             <div className="flex gap-3 h-full justify-center ">
                               <button
-                                onClick={() => SetDetailOrder(true)}
+                                onClick={() => changetData(item)}
                                 className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center"
                               >
                                 <FaRegListAlt className="text-[#8E6447]" />
@@ -229,33 +242,6 @@ function OrderList() {
                       <input type="button" value="Prev" />
                     </button>
                     <div>{page}</div>
-                    {/* <button type="submit" onClick={()=>setPage(1)} className="hover:text-[#FF8906]">
-                        <input type="button" value="1"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(2)} className="hover:text-[#FF8906]">
-                        <input type="button" value="2"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(3)} className="hover:text-[#FF8906]">
-                        <input type="button" value="3"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(4)} className="hover:text-[#FF8906]">
-                        <input type="button" value="4"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(5)} className="hover:text-[#FF8906]">
-                        <input type="button" value="5"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(6)} className="hover:text-[#FF8906]">
-                        <input type="button" value="6"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(7)} className="hover:text-[#FF8906]">
-                        <input type="button" value="7"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(8)} className="hover:text-[#FF8906]">
-                        <input type="button" value="8"/>
-                      </button>
-                      <button type="submit" onClick={()=>setPage(9)} className="hover:text-[#FF8906]">
-                        <input type="button" value="9"/>
-                      </button> */}
                     <button
                       type="submit"
                       onClick={
