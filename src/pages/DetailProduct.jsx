@@ -256,7 +256,7 @@ function DetailProduct() {
         <div className="text-[#0B0909]">Recommendation</div>
         <div className="text-[#8E6447]">For You</div>
       </div>
-      <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
+      <div className="grid grid-cols-2 justify-center md:grid-cols-4 mb-20">
         {recomend &&
           recomend.map((item) => <GridProduct key={item.id} data={item} />)}
       </div>
