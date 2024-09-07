@@ -21,20 +21,22 @@ function DetailOrder() {
     const json = await response.json()
     setData(json.result)
     setLoading(false)
+
   }
   async function GetProduct() {
-    const response = await fetch(`http://localhost:8000/transaction/products/${id}`)
-    const json = await response.json()
-    setProduct(json.result)
-    setLoading(false)
+    const response = await fetch(
+      `http://localhost:8000/transaction/products/${id}`
+    );
+    const json = await response.json();
+    setProduct(json.result);
   }
   React.useEffect(()=>{
     GetPayment()
     GetProduct()
   },[])
-  // const products = loading ? [] : product
   const order = loading ? "" : data
   console.log(product)
+
   return (
     <Layout>
       <div className="bg-black w-screen h-24"></div>
@@ -55,18 +57,22 @@ function DetailOrder() {
               <FaRegUser className="text-[#4F5665]" />
               <div className="flex w-full justify-between">
                 <div className="font-medium text-[#4F5665]">Full Name</div>
+
                 <div className="text-[#0B132A] font-bold">
                   {order.fullName}
                 </div>
+
               </div>
             </div>
             <div className="flex items-center p-4 gap-2 border-b-2">
               <FaLocationDot className="text-[#4F5665]" />
               <div className="flex w-full justify-between">
                 <div className="font-medium text-[#4F5665]">Address</div>
+
                 <div className="text-[#0B132A] font-bold">
                   {order.address}
                 </div>
+
               </div>
             </div>
             <div className="flex items-center p-4 gap-2 border-b-2">
@@ -110,7 +116,7 @@ function DetailOrder() {
                 return (
                   <div key={item.id} className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full">
                     <div className="">
-                      <img src={Kopie} alt="" className="w-44 h-44" />
+                      <img src={data.image} alt="" className="w-44 h-44" />
                     </div>
                     <div className="flex flex-col gap-4">
                       <div className="flex justify-center bg-[#D00000] p-2 text-white rounded-full">

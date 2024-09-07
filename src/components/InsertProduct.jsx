@@ -1,19 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { CiImageOn } from "react-icons/ci";
-import { FaRegUser } from "react-icons/fa6";
-import { MdOutlineEmail } from "react-icons/md";
-import { FiPhoneOutgoing } from "react-icons/fi";
-import { MdLocationPin } from "react-icons/md";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function InsertProduct(props) {
   const dataToken = useSelector((state) => state.auth.token);
   const [message, setMessage] = React.useState(true);
-  const navigate = useNavigate()
-  const [effect, setEffect] = React.useState()
+  const navigate = useNavigate();
+  const [image, setImage] = useState(0);
+  const [file, setFile] = useState();
+
+  function handlerChange(e) {
+    console.log(e);
+    setImage(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
+  }
+
+  async function submitProductImage(productId) {
+    const url = "http://localhost:8000/products/upload/img/" + productId;
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    const formData = new FormData();
+    formData.append("upload", file);
+    const uploadImage = await axios.post(url, formData, config);
+    if (uploadImage.data.success) {
+      props.closeMenu(false);
+    }
+  }
 
   async function updateProduct(e) {
     e.preventDefault();
@@ -34,10 +52,11 @@ function InsertProduct(props) {
       body: form,
     });
     const listData = await dataProduct.json();
-    setMessage(listData.message)
-    console.log(listData)
-    props.effect()
-    
+    setMessage(listData.message);
+
+    if (listData.success) {
+      submitProductImage(listData.result.id);
+    }
   }
   return (
     <div>
@@ -58,12 +77,19 @@ function InsertProduct(props) {
           <form onSubmit={updateProduct} className="flex flex-col gap-2">
             <div className="flex flex-col gap-2">
               <span className="text-sm">Photos Product</span>
-              <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
-                <CiImageOn />
-              </div>
-              <button className="bg-[#FF8906] w-[80px] rounded-md px-[16px]">
-                <span className="text-xs">Upload</span>
-              </button>
+              <label
+                htmlFor="image"
+                className="bg-[#E8E8E8] flex items-center justify-center w-[50px] h-[50px] rounded-lg overflow-hidden"
+              >
+                {image === 0 ? <CiImageOn /> : <img src={image} alt="" />}
+              </label>
+              <input
+                type="file"
+                name="image"
+                id="image"
+                onChange={handlerChange}
+                hidden
+              />
             </div>
             <div className="flex gap-2 flex-col">
               <label htmlFor="productName" className="font-bold">

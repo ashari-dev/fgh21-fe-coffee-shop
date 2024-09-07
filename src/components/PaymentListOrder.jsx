@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  FaCircleXmark,
   FaPlus,
   FaRegEnvelope,
   FaRegUser,
   FaLocationDot,
 } from "react-icons/fa6";
-import Kopie from "../img/Kopie.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector , useDispatch} from "react-redux";
 import Loading from "../component/Loading";
@@ -17,16 +15,18 @@ import { addOrder } from "../redux/reducers/order.js";
 function PaymentListOrder() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.token);
   const [itemLoading, setLoading] = React.useState(false);
   const cart = useSelector((state) => state.carts.data);
   const [isError, setIsError] = React.useState(false)
   const [dataProduct, setDataProduct] = React.useState([])
   const [id, setId] = React.useState(0)
-  const [selectedDelivery, setSelectedDelivery] = React.useState(0);
-  console.log(selectedDelivery)
   const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
   const price = cart.map((item) => item.price);
+  const [selectedDelivery, setSelectedDelivery] = React.useState(1);
+  const { data, err, isLoading } = useGetCartQuery(token);
+  const price = isLoading ? [] : data.result.map((item) => item.price);
   const sumPrice = price.reduce((a, b) => a + b, 0);
   const quantity = cart.map((item) => item.quantity);
   const sumQuantity = quantity.reduce((a, b) => a + b, 0);
@@ -42,6 +42,7 @@ function PaymentListOrder() {
     const json = await response.json()
 
     setDataProduct(json.result)
+
   }
   async function DeleteCarts() {
     const response = await fetch(`http://localhost:8000/carts`, {
@@ -66,6 +67,7 @@ function PaymentListOrder() {
     if (email === "" || fullName === "" || address === "" || selectedDelivery === 0) {
       setIsError(true)
       return
+
     }
     setLoading(true);
     setTimeout(() => {
@@ -127,9 +129,6 @@ function PaymentListOrder() {
         })
       }
       transactionDetail()
-      // DeleteCarts()
-      // dispatch(removeData())
-      // navigate("/history-order")
     }
   }
   let Delivery = "";
@@ -166,6 +165,7 @@ function PaymentListOrder() {
         </div>
         <div className="flex flex-col md:flex-row gap-12">
           <div className="flex-1 flex flex-col gap-4 w-full">
+
             {cart.map((item) => {
                 return (
                   <div

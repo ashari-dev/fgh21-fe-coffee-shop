@@ -11,6 +11,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {  addCart } from "../redux/reducers/carts.js";
 import { useGetProductsQuery } from "../redux/services/products.js";
+import {
+  addQuantity,
+  addVariant,
+  addSize,
+  addProductId,
+} from "../redux/reducers/payment.js";
+import {
+  useGetProductsQuery,
+  useListProductsQuery,
+} from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
 import Loading from "../component/Loading";
 import axios from "axios";
@@ -99,23 +109,22 @@ function DetailProduct() {
   //   formData.append("variant", selectedTemperature);
   //   formData.append("productSize", selectedSize);
 
-  //   const response = await fetch(`http://localhost:8000/carts/${id}`, {
-  //     method: "POST",
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //     },
-  //     body: formData,
-  //   });
-  //   const json = await response.json();
-  //   console.log(json);
-  // }
+    const response = await fetch(`http://localhost:8000/carts/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    });
+  }
 
   async function recommendation() {
     const respont = await axios.get(
-      "http://localhost:8000/products/our-product?page=1&limit=4"
+      "http://localhost:8000/products/our-product/?page=1&limit=4"
     );
     setRecomend(respont.product);
   }
+
   useEffect(() => {
     recommendation();
   }, []);
@@ -125,8 +134,11 @@ function DetailProduct() {
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
-        <div className="md:w-1/2 flex flex-col gap-4">
-          <img src={coffe_1} className="bg-black w-full object-cover" />
+        <div className="md:w-1/2 flex flex-col gap-4 max-h-96">
+          <img
+            src={isLoading || err ? "" : data.result.image}
+            className=" w-full h-full object-contain"
+          />
           <div className="grid grid-cols-3 gap-4 w-full">
             <img src={coffe_2} className="flex w-full bg-black" />
             <img src={coffe_3} className="flex w-full bg-black" />
@@ -265,11 +277,9 @@ function DetailProduct() {
         <div className="text-[#0B0909]">Recommendation</div>
         <div className="text-[#8E6447]">For You</div>
       </div>
-      <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
+      <div className="grid grid-cols-2 justify-center md:grid-cols-4 mb-20">
         {recomend &&
-          recomend.map((item) => (
-            <GridProduct key={item.id} data={item} />
-          ))}
+          recomend.map((item) => <GridProduct key={item.id} data={item} />)}
       </div>
       <Footer />
     </div>

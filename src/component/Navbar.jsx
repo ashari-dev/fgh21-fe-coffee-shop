@@ -64,20 +64,30 @@ function Navbar() {
             </div>
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
-            <Link to={"/"}>Home</Link>
-            <Link to={"/product"}>Product</Link>
+            <Link
+              className="hover:underline hover:font-semibold hover:-skew-y-3"
+              to={"/"}
+            >
+              Home
+            </Link>
+            <Link
+              className="hover:underline hover:font-semibold hover:-skew-y-3"
+              to={"/product"}
+            >
+              Product
+            </Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">
           <button>
-            <FaSearch className="text-white text-xl"></FaSearch>
+            <FaSearch className="text-white text-xl hover:text-[#FF8906]"></FaSearch>
           </button>
           <button
             onClick={() => {
               navigate("/payment-detail");
             }}
           >
-            <FaShoppingCart className="text-white text-xl"></FaShoppingCart>
+            <FaShoppingCart className="text-white text-xl hover:text-[#FF8906]"></FaShoppingCart>
           </button>
           <div className="">
             {token === null ? (
@@ -87,7 +97,7 @@ function Navbar() {
                     navigate("/login");
                   }}
                   type="button"
-                  className="border-2 border-white py-3 px-4 rounded text-white"
+                  className="border-2 border-white py-3 px-4 rounded text-white hover:bg-[#FF8906] hover:font-bold hover:border-transparent hover:ease-in-out duration-200"
                 >
                   SignIn
                 </button>
@@ -96,7 +106,7 @@ function Navbar() {
                     navigate("/register");
                   }}
                   type="button"
-                  className="bg-[#FF8906] py-3 px-4 rounded"
+                  className="bg-[#FF8906] hover:text-white hover:font-semibold py-3 px-4 rounded hover:ease-in-out duration-200"
                 >
                   SignUp
                 </button>
@@ -108,14 +118,18 @@ function Navbar() {
                 className="flex items-center gap-3 relative"
               >
                 <div className="flex rounded-full overflow-hidden border border-[#4F5665] ">
-                  {profile.image && <img
-                    className="h-12 w-12 p-1 rounded-full"
-                    src={profile.image}
-                    alt="img"
-                  />}
-                  {!profile.image && <div className="bg-[#FF8906] text-white h-12 w-12 flex justify-center items-center rounded-full">
-                    <FaUser size={24} />
-                    </div>}
+                  {profile.image && (
+                    <img
+                      className="h-12 w-12 p-1 rounded-full"
+                      src={profile.image}
+                      alt="img"
+                    />
+                  )}
+                  {!profile.image && (
+                    <div className="bg-[#FF8906] text-white h-12 w-12 flex justify-center items-center rounded-full">
+                      <FaUser size={24} />
+                    </div>
+                  )}
                 </div>
                 <div>
                   {!showDropdown && (
@@ -132,7 +146,10 @@ function Navbar() {
                         <FaUser />
                         <span>Profile</span>
                       </Link>
-                      <Link to="/history-order" className="flex gap-5 items-center">
+                      <Link
+                        to="/history-order"
+                        className="flex gap-5 items-center"
+                      >
                         <FaFileInvoice />
                         <span>Your Order</span>
                       </Link>

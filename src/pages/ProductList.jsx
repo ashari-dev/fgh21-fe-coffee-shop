@@ -76,7 +76,7 @@ function ProductList() {
         <Navbar/>
         <div className="py-8 flex items-center justify-between border-b"></div>
         <div className="flex">
-        <SidebarAdmin />
+        <SidebarAdmin active={2} />
         <div className="relative w-full">
           {showAdd ? <InsertProduct closeMenu={SetShowAdd} /> : ""}
           {showUpdate ? <EditProduct closeMenu={setShowUpdate} id={showUpdate}/> : ""}

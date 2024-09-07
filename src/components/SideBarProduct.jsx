@@ -107,11 +107,11 @@ function SideBarProduct({ fetchProducts }) {
                 type="range"
                 id="highPrice"
                 name="highPrice"
-                min="20001"
+                min="20000"
                 max="50000"
                 value={maxPrice}
                 onChange={handleMaxChange}
-                className="w-1/2"
+                className="w-1/2 -ml-2 rotate-180"
               />
             </div>
             <div className="flex justify-between text-white mt-2">
