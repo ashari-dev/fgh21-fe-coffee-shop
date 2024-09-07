@@ -104,9 +104,8 @@ function UserList() {
                         type="text"
                         id="search"
                         name="search"
-//                         value={inputSearch}
-//                         onChange={(e) => setInputSearch(e.target.value)}
-
+                        value={inputSearch}
+                        onChange={(e) => setInputSearch(e.target.value)}
                         placeholder="Enter User Name"
                         className="outline-none"
                       />

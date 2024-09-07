@@ -12,48 +12,82 @@ import * as yup from "yup"
 
 function EditUser(props) {
   const [dataUser, setDataUser] = useState([])
-
-  const formik = useFormik({
-    initialValues: {
-        fullName: "",
-        email: "",
-        phone: "",
-        password: "",
-        address: ""
-    },
-    onSubmit: updateProfile,
-    validationSchema: yup.object().shape({
-        fullName: yup.string().required('Please Enter your name').min(3).max(50),
-        email: yup.string().required('Please Enter your email').email()
-        // password: yup.string().required('Please Enter your password').min(8)
-    })
-  })
+  const [message, setMessage] = useState(""); 
+  const [imagePreview, setImagePreview] = useState(null);
   
-  // const file = formik.values.file
-  // data.append('roleId', role)
-  async function updateProfile(){
-      const fullName = formik.values.fullName
-      const email = formik.values.email
-      const phone = formik.values.phone
-      const password = formik.values.password
-      const address = formik.values.address
+  const formik = useFormik({
+      onSubmit: editForm,
+        initialValues: {
+            fullName: dataUser.fullName,
+            email: dataUser.email,
+            phone: dataUser.phoneNumber,
+            password: "",
+            address: dataUser.address,          
+        },    
+        validationSchema: yup.object().shape({
+          fullName: yup.string().required('Please Enter your name').min(3).max(50),
+          email: yup.string().required('Please Enter your email').email(),
+          password: yup.string().required('Please Enter your password').min(8),
+          phone: yup.string().required('Please Enter your phone number'),
+          address: yup.string().required('Please Enter your address')
+        })  
+    })
+      async function editForm() {  
+      const fullName = formik.values.fullName;
+      const email = formik.values.email;
+      const phone = formik.values.phone;
+      const password = formik.values.password;
+      const address = formik.values.address;
+    
+
+      const data = new FormData();
+      data.append("fullName", fullName);
+      data.append("email", email);
+      data.append("phoneNumber", phone);
+      data.append("password", password);
+      data.append("address", address);
+    
+      try {
+        const response = await fetch("http://localhost:8000/profile/"+props.id, {
+          method: "PATCH",
+          body: data,
+        })
+    
+        if (!response.ok) {
+          setMessage("Failed to edit user");
+          return;
+        }
+    
+        const userData = await response.json();
+        console.log("User Data:", userData);
+        setMessage("User successfully edited!")
         
-        const data = new URLSearchParams()
-        // data.append('image', file)
-        data.append('fullName', fullName)
-        data.append('email', email)
-        data.append('phoneNumber', phone)
-        data.append('password', password)
-        data.append('address', address)
-      const response = await fetch(`http://localhost:8000/profile/`+ props.id,{
-        method: 'PATCH',
-        body: data,
-      })
-      // const userData = await response.json()
-      // const listData = userData.result
-      // console.log(listData)
+
+      } catch (error) {
+        console.error("Error updating user:", error);
+        setMessage("An error occurred. Please try again.")  
+      }
       props.closeMenu(false)
-    }
+    } 
+
+  function handlerChange(e) {
+    e.preventDefault()
+    setFile(e.target.files[0])
+    console.log(e.target.files[0])
+    setImagePreview(URL.createObjectURL(e.target.files[0]))
+  }
+  
+  const [file, setFile] = useState();
+  async function uploadImage(e){
+    e.preventDefault()
+    const form = new FormData()
+    form.append("profileImg", file)
+    await fetch("http://localhost:8000/profile/img/"+props.id, {
+      method: "PATCH",
+      body: form,
+    })
+    props.closeMenu(false)
+  }
     async function getData() {
         const endPoint = 'http://localhost:8000/profile/' + props.id
         const response = await fetch(endPoint);
@@ -67,11 +101,6 @@ function EditUser(props) {
         getData()
     }, [])
 
-
-  const handleForm = (event) => {
-      const {target} = event
-      formik.setFieldValue(target.name, target.value)
-  }
   return (
     <div>
       <div className="absolute bg-[#00000099] w-full flex h-screen justify-end">
@@ -82,19 +111,38 @@ function EditUser(props) {
               <IoMdCloseCircleOutline />
             </button>
           </div>
-          <form action="" onSubmit={formik.handleSubmit} className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full">
+            <form action="" onSubmit={uploadImage}>
+
             <div className="flex flex-col gap-2">
               <span className="text-sm">Image User</span>
-              <div className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
-                <CiImageOn />
-              </div>
-              <button
-                type="button"
-                className="bg-[#FF8906] w-[80px] rounded-md px-[16px]"
-              >
+              <label htmlFor="img">
+              <img
+              src={
+                imagePreview
+              }
+              className="p-[15px] bg-[#E8E8E8] w-[50px] h-[50px] rounded-lg">
+               
+              </img>
+              </label>
+              <div className="flex text-center w-full">
+                  <input
+                    type="file"
+                    name="img"
+                    id="img"
+                    className="hidden"
+                    onChange={handlerChange}
+                    />
+                </div>
+              <button className="bg-[#FF8906] w-[80px] rounded-md px-[16px]">
                 <span className="text-xs">Upload</span>
               </button>
+              {formik.errors.file && formik.touched.file && (
+                <p className="text-red-500">{formik.errors.file}</p>
+              )}
             </div>
+            </form>
+            <form action="" onSubmit={formik.handleSubmit}>
             <div className="flex gap-2 flex-col">
               <label htmlFor="fullName" className="font-bold">
                 FullName
@@ -107,10 +155,13 @@ function EditUser(props) {
                   defaultValue={dataUser.fullName}
                   placeholder="Enter Full Name"
                   name="fullName"
-                  onChange={handleForm}
+                  onChange={formik.handleChange}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
               </div>
+              {formik.errors.fullName && formik.touched.fullName && (
+                  <p className="text-red-500">{formik.errors.fullName}</p>
+                )}
             </div>
             <div className="flex gap-2 flex-col">
               <label htmlFor="email" className="font-bold">
@@ -124,10 +175,13 @@ function EditUser(props) {
                   placeholder="Enter Your Email"
                   name="email"
                   defaultValue={dataUser.email}
-                  onChange={handleForm}
+                  onChange={formik.handleChange}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
                 />
               </div>
+              {formik.errors.email && formik.touched.email && (
+                  <p className="text-red-500">{formik.errors.email}</p>
+                )}
             </div>
             <div className="flex gap-2 flex-col">
               <label htmlFor="phone" className="font-bold">
@@ -141,10 +195,13 @@ function EditUser(props) {
                   placeholder="Enter Your Number"
                   name="phone"
                   defaultValue={dataUser.phoneNumber}
-                  onChange={handleForm}
+                  onChange={formik.handleChange}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
-                />
+                  />
               </div>
+              {formik.errors.phone && formik.touched.phone && (
+                <p className="text-red-500">{formik.errors.phone}</p>
+              )}
             </div>
             <div className="flex gap-2 flex-col">
               <div className="flex justify-between">
@@ -154,7 +211,7 @@ function EditUser(props) {
                 <label
                   htmlFor="password"
                   className="text-[#FF8906] font-semibold"
-                >
+                  >
                   Set New Password
                 </label>
               </div>
@@ -165,8 +222,9 @@ function EditUser(props) {
                   id="password"
                   placeholder="Enter Your Password"
                   name="password"
+                  onChange={formik.handleChange}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
-                />
+                  />
               </div>
             </div>
             <div className="flex gap-2 flex-col">
@@ -181,17 +239,21 @@ function EditUser(props) {
                   placeholder="Enter Your Address"
                   name="address"
                   defaultValue={dataUser.address}
-                  onChange={handleForm}
+                  onChange={formik.handleChange}
                   className="h-[40px] pl-10 w-full bg-[#DEDEDE] rounded-lg"
-                />
+                  />
               </div>
+              {formik.errors.address && formik.touched.address && (
+                <p className="text-red-500">{formik.errors.address}</p>
+              )}
             </div>
             <div className="flex">
               <button type="submit" className="bg-[#FF8906] w-full rounded-md py-[10px]">
                 Update
               </button>
             </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
