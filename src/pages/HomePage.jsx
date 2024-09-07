@@ -9,6 +9,7 @@ import Footer from "../component/Footer";
 
 function HomePage() {
 
+
   return (
     <>
       <Navbar />

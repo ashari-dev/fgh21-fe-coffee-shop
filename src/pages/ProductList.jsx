@@ -7,7 +7,7 @@ import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import InsertProduct from "../components/InsertProduct";
 import EditProduct from "../components/EditProduct";
-import NavbarAdmin from "../component/NavbarAdmin";
+import Navbar from "../component/Navbar";
 import { Form } from "formik";
 
 function ProductList() {
@@ -73,7 +73,8 @@ function ProductList() {
 
   return (
     <>
-        <NavbarAdmin/>
+        <Navbar/>
+        <div className="py-8 flex items-center justify-between border-b"></div>
         <div className="flex">
         <SidebarAdmin active={2} />
         <div className="relative w-full">
