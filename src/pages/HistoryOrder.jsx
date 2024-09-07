@@ -11,7 +11,20 @@ import { useSelector } from "react-redux";
 function HistoryOrder() {
     const token = useSelector((state) => state.auth.token);
     const { data, err, isLoading } = useGetTransactionQuery(token);
-    // const datas = isLoading ? [] : data.result.Price
+    async function getTransaction() {
+        const response  = await fetch("http://localhost:8000/transaction", {
+            headers:{
+                Authorization: "Bearer " + token,
+            }
+        })
+        const json = await response.json()
+        console.log(json)
+    }
+    React.useEffect(()=>{
+        getTransaction()
+    },[])
+    const order = data?.result || []
+    console.log(order)
     return (
         <div className="">
             <Navbar />
@@ -26,12 +39,7 @@ function HistoryOrder() {
                     <div className="flex flex-col md:w-2/3 gap-5">
                         {isLoading || err
                         ? ""
-                        : data.result.map((item) => {
-                            // const numbers = item.Price
-                            const price = item.Price.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-                            const quantity = item.Quantity.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-                            console.log(price)
-                            console.log(quantity)
+                        : order.map((item) => {
                             return (
                                 <>
                                 <div className="flex gap-5 bg-[#E8E8E8]/30 p-4 rounded-lg" key={item.id}>
@@ -65,7 +73,7 @@ function HistoryOrder() {
                                                 Total
                                             </div>
                                         </div>
-                                        <div className="font-bold py-2 text-[#0B132A]">Idr {(price * quantity).toLocaleString("id")}</div>
+                                        <div className="font-bold py-2 text-[#0B132A]">Idr {(item.Price * item.Quantity).toLocaleString("id")}</div>
                                     </div>
                                     <div className="flex flex-col gap-3 py-3">
                                         <div className="flex items-center gap-2">

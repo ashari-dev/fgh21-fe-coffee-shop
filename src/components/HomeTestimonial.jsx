@@ -14,6 +14,7 @@ function HomeTestimonial() {
     setPage(1)
   }
   const { data, err, isLoading } = useListTestimonialsQuery(page);
+  const testimonial = data?.result || []
   function StarRating({ rating }) {
     const stars = Array.from({ length: rating }, (_, index) => (
       <FaStar key={index} fontSize={20} color="orange" />
@@ -31,21 +32,21 @@ function HomeTestimonial() {
     <>
       <div className="flex flex-col md:flex-row bg-[rgba(0,0,0,0.9)] min-h-[583px] gap-4 py-16 md:px-32 p-5">
         <div className="bg-white h-[500px] md:max-h-[432px] flex-1">
-          <img src={isLoading || err ? "" : data.result.image} alt={isLoading || err ? "" : data.result.name} className="w-full h-full object-cover"/>
+          <img src={isLoading || err ? "" : testimonial.image} alt={isLoading || err ? "" : testimonial.name} className="w-full h-full object-cover"/>
         </div>
         <div className="flex-1 text-white flex-col flex gap-6">
           <div className="text-xl md:flex hidden">TESTIMONIAL</div>
-          <div className="text-3xl">{isLoading || err ? "" : data.result.name}</div>
-          <div className="text-[#FF8906]">{isLoading || err ? "" : data.result.profession}</div>
+          <div className="text-3xl">{isLoading || err ? "" : testimonial.name}</div>
+          <div className="text-[#FF8906]">{isLoading || err ? "" : testimonial.profession}</div>
           <div>
-            {isLoading || err ? "" : data.result.comment}
+            {isLoading || err ? "" : testimonial.comment}
           </div>
           <div className="flex gap-8 items-center">
             <div >
-              <StarRating rating={isLoading || err ? "" : data.result.rating} />
+              <StarRating rating={isLoading || err ? "" : testimonial.rating} />
               {/* <FaStar /> */}
             </div>
-            <span>{isLoading || err ? "" : data.result.rating}</span>
+            <span>{isLoading || err ? "" : testimonial.rating}</span>
           </div>
           <div className="flex gap-8">
             <button className="bg-white text-black p-4 rounded-full" onClick={pageDown}>

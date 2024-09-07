@@ -13,20 +13,36 @@ import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowDown, IoIosArrowUp, IoMdSearch } from "react-icons/io";
 import { logout } from "../redux/reducers/auth";
+import { removeData } from "../redux/reducers/carts";
 import { editProfile } from "../redux/reducers/profile";
 import { jwtDecode } from "jwt-decode";
 
 function Navbar() {
   const navigate = useNavigate();
+  const [role, setRole] = React.useState(0)
   const token = useSelector((state) => state.auth.token);
-  const decoded = jwtDecode(token);
-  console.log(decoded); 
-  const dataToken = useSelector((state) => state.auth.token);
+  React.useEffect(() => {
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+          if(decoded.role === 2){
+            setRole(decoded.role)
+          } else {
+            setRole(decoded.role)
+          }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    } else {
+      console.log('Token is empty or undefined');
+    }
+  }, []);
   const profile = useSelector((state) => state.profile.data);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const dispatch = useDispatch();
   const processLogout = () => {
     dispatch(logout());
+    dispatch(removeData())
     dispatch(editProfile({}));
     navigate("/login");
   };
@@ -64,7 +80,7 @@ function Navbar() {
             <FaShoppingCart className="text-white text-xl"></FaShoppingCart>
           </button>
           <div className="">
-            {dataToken === null ? (
+            {token === null ? (
               <div className="flex gap-5">
                 <button
                   onClick={() => {
@@ -120,8 +136,8 @@ function Navbar() {
                         <FaFileInvoice />
                         <span>Your Order</span>
                       </Link>
-                      {
-                        decoded.role === 2 ? 
+                      { role
+                         ? 
                         <Link to="/dashboard-admin" className="flex gap-5 items-center">
                           <FaUserTie />
                           <span>Dashboard</span>
