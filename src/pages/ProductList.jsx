@@ -7,50 +7,76 @@ import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import InsertProduct from "../components/InsertProduct";
 import EditProduct from "../components/EditProduct";
-import NavbarAdmin from "../component/NavbarAdmin";
+import Navbar from "../component/Navbar";
+import { Form } from "formik";
 
-function ProductList(props) {
+function ProductList() {
   const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
   const [product, setProduct] = React.useState([]);
+  const [page, setPage] = React.useState(1)
+  const [totalProduct, setTotalProduct] = useState([]);
+  const [search, setSearch] = React.useState("")
+
+
+
 
   async function products() {
     const dataProducts = await fetch("http://localhost:8000/products/", {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
-
+  
   async function filterProducts(e) {
-    e.preventDefault();
-    const datas = e.target.search.value;
-    console.log(datas)
-    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${datas}`, {});
+    e.preventDefault()
+    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&page=${page}`, {});
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
 
+  async function allProduct() {
+    const dataProducts = await fetch(`http://localhost:8000/products/filter/?title=${search}&limit=1000&page=${page}`, {});
+    const listProduct = await dataProducts.json();
+    setTotalProduct(listProduct.result.length)
+  } 
+
+
+  const itemPerPage = 3; 
+  const startIndex = (page - 1) * itemPerPage + 1; 
+  const endIndex = Math.min(page * itemPerPage, totalProduct); 
+
+
+
   useEffect(() => {
+    allProduct()
     products()
-  }, []);
+  }, [search]);
+
+  useEffect(() => {
+    filterProducts()
+  }, [page, search]);
+
+
   function removeData(id) {
     fetch("http://localhost:8000/products/" + id, {
       method: "DELETE",
     })
       .then(() => {
         console.log("removed");
-        products()
+        filterProducts()
       })
       .catch((err) => {
         console.log(err);
       });
-      effect = product()
 
   }
+
   return (
     <>
-        <NavbarAdmin/>
+        <Navbar/>
+        <div className="py-8 flex items-center justify-between border-b"></div>
         <div className="flex">
-        <SidebarAdmin />
+        <SidebarAdmin active={2} />
         <div className="relative w-full">
           {showAdd ? <InsertProduct closeMenu={SetShowAdd} /> : ""}
           {showUpdate ? <EditProduct closeMenu={setShowUpdate} id={showUpdate}/> : ""}
@@ -81,6 +107,8 @@ function ProductList(props) {
                         name="search"
                         placeholder="Enter Product Name"
                         className="outline-none"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                       />
                       <IoMdSearch className="text-[#4F5665]" />
                     </div>
@@ -108,11 +136,11 @@ function ProductList(props) {
                       <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {product.map((item) => {
-                      console.log(item.id)
-                      return (
-                        <tr className="border-t text-[#4F5665]">
+                  <tbody>   
+                    {product.map((item) => 
+               
+                      (
+                        <tr key={item.id}className="border-t text-[#4F5665]">
                           <td className="text-center ">
                             <input type="checkbox" />
                           </td>
@@ -149,28 +177,40 @@ function ProductList(props) {
                             </div>
                           </td>
                         </tr>
-                      );
-                    })}
+                      
+                    ))}
                   </tbody>
                 </table>
               </div>
               <div className="flex justify-between text-[#4F5665]">
                 <div>
-                  <p>Show 5 user of 100 user</p>
+                  <p>Show {totalProduct > 0 ? startIndex : 0} - {endIndex} of {totalProduct} products</p>
                 </div>
+                
                 <div className="flex gap-3">
-                  <span>Prev</span>
-                  <span className="text-[#FF8906]">1</span>
-                  <span>2</span>
-                  <span>3</span>
-                  <span>4</span>
-                  <span>5</span>
-                  <span>6</span>
-                  <span>7</span>
-                  <span>8</span>
-                  <span>9</span>
-                  <span className="text-black">Next</span>
+                <form action="" onSubmit={filterProducts}>
+                    <div className="flex gap-3">
+                      {/* <button type="submit" onClick={page > 1 ?()=>setPage(page -1):()=>setPage(1)} className="hover:text-[#FF8906]">
+                        <input type="button" value="Prev"/>
+                      </button> */}
+                      <button
+                          onClick={() => setPage(Math.max(1, page - 1))}
+                          className="hover:text-[#FF8906]">
+                          Prev
+                      </button>
+                      <div>{page}</div>
+                      {/* <button type="submit" onClick={page < Math.ceil(totalProduct / itemPerPage) ? () => setPage(page + 1) : () => setPage(page)} className="hover:text-[#FF8906]">
+                        <input type="button" value="Next"/>
+                      </button> */}
+                      <button
+                          onClick={() => setPage(Math.min(page + 1, Math.ceil(totalProduct / itemPerPage)))}
+                          className="hover:text-[#FF8906]">
+                          Next
+                  </button>
+                    </div>
+                  </form>
                 </div>
+           
               </div>
             </div>
           </div>

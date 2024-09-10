@@ -1,14 +1,17 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import auth from "./auth";
 import profile from "./profile";
-import payment from "./payment";
+import carts from "./carts";
+import order from "./order";
 import { services } from "../services";
 
 const reducer = combineReducers({
   auth,
   profile,
-  payment,
+  carts,
+  order,
   ...services,
 });
+// console.log(services)
 
 export default reducer;

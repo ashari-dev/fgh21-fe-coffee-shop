@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../component/Navbar.jsx";
 import { FaStar, FaRegThumbsUp, FaMinus, FaPlus } from "react-icons/fa6";
 import { MdOutlineShoppingCart } from "react-icons/md";
@@ -6,34 +6,40 @@ import coffe_1 from "../assets/img/coffe_1.svg";
 import coffe_2 from "../assets/img/coffe_2.svg";
 import coffe_3 from "../assets/img/coffe_3.svg";
 import coffe_4 from "../assets/img/coffe_4.svg";
-import Pagination from "../components/Pagination.jsx";
-import GridProduct from "../components/GridProduct.jsx";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {  addCart } from "../redux/reducers/carts.js";
+import { useGetProductsQuery } from "../redux/services/products.js";
 import {
   addQuantity,
   addVariant,
   addSize,
   addProductId,
 } from "../redux/reducers/payment.js";
-import { useGetProductsQuery } from "../redux/services/products.js";
+import {
+  useGetProductsQuery,
+  useListProductsQuery,
+} from "../redux/services/products.js";
 import AuthPopUp from "../components/AuthPopUp.jsx";
 import Loading from "../component/Loading";
+import axios from "axios";
+import GridProduct from "../components/GridProduct.jsx";
 
 function DetailProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const response = { message: "purchases cannot be empty" };
+  const token = useSelector((state) => state.auth.token);
   const id = useParams().id;
-  console.log(typeof id);
   const [itemLoading, setLoading] = React.useState(true);
   const [showPopUp, setShowPopUp] = React.useState(false);
   const [num, setNum] = React.useState(0);
-  const [selectedSize, setSelectedSize] = React.useState("Reguler");
-  const [selectedTemperature, setSelectedTemperature] = React.useState("Ice");
+  const [selectedSize, setSelectedSize] = React.useState(1);
+  const [selectedTemperature, setSelectedTemperature] = React.useState(1);
   const { data, err, isLoading } = useGetProductsQuery(id);
-  console.log(data);
+  const product = data?.result || []
+  const [recomend, setRecomend] = useState([]);
   function mins() {
     if (num > 0) {
       setNum(num - 1);
@@ -44,29 +50,95 @@ function DetailProduct() {
       setNum(num + 1);
     }
   }
-  function pay() {
+
+  let size = "";
+  if (selectedSize === 1) {
+    size = "Reguler";
+  }
+  if (selectedSize === 2) {
+    size = "Medium";
+  }
+  if (selectedSize === 3) {
+    size = "Large";
+  }
+
+  let variant = "";
+  if (selectedTemperature === 1) {
+    variant = "Ice";
+  }
+  if (selectedTemperature === 2) {
+    variant = "Hot";
+  }
+  async function cart(e) {
+    e.preventDefault();
     if (num == 0) {
       setShowPopUp(true);
       return;
-    } else {
-      setLoading(false);
-
-      navigate("/payment-detail");
-      return;
     }
-    dispatch(addQuantity(num));
-    dispatch(addVariant(selectedSize));
-    dispatch(addSize(selectedTemperature));
-    dispatch(addProductId(id));
+    setLoading(false);
+    const formData = new URLSearchParams();
+    formData.append("quantity", num);
+    formData.append("variant", selectedTemperature);
+    formData.append("productSize", selectedSize);
+    const response = await fetch(`http://localhost:8000/carts/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    });
+    const json = await response.json();
+    if (json.success) {
+      setTimeout(() => {
+        setLoading(true);
+        navigate("/payment-detail");
+        dispatch(addCart({
+          id: id,
+          title: product.title,
+          quantity: num,
+          size: size,
+          variant: variant,
+          price: product.price, 
+        }))
+      }, 3000);
+    }
   }
+  // async function cart() {
+  //   const formData = new URLSearchParams();
+  //   formData.append("quantity", num);
+  //   formData.append("variant", selectedTemperature);
+  //   formData.append("productSize", selectedSize);
+
+    const response = await fetch(`http://localhost:8000/carts/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formData,
+    });
+  }
+
+  async function recommendation() {
+    const respont = await axios.get(
+      "http://localhost:8000/products/our-product/?page=1&limit=4"
+    );
+    setRecomend(respont.product);
+  }
+
+  useEffect(() => {
+    recommendation();
+  }, []);
   return (
     <div className="">
       <Navbar />
       <div className="flex flex-col md:flex-row md:px-32 px-5 py-32 gap-5 mb-16">
         {itemLoading ? "" : <Loading />}
         {showPopUp ? <AuthPopUp data={response} /> : ""}
-        <div className="md:w-1/2 flex flex-col gap-4">
-          <img src={coffe_1} className="bg-black w-full object-cover" />
+        <div className="md:w-1/2 flex flex-col gap-4 max-h-96">
+          <img
+            src={isLoading || err ? "" : data.result.image}
+            className=" w-full h-full object-contain"
+          />
           <div className="grid grid-cols-3 gap-4 w-full">
             <img src={coffe_2} className="flex w-full bg-black" />
             <img src={coffe_3} className="flex w-full bg-black" />
@@ -81,14 +153,14 @@ function DetailProduct() {
               FLASH SALE!
             </div>
             <div className="text-[#0B0909] font-medium text-5xl">
-              {data.result.title}
+              {product.title}
             </div>
             <div className="flex gap-4 items-center">
               <div className="font-medium text-[#D00000] line-through text-xs">
                 IDR 20.000
               </div>
               <div className="text-[#FF8906] font-medium text-2xl">
-                IDR {data.result.price.toLocaleString("id")}
+                IDR {product.price.toLocaleString("id")}
               </div>
             </div>
             <div className="flex gap-3 items-center  text-sm">
@@ -105,7 +177,7 @@ function DetailProduct() {
               <div className="text-[#4F5665]">Recommendation</div>
               <FaRegThumbsUp className="text-[#FF8906]" />
             </div>
-            <div className="text-[#4F5665]">{data.result.description}</div>
+            <div className="text-[#4F5665]">{product.description}</div>
             <div className="flex gap-4 items-center">
               <button
                 type="button"
@@ -128,33 +200,27 @@ function DetailProduct() {
             <div className="flex gap-5">
               <button
                 type="button"
-                onClick={() => setSelectedSize("Reguler")}
+                onClick={() => setSelectedSize(1)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === "Reguler"
-                    ? "border-[#FF8906]"
-                    : "border-[#E8E8E8]"
+                  selectedSize === 1 ? "border-[#FF8906]" : "border-[#E8E8E8]"
                 }`}
               >
                 Reguler
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedSize("Medium")}
+                onClick={() => setSelectedSize(2)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === "Medium"
-                    ? "border-[#FF8906]"
-                    : "border-[#E8E8E8]"
+                  selectedSize === 2 ? "border-[#FF8906]" : "border-[#E8E8E8]"
                 }`}
               >
                 Medium
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedSize("Large")}
+                onClick={() => setSelectedSize(3)}
                 className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedSize === "Large"
-                    ? "border-[#FF8906]"
-                    : "border-[#E8E8E8]"
+                  selectedSize === 3 ? "border-[#FF8906]" : "border-[#E8E8E8]"
                 }`}
               >
                 Large
@@ -164,9 +230,9 @@ function DetailProduct() {
             <div className="flex gap-5 w-full mb-4">
               <button
                 type="button"
-                onClick={() => setSelectedTemperature("Ice")}
+                onClick={() => setSelectedTemperature(1)}
                 className={`flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedTemperature === "Ice"
+                  selectedTemperature === 1
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -175,9 +241,9 @@ function DetailProduct() {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedTemperature("Hot")}
+                onClick={() => setSelectedTemperature(2)}
                 className={`flex items-center justify-center h-11 w-1/2 border-2 text-base text-[#0B0909] rounded-md ${
-                  selectedTemperature === "Hot"
+                  selectedTemperature === 2
                     ? "border-[#FF8906]"
                     : "border-[#E8E8E8]"
                 }`}
@@ -187,13 +253,14 @@ function DetailProduct() {
             </div>
             <div className="flex gap-5 w-full mb-4">
               <button
-                onClick={pay}
+                onClick={cart}
                 type="button"
                 className="flex items-center justify-center h-11 w-1/2 text-base text-[#0B0909] rounded-md bg-[#FF8906] hover:bg-orange-600"
               >
                 Buy
               </button>
               <button
+                // onClick={cart}
                 type="button"
                 className="flex gap-1 items-center justify-center h-11 w-1/2 border-2 text-base border-[#FF8906] rounded-md text-[#FF8906]"
               >
@@ -206,15 +273,13 @@ function DetailProduct() {
           </div>
         )}
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-center px-32 py-16 gap-1 font-medium text-5xl mb-6">
+      <div className="flex flex-col md:flex-row items-center justify-center px-32 py-16 gap-1 font-medium text-4xl md:text-5xl mb-6">
         <div className="text-[#0B0909]">Recommendation</div>
         <div className="text-[#8E6447]">For You</div>
       </div>
-      <div className="grid grid-cols-2 justify-center md:grid-cols-4 px-32 mb-20">
-        {/* <GridProduct />
-        <GridProduct />
-        <GridProduct />
-        <GridProduct /> */}
+      <div className="grid grid-cols-2 justify-center md:grid-cols-4 mb-20">
+        {recomend &&
+          recomend.map((item) => <GridProduct key={item.id} data={item} />)}
       </div>
       <Footer />
     </div>

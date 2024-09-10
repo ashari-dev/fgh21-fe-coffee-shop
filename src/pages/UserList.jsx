@@ -7,51 +7,79 @@ import { FiEdit3 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import EditUser from "../components/EditUser";
 import InsertUser from "../components/InsertUser";
+import Navbar from "../component/Navbar";
 import NavbarAdmin from "../component/NavbarAdmin";
+import { useParams } from "react-router-dom";
 
 function UserList() {
   const [showUpdate, setShowUpdate] = useState(0);
   const [showAdd, SetShowAdd] = useState(false);
-  const [listUser, setListUser] = useState([])
-  const [dataPage, setDataPage] = useState({})
+  const [listUser, setListUser] = useState([]);
+  const [dataPage, setDataPage] = useState({});
+  const [inputSearch, setInputSearch] = useState("");
+  const [page, setPage] = useState(1);
+  
+  
 
   async function deleteItem(id) {
     await fetch(`http://localhost:8000/profile/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     dataUser();
   }
 
   async function filterUsers(e) {
     e.preventDefault();
-    const findUser = e.target.search.value;
-    console.log(findUser)
-    const listDataUser = await fetch(`http://localhost:8000/profile?search=${findUser}`, {});
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      {}
+    );
+
     const listFilterUser = await listDataUser.json();
     setListUser(listFilterUser.result);
+    const pageInfo = listFilterUser.pageInfo;
+    setDataPage(pageInfo);
+  }
+
+  async function paginationUsers(e) {
+    e.preventDefault();
+    const listDataUser = await fetch(
+      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      {}
+    );
+    const listFilterUser = await listDataUser.json();
+    setListUser(listFilterUser.result);
+    const pageInfo = listFilterUser.pageInfo;
+    setDataPage(pageInfo);
   }
 
   async function dataUser() {
-    const endPoint = 'http://localhost:8000/profile'
+    const endPoint = `http://localhost:8000/profile`;
     const response = await fetch(endPoint);
-    const data = await response.json()
-    const listData = data.result
-    const pageInfo = data.pageInfo
-    setListUser(listData)
-    setDataPage(pageInfo)
-}
-useEffect(() => {
-    dataUser()
-},[showAdd, showUpdate])
+    const data = await response.json();
+    const listData = data.result;
+    console.log(listData)
+    const pageInfo = data.pageInfo;
+    setDataPage(pageInfo);
+    setListUser(listData);
+  }
+  useEffect(() => {
+    dataUser();
+  }, [showAdd, showUpdate]);
+  const dataTotalPage = dataPage.totalPage;
   return (
     <>
-      <NavbarAdmin />
-
+      <Navbar />
+      <div className="py-8 flex items-center justify-between border-b"></div>
       <div className="flex ">
-        <SidebarAdmin />
+        <SidebarAdmin active={4} />
         <div className="relative w-full">
           {showAdd ? <InsertUser closeMenu={SetShowAdd} /> : ""}
-          {showUpdate ? <EditUser closeMenu={setShowUpdate} id={showUpdate}/> : ""}
+          {showUpdate ? (
+            <EditUser closeMenu={setShowUpdate} id={showUpdate} />
+          ) : (
+            ""
+          )}
 
           <div className="border-l w-full min-h-screen pt-6 pl-7 pr-20 flex flex-col gap-5">
             <div className="text-2xl">User List</div>
@@ -77,6 +105,8 @@ useEffect(() => {
                         type="text"
                         id="search"
                         name="search"
+                        value={inputSearch}
+                        onChange={(e) => setInputSearch(e.target.value)}
                         placeholder="Enter User Name"
                         className="outline-none"
                       />
@@ -105,23 +135,29 @@ useEffect(() => {
                     </tr>
                   </thead>
                   <tbody>
-                    {listUser.map((item)=>{
-                      return(
-                        <tr key={item.id}  data={item.id} className="border-t text-[#4F5665]">
+                    {listUser.map((item) => {
+                      return (
+                        <tr
+                          key={item.id}
+                          data={item.id}
+                          className="border-t text-[#4F5665]"
+                        >
                           <td className="text-center ">
                             <input type="checkbox" />
                           </td>
                           <td className="py-3 flex items-center justify-center">
-                            <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12">
-                              <img src={item.image?item.image:<FaUserCircle />} alt="" />
-                              {/* {item.image?item.image:<FaUserCircle />} */}
+                            <div className="flex items-center justify-center rounded bg-blue-400 h-12 w-12 overflow-hidden">
+                              <img
+                                src={item.image ? item.image : <FaUserCircle />}
+                                alt=""
+                              />
                             </div>
                           </td>
                           <td className="text-center">{item.fullName}</td>
-                          <td className="text-center">{item.phoneNUmber}</td>
+                          <td className="text-center">{item.phoneNumber}</td>
                           <td className="text-center">{item.address}</td>
                           <td className="text-center">{item.email}</td>
-                          <td className="justify-center flex">
+                          <td className="flex justify-center">
                             <div className="flex gap-3">
                               <div className="bg-[#8E64471A] h-6 w-6 rounded-full flex items-center justify-center">
                                 <FaRegListAlt className="text-[#8E6447]" />
@@ -132,34 +168,51 @@ useEffect(() => {
                               >
                                 <FiEdit3 className="text-[#FF8906]" />
                               </button>
-                              <button onClick={() => deleteItem(item.id)} className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                              <button
+                                onClick={() => deleteItem(item.id)}
+                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center"
+                              >
                                 <AiOutlineDelete className="text-[#d00000]" />
                               </button>
                             </div>
                           </td>
                         </tr>
-                      )
+                      );
                     })}
                   </tbody>
                 </table>
               </div>
               <div className="flex justify-between text-[#4F5665]">
                 <div>
-                  <p>Show {listUser.length} user of {dataPage.totalData} user</p>
+                  <p>
+                    Show {listUser.length} user of {dataPage.totalData} user
+                  </p>
                 </div>
-                <div className="flex gap-3">
-                  <span>Prev</span>
-                  <span className="text-[#FF8906]">1</span>
-                  <span>2</span>
-                  <span>3</span>
-                  <span>4</span>
-                  <span>5</span>
-                  <span>6</span>
-                  <span>7</span>
-                  <span>8</span>
-                  <span>9</span>
-                  <span className="text-black">Next</span>
-                </div>
+                <form action="" onSubmit={paginationUsers}>
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      onClick={
+                        page > 1 ? () => setPage(page - 1) : () => setPage(1)
+                      }
+                      className="hover:text-[#FF8906]"
+                    >
+                      <input type="button" value="Prev" />
+                    </button>
+                    <div>{page}</div>
+                    <button
+                      type="submit"
+                      onClick={
+                        page < dataPage.totalPage
+                          ? () => setPage(page + 1)
+                          : () => setPage(1)
+                      }
+                      className="hover:text-[#FF8906]"
+                    >
+                      <input type="button" value="Next" />
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
