@@ -9,19 +9,18 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../redux/reducers/auth";
 import { addData } from "../redux/reducers/profile";
-import HandlerError from "../component/handlerError";
+import { changeData } from "../redux/reducers/carts";
+import HandlerError from "../component/HandlerError";
 import Loading from "../component/Loading";
 
 function Login() {
-  const datatoken = useSelector((state) => state.auth.token);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [err, setErr] = useState(false);
-  const [itemLoading, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = React.useState(false);
   let [pass, setPassword] = React.useState("password");
   function changePassword() {
     if (pass === "password") {
@@ -53,20 +52,25 @@ function Login() {
     formData.append("email", email);
     formData.append("password", password);
 
-    const datalogin = await fetch("http://localhost:8000/auth/login", {
+    fetch("http://localhost:8000/auth/login", {
       method: "POST",
       body: formData,
     }).then((response) => {
       response.json().then((data) => {
         if (data.success) {
+          setLoading(true);
           console.log(data.result.token);
           dispatch(login(data.result.token));
           async function dataUpdate() {
-            const response = await fetch("http://localhost:8000/profile", {
-              headers: {
-                Authorization: "Bearer " + data.result.token,
-              },
-            });
+            const response = await fetch(
+              "http://localhost:8000/profile/login",
+              {
+                headers: {
+                  Authorization: "Bearer " + data.result.token,
+                },
+              }
+            );
+
             const json = await response.json();
             dispatch(addData(json.result));
 
@@ -78,14 +82,24 @@ function Login() {
               return;
             }
           }
+          async function getCarts() {
+            const response = await fetch(`http://localhost:8000/carts`, {
+              headers: {  
+                Authorization: "Bearer " + data.result.token,
+              },
+            });
+            const json = await response.json()
+            console.log(json.result)
+            dispatch(changeData(json.result))
+          }
           dataUpdate();
+          getCarts()
         } else {
-          setLoading(false);
           setErr(true);
           setTimeout(() => {
             setErr(false);
-          }, 3000);
-          console.log("error");
+          }, 1000);
+          setTimeout(() => setLoading(false), 1000);
         }
       });
     });
@@ -93,7 +107,7 @@ function Login() {
 
   return (
     <div className="flex justify-center flex-col md:flex-row gap-16 h-screen">
-      {itemLoading ? "" : <Loading />}
+      {isLoading === true && <Loading />}
       <div className="md:w-1/4 h-screen md:flex hidden">
         <img src={ImgLogin} alt="" className="object-cover" />
       </div>

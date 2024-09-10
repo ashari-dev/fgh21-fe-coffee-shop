@@ -5,25 +5,48 @@ import {
   FaBars,
   FaUser,
   FaPowerOff,
+  FaFileInvoice,
+  FaUserTie,
 } from "react-icons/fa";
 import Logo from "../assets/components/Logo";
 import { Link, ScrollRestoration, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosArrowDown, IoIosArrowUp, IoMdSearch } from "react-icons/io";
-import { BsCart3 } from "react-icons/bs";
 import { logout } from "../redux/reducers/auth";
+import { removeData } from "../redux/reducers/carts";
 import { editProfile } from "../redux/reducers/profile";
+import { jwtDecode } from "jwt-decode";
 
 function Navbar() {
   const navigate = useNavigate();
-  const dataToken = useSelector((state) => state.auth.token);
+  const [role, setRole] = React.useState(0)
+  const token = useSelector((state) => state.auth.token);
+  React.useEffect(() => {
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+          if(decoded.role === 2){
+            setRole(decoded.role)
+          } else {
+            setRole(decoded.role)
+          }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    } else {
+      console.log('Token is empty or undefined');
+    }
+  }, []);
+  const profile = useSelector((state) => state.profile.data);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const dispatch = useDispatch();
   const processLogout = () => {
     dispatch(logout());
+    dispatch(removeData())
     dispatch(editProfile({}));
     navigate("/login");
   };
+
   return (
     <>
       <div className="fixed z-10 w-full flex justify-between py-2 px-5 md:px-32 items-center bg-[#0B090921]">
@@ -41,26 +64,40 @@ function Navbar() {
             </div>
           </div>
           <div className="hidden md:flex gap-14 text-white items-center">
-            <Link to={"/"}>Home</Link>
-            <Link to={"/list-product"}>Product</Link>
+            <Link
+              className="hover:underline hover:font-semibold hover:-skew-y-3"
+              to={"/"}
+            >
+              Home
+            </Link>
+            <Link
+              className="hover:underline hover:font-semibold hover:-skew-y-3"
+              to={"/product"}
+            >
+              Product
+            </Link>
           </div>
         </div>
         <div className="hidden md:flex gap-6 items-center">
           <button>
-            <FaSearch className="text-white text-xl"></FaSearch>
+            <FaSearch className="text-white text-xl hover:text-[#FF8906]"></FaSearch>
           </button>
-          <button>
-            <FaShoppingCart className="text-white text-xl"></FaShoppingCart>
+          <button
+            onClick={() => {
+              navigate("/payment-detail");
+            }}
+          >
+            <FaShoppingCart className="text-white text-xl hover:text-[#FF8906]"></FaShoppingCart>
           </button>
           <div className="">
-            {dataToken === null ? (
+            {token === null ? (
               <div className="flex gap-5">
                 <button
                   onClick={() => {
                     navigate("/login");
                   }}
                   type="button"
-                  className="border-2 border-white py-3 px-4 rounded text-white"
+                  className="border-2 border-white py-3 px-4 rounded text-white hover:bg-[#FF8906] hover:font-bold hover:border-transparent hover:ease-in-out duration-200"
                 >
                   SignIn
                 </button>
@@ -69,7 +106,7 @@ function Navbar() {
                     navigate("/register");
                   }}
                   type="button"
-                  className="bg-[#FF8906] py-3 px-4 rounded"
+                  className="bg-[#FF8906] hover:text-white hover:font-semibold py-3 px-4 rounded hover:ease-in-out duration-200"
                 >
                   SignUp
                 </button>
@@ -81,11 +118,18 @@ function Navbar() {
                 className="flex items-center gap-3 relative"
               >
                 <div className="flex rounded-full overflow-hidden border border-[#4F5665] ">
-                  <img
-                    className="h-12 w-12 p-1 rounded-full"
-                    src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/corporate-user-icon.png"
-                    alt="img"
-                  />
+                  {profile.image && (
+                    <img
+                      className="h-12 w-12 p-1 rounded-full"
+                      src={profile.image}
+                      alt="img"
+                    />
+                  )}
+                  {!profile.image && (
+                    <div className="bg-[#FF8906] text-white h-12 w-12 flex justify-center items-center rounded-full">
+                      <FaUser size={24} />
+                    </div>
+                  )}
                 </div>
                 <div>
                   {!showDropdown && (
@@ -96,12 +140,26 @@ function Navbar() {
                   )}
                 </div>
                 {showDropdown && (
-                  <div className="absolute -bottom-[115px] p-5 right-0 w-full min-w-[200px] bg-white shadow rounded">
+                  <div className="absolute top-10 p-5 right-0 w-full min-w-[200px] bg-white shadow rounded">
                     <div className="flex flex-col gap-5">
                       <Link to="/profile" className="flex gap-5 items-center">
                         <FaUser />
                         <span>Profile</span>
                       </Link>
+                      <Link
+                        to="/history-order"
+                        className="flex gap-5 items-center"
+                      >
+                        <FaFileInvoice />
+                        <span>Your Order</span>
+                      </Link>
+                      { role
+                         ? 
+                        <Link to="/dashboard-admin" className="flex gap-5 items-center">
+                          <FaUserTie />
+                          <span>Dashboard</span>
+                        </Link> : ""
+                      }
                       <button
                         onClick={processLogout}
                         type="button"
