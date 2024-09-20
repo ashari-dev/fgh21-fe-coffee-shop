@@ -7,7 +7,7 @@ import { RxExit } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/reducers/auth";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+// import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 
 function SidebarAdmin(props) {

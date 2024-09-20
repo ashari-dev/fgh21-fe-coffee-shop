@@ -21,9 +21,8 @@ function PaymentListOrder() {
   const [isError, setIsError] = React.useState(false)
   const [dataProduct, setDataProduct] = React.useState([])
   const [id, setId] = React.useState(0)
-  const token = useSelector((state) => state.auth.token);
   const profile = useSelector((state) => state.profile.data);
-  const price = cart.map((item) => item.price);
+  // const price = cart.map((item) => item.price);
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
   const { data, err, isLoading } = useGetCartQuery(token);
   const price = isLoading ? [] : data.result.map((item) => item.price);
