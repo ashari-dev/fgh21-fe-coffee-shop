@@ -9,14 +9,7 @@ import coffe_4 from "../assets/img/coffe_4.svg";
 import Footer from "../component/Footer.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {  addCart } from "../redux/reducers/carts.js";
-import { useGetProductsQuery } from "../redux/services/products.js";
-import {
-  addQuantity,
-  addVariant,
-  addSize,
-  addProductId,
-} from "../redux/reducers/payment.js";
+import { addCart } from "../redux/reducers/carts.js";
 import {
   useGetProductsQuery,
   useListProductsQuery,
@@ -38,7 +31,7 @@ function DetailProduct() {
   const [selectedSize, setSelectedSize] = React.useState(1);
   const [selectedTemperature, setSelectedTemperature] = React.useState(1);
   const { data, err, isLoading } = useGetProductsQuery(id);
-  const product = data?.result || []
+  const product = data?.result || [];
   const [recomend, setRecomend] = useState([]);
   function mins() {
     if (num > 0) {
@@ -92,22 +85,24 @@ function DetailProduct() {
       setTimeout(() => {
         setLoading(true);
         navigate("/payment-detail");
-        dispatch(addCart({
-          id: id,
-          title: product.title,
-          quantity: num,
-          size: size,
-          variant: variant,
-          price: product.price, 
-        }))
+        dispatch(
+          addCart({
+            id: id,
+            title: product.title,
+            quantity: num,
+            size: size,
+            variant: variant,
+            price: product.price,
+          })
+        );
       }, 3000);
     }
   }
-  // async function cart() {
-  //   const formData = new URLSearchParams();
-  //   formData.append("quantity", num);
-  //   formData.append("variant", selectedTemperature);
-  //   formData.append("productSize", selectedSize);
+  async function cart() {
+    const formData = new URLSearchParams();
+    formData.append("quantity", num);
+    formData.append("variant", selectedTemperature);
+    formData.append("productSize", selectedSize);
 
     const response = await fetch(`http://localhost:8000/carts/${id}`, {
       method: "POST",
