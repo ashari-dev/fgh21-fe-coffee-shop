@@ -6,23 +6,22 @@ import {
   FaLocationDot,
 } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-import { useSelector , useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Loading from "../component/Loading";
 import HandlerError from "../component/HandlerError.jsx";
 import { removeData } from "../redux/reducers/carts.js";
 import { addOrder } from "../redux/reducers/order.js";
 
 function PaymentListOrder() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const [itemLoading, setLoading] = React.useState(false);
   const cart = useSelector((state) => state.carts.data);
-  const [isError, setIsError] = React.useState(false)
-  const [dataProduct, setDataProduct] = React.useState([])
-  const [id, setId] = React.useState(0)
+  const [isError, setIsError] = React.useState(false);
+  const [dataProduct, setDataProduct] = React.useState([]);
+  const [id, setId] = React.useState(0);
   const profile = useSelector((state) => state.profile.data);
-  // const price = cart.map((item) => item.price);
   const [selectedDelivery, setSelectedDelivery] = React.useState(1);
   const { data, err, isLoading } = useGetCartQuery(token);
   const price = isLoading ? [] : data.result.map((item) => item.price);
@@ -33,40 +32,43 @@ function PaymentListOrder() {
   const tax = (total * 10) / 100;
   const subTotal = total + tax;
   async function GetCarts() {
-    const response = await fetch(`http://localhost:8000/carts`, {
-      headers: {  
+    const response = await fetch(`http://103.93.58.89:23230/carts`, {
+      headers: {
         Authorization: "Bearer " + token,
       },
     });
-    const json = await response.json()
+    const json = await response.json();
 
-    setDataProduct(json.result)
-
+    setDataProduct(json.result);
   }
   async function DeleteCarts() {
-    const response = await fetch(`http://localhost:8000/carts`, {
+    const response = await fetch(`http://103.93.58.89:23230/carts`, {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + token,
       },
     });
-    const json = response.json()
-    console.log(json)
-    setDataProduct(json.result)
+    const json = response.json();
+    console.log(json);
+    setDataProduct(json.result);
   }
 
   React.useEffect(() => {
-    GetCarts()
-  }, [])
+    GetCarts();
+  }, []);
 
   async function TransactionPayment() {
     const email = document.getElementById("email").value;
     const fullName = document.getElementById("name").value;
     const address = document.getElementById("address").value;
-    if (email === "" || fullName === "" || address === "" || selectedDelivery === 0) {
-      setIsError(true)
-      return
-
+    if (
+      email === "" ||
+      fullName === "" ||
+      address === "" ||
+      selectedDelivery === 0
+    ) {
+      setIsError(true);
+      return;
     }
     setLoading(true);
     setTimeout(() => {
@@ -81,7 +83,7 @@ function PaymentListOrder() {
       transactionStatus: 2,
     });
 
-    const response = await fetch(`http://localhost:8000/transaction`, {
+    const response = await fetch(`http://103.93.58.89:23230/transaction`, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + token,
@@ -89,45 +91,48 @@ function PaymentListOrder() {
       body: formData,
     });
     const data = await response.json();
-    dispatch(addOrder(data.result))
-    setId(data.result.Id)
-    console.log(data)
+    dispatch(addOrder(data.result));
+    setId(data.result.Id);
+    console.log(data);
     if (data.success) {
-      console.log(data.result.Id)
+      console.log(data.result.Id);
       function transactionDetail() {
-        cart.map(async(item)=>{
-          const size = []
+        cart.map(async (item) => {
+          const size = [];
           if (item.size === "Reguler") {
             size.push(1);
           } else if (item.size === "Medium") {
-            size.push(2)
+            size.push(2);
           } else if (item.size === "Large") {
-            size.push(3)
+            size.push(3);
           }
-          const variant = []
+          const variant = [];
           if (item.variant === "Ice") {
             variant.push(1);
           } else if (item.variant === "Hot") {
-            variant.push(2)
+            variant.push(2);
           }
           const formData = new URLSearchParams({
-            "quantity": item.quantity ,
-            "transaction": data.result.Id,
-            "variant": variant.map(item => item),
-            "productSize": size.map(item => item),
+            quantity: item.quantity,
+            transaction: data.result.Id,
+            variant: variant.map((item) => item),
+            productSize: size.map((item) => item),
           });
-          const response = await fetch(`http://localhost:8000/transaction/${item.id}`, {
-            method: "POST",
-            headers:{
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: formData,
-          });
-          const json = await response.json() 
-          console.log(json)
-        })
+          const response = await fetch(
+            `http://103.93.58.89:23230/transaction/${item.id}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: formData,
+            }
+          );
+          const json = await response.json();
+          console.log(json);
+        });
       }
-      transactionDetail()
+      transactionDetail();
     }
   }
   let Delivery = "";
@@ -164,47 +169,50 @@ function PaymentListOrder() {
         </div>
         <div className="flex flex-col md:flex-row gap-12">
           <div className="flex-1 flex flex-col gap-4 w-full">
-
             {cart.map((item) => {
-                return (
-                  <div
-                    key={item.id}
-                    className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full"
-                  >
-                    <div className="">
-                      <img src={Kopie} alt="" className="object-cover" />
+              return (
+                <div
+                  key={item.id}
+                  className="flex gap-7 p-2 bg-[#E8E8E8]/30 rounded-md w-full"
+                >
+                  <div className="">
+                    <img src={Kopie} alt="" className="object-cover" />
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex justify-center max-w-32 bg-[#D00000] p-2 text-white rounded-full">
+                      FLASH SALE!
                     </div>
-                    <div className="flex flex-col gap-4">
-                      <div className="flex justify-center max-w-32 bg-[#D00000] p-2 text-white rounded-full">
-                        FLASH SALE!
-                      </div>
-                      <div className="text-[#0B0909] font-bold text-lg">
-                        {item.title}
-                      </div>
-                      <div className="flex gap-2 ">
-                        <div className="">{item.quantity}pcs</div>
-                        <div className="">|</div>
-                        <div className="">{item.size}</div>
-                        <div className="">|</div>
-                        <div className="">{item.variant}</div>
-                        <div className="">|</div>
-                        <div className="">{Delivery}</div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        {/* <div className="text-[#D00000] font-medium text-xs line-through">
+                    <div className="text-[#0B0909] font-bold text-lg">
+                      {item.title}
+                    </div>
+                    <div className="flex gap-2 ">
+                      <div className="">{item.quantity}pcs</div>
+                      <div className="">|</div>
+                      <div className="">{item.size}</div>
+                      <div className="">|</div>
+                      <div className="">{item.variant}</div>
+                      <div className="">|</div>
+                      <div className="">{Delivery}</div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      {/* <div className="text-[#D00000] font-medium text-xs line-through">
                               IDR 40.000
                             </div> */}
-                        <div className="font-medium text-[#FF8906]">
-                          IDR. {item.price.toLocaleString("id")}
-                        </div>
+                      <div className="font-medium text-[#FF8906]">
+                        IDR. {item.price.toLocaleString("id")}
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
 
             <div className="flex flex-col gap-2">
-              {isError ? <HandlerError msg={"Please fill in the orderer's data"} /> : ""}
+              {isError ? (
+                <HandlerError msg={"Please fill in the orderer's data"} />
+              ) : (
+                ""
+              )}
               <div className="font-bold">Payment Info & Delivery</div>
               <form className="flex flex-col gap-2">
                 <label
@@ -270,30 +278,33 @@ function PaymentListOrder() {
                       <button
                         type="button"
                         onClick={() => setSelectedDelivery(1)}
-                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${selectedDelivery === 1
-                          ? "border-[#FF8906]"
-                          : "border-[#E8E8E8]"
-                          }`}
+                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                          selectedDelivery === 1
+                            ? "border-[#FF8906]"
+                            : "border-[#E8E8E8]"
+                        }`}
                       >
                         Dine in
                       </button>
                       <button
                         type="button"
                         onClick={() => setSelectedDelivery(2)}
-                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${selectedDelivery === 2
-                          ? "border-[#FF8906]"
-                          : "border-[#E8E8E8]"
-                          }`}
+                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                          selectedDelivery === 2
+                            ? "border-[#FF8906]"
+                            : "border-[#E8E8E8]"
+                        }`}
                       >
                         Door Delivery
                       </button>
                       <button
                         type="button"
                         onClick={() => setSelectedDelivery(3)}
-                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${selectedDelivery === 3
-                          ? "border-[#FF8906]"
-                          : "border-[#E8E8E8]"
-                          }`}
+                        className={`flex items-center justify-center h-11 w-1/3 border-2 text-base text-[#0B0909] rounded-md ${
+                          selectedDelivery === 3
+                            ? "border-[#FF8906]"
+                            : "border-[#E8E8E8]"
+                        }`}
                       >
                         Pick Up
                       </button>
@@ -334,9 +345,7 @@ function PaymentListOrder() {
                 </div>
               </div>
               <button
-                onClick={
-                  TransactionPayment
-                }
+                onClick={TransactionPayment}
                 className="bg-orange-400 py-2 rounded-lg"
               >
                 Checkout

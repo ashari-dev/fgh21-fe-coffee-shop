@@ -18,11 +18,9 @@ function UserList() {
   const [dataPage, setDataPage] = useState({});
   const [inputSearch, setInputSearch] = useState("");
   const [page, setPage] = useState(1);
-  
-  
 
   async function deleteItem(id) {
-    await fetch(`http://localhost:8000/profile/${id}`, {
+    await fetch(`http://103.93.58.89:23230/profile/${id}`, {
       method: "DELETE",
     });
     dataUser();
@@ -31,7 +29,7 @@ function UserList() {
   async function filterUsers(e) {
     e.preventDefault();
     const listDataUser = await fetch(
-      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      `http://103.93.58.89:23230/profile?page=${page}&search=${inputSearch}`,
       {}
     );
 
@@ -44,7 +42,7 @@ function UserList() {
   async function paginationUsers(e) {
     e.preventDefault();
     const listDataUser = await fetch(
-      `http://localhost:8000/profile?page=${page}&search=${inputSearch}`,
+      `http://103.93.58.89:23230/profile?page=${page}&search=${inputSearch}`,
       {}
     );
     const listFilterUser = await listDataUser.json();
@@ -54,11 +52,11 @@ function UserList() {
   }
 
   async function dataUser() {
-    const endPoint = `http://localhost:8000/profile`;
+    const endPoint = `http://103.93.58.89:23230/profile`;
     const response = await fetch(endPoint);
     const data = await response.json();
     const listData = data.result;
-    console.log(listData)
+    console.log(listData);
     const pageInfo = data.pageInfo;
     setDataPage(pageInfo);
     setListUser(listData);

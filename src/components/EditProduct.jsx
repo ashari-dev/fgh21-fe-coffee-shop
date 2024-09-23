@@ -14,15 +14,18 @@ function EditProduct(props) {
   const dataToken = useSelector((state) => state.auth.token);
   const [message, setMessage] = React.useState(true);
   const [product, setProduct] = React.useState([]);
-  console.log(product)
+  console.log(product);
   async function products() {
-    const dataProducts = await fetch("http://localhost:8000/products/" + props.id, {});
+    const dataProducts = await fetch(
+      "http://103.93.58.89:23230/products/" + props.id,
+      {}
+    );
     const listProduct = await dataProducts.json();
     setProduct(listProduct.result);
   }
 
   useEffect(() => {
-    products()
+    products();
   }, []);
   async function updateProduct(e) {
     e.preventDefault();
@@ -35,15 +38,18 @@ function EditProduct(props) {
     form.append("description", description);
     form.append("price", price);
     form.append("stock", stock);
-    const dataProduct = await fetch("http://localhost:8000/products/" + props.id, {
-      method: "PATCH",
-      headers: {
-        Authorization: "Bearer " + dataToken,
-      },
-      body: form,
-    });
+    const dataProduct = await fetch(
+      "http://103.93.58.89:23230/products/" + props.id,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + dataToken,
+        },
+        body: form,
+      }
+    );
     const listData = await dataProduct.json();
-    console.log(listData)
+    console.log(listData);
     setMessage(listData.message);
     setProfile(listData.result);
   }

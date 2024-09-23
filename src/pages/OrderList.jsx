@@ -19,9 +19,8 @@ function OrderList() {
   const [page, setPage] = useState(1);
   const [data, setDataOrder] = useState({});
 
-  
   async function deleteItem(id) {
-    await fetch(`http://localhost:8000/transaction/${id}`, {
+    await fetch(`http://103.93.58.89:23230/transaction/${id}`, {
       method: "DELETE",
     });
     dataTransaction();
@@ -31,7 +30,7 @@ function OrderList() {
     console.log(inputSearch);
     e.preventDefault();
     const listDataTransaction = await fetch(
-      `http://localhost:8000/transaction/admin?page=${page}&search=${inputSearch}`,
+      `http://103.93.58.89:23230/transaction/admin?page=${page}&search=${inputSearch}`,
       {}
     );
     const listFilterTransaction = await listDataTransaction.json();
@@ -44,7 +43,7 @@ function OrderList() {
     // e.preventDefault();
     // const status = e.target.findStatus.value
     const listDataTransaction = await fetch(
-      `http://localhost:8000/transaction/status?search=${status}`,
+      `http://103.93.58.89:23230/transaction/status?search=${status}`,
       {}
     );
     const listFilterTransaction = await listDataTransaction.json();
@@ -56,7 +55,7 @@ function OrderList() {
   async function paginationTransactions(e) {
     e.preventDefault();
     const listDataTransaction = await fetch(
-      `http://localhost:8000/transaction/admin?page=${page}&search=${inputSearch}`,
+      `http://103.93.58.89:23230/transaction/admin?page=${page}&search=${inputSearch}`,
       {}
     );
     const listFilterTransaction = await listDataTransaction.json();
@@ -66,7 +65,7 @@ function OrderList() {
   }
 
   async function dataTransaction() {
-    const endPoint = `http://localhost:8000/transaction/admin`;
+    const endPoint = `http://103.93.58.89:23230/transaction/admin`;
     const response = await fetch(endPoint);
     const data = await response.json();
     const listData = data.result;
@@ -79,11 +78,11 @@ function OrderList() {
   useEffect(() => {
     filterStatus();
   }, [status]);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     dataTransaction();
-    filterStatus()
-  }, [status])
+    filterStatus();
+  }, [status]);
 
   useEffect(() => {
     dataTransaction();
@@ -187,7 +186,9 @@ function OrderList() {
                           <td className="py-3">
                             <div className="flex w-full  justify-center">
                               <ul className="list-disc">
-                                <li className="">{item.title} x{item.quantity}</li>
+                                <li className="">
+                                  {item.title} x{item.quantity}
+                                </li>
                                 {/* <li>Caramel Machiato L 1x</li> */}
                               </ul>
                             </div>
@@ -213,7 +214,8 @@ function OrderList() {
                               </button>
                               <button
                                 onClick={() => deleteItem(item.id)}
-                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center">
+                                className="bg-[#D000001A] h-6 w-6 rounded-full flex items-center justify-center"
+                              >
                                 <AiOutlineDelete className="text-[#d00000]" />
                               </button>
                             </div>
