@@ -52,7 +52,7 @@ function Login() {
     formData.append("email", email);
     formData.append("password", password);
 
-    fetch("http://localhost:8000/auth/login", {
+    fetch("http://103.93.58.89:23230/auth/login", {
       method: "POST",
       body: formData,
     }).then((response) => {
@@ -63,7 +63,7 @@ function Login() {
           dispatch(login(data.result.token));
           async function dataUpdate() {
             const response = await fetch(
-              "http://localhost:8000/profile/login",
+              "http://103.93.58.89:23230/profile/login",
               {
                 headers: {
                   Authorization: "Bearer " + data.result.token,
@@ -83,17 +83,17 @@ function Login() {
             }
           }
           async function getCarts() {
-            const response = await fetch(`http://localhost:8000/carts`, {
-              headers: {  
+            const response = await fetch(`http://103.93.58.89:23230/carts`, {
+              headers: {
                 Authorization: "Bearer " + data.result.token,
               },
             });
-            const json = await response.json()
-            console.log(json.result)
-            dispatch(changeData(json.result))
+            const json = await response.json();
+            console.log(json.result);
+            dispatch(changeData(json.result));
           }
           dataUpdate();
-          getCarts()
+          getCarts();
         } else {
           setErr(true);
           setTimeout(() => {

@@ -19,7 +19,7 @@ function InsertProduct(props) {
   }
 
   async function submitProductImage(productId) {
-    const url = "http://localhost:8000/products/upload/img/" + productId;
+    const url = "http://103.93.58.89:23230/products/upload/img/" + productId;
     const config = {
       headers: {
         "content-type": "multipart/form-data",
@@ -44,7 +44,7 @@ function InsertProduct(props) {
     form.append("description", description);
     form.append("price", price);
     form.append("stock", stock);
-    const dataProduct = await fetch("http://localhost:8000/products", {
+    const dataProduct = await fetch("http://103.93.58.89:23230/products", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + dataToken,
